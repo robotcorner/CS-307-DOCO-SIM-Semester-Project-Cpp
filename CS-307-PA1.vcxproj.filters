@@ -24,6 +24,9 @@
     <ClInclude Include="GridSize.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CellGrid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DataParser.cpp">
@@ -36,6 +39,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GridSize.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CellGrid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

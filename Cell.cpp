@@ -60,6 +60,7 @@ void Cell::setSymbol()
 {
 	// The symbols are as follows : '*' = location of a DOCO,
 	// '.' = one or more food pellets, and '-' = an empty cell.
+	// prioritizes the occupied symbol.
 	if (this->occupied) {
 		this->symbol = '*';
 	}
