@@ -7,7 +7,6 @@
 int main() {
 	char inFile[] = "DOCOData01.xml";
 	DataParser* myParser = new DataParser(inFile);
-	
 	cout << "Sensor count is " << myParser->getDOCOCount() << endl;
 
 

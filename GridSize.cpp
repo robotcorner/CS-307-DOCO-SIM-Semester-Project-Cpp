@@ -1,6 +1,10 @@
 // Stephen Stammen - 9/25/2020
 #include "GridSize.h"
 
+GridSize::GridSize() {
+
+}
+
 GridSize::GridSize(int w, int h) 
 {
 	this->height = h;
