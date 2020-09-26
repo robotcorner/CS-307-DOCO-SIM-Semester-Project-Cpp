@@ -48,7 +48,7 @@ int Simulator::getUpdateInterval()
 	return this->update_interval;
 }
 
-int Simulator::getPausedState()
+bool Simulator::getPausedState()
 {
 	return this->paused;
 }

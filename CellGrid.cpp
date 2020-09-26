@@ -5,16 +5,16 @@
 
 /*Private Variables
 	
-	GridSize myGridSize;		
+	GridSize my_grid_size;		
 	// holds the details about the CellGrid
 	
-	std::vector<std::vector<Cell> > cellMatrix;		
+	std::vector<std::vector<Cell> > cell_matrix;		
 	// holds the matrix of cell objects
 	
-	std::vector<std::vector<char> > charMatrix;		
+	std::vector<std::vector<char> > char_matrix;		
 	// holds matrix of the characters to represent
 	
-	std::vector<std::pair<int, int> > tempAdjoinedCells; 
+	std::vector<std::pair<int, int> > temp_adjoined_cells; 
 	// holds vector of adjoined cells for a given position
 
 */
@@ -24,18 +24,18 @@
 
 CellGrid::CellGrid(int h, int w)
 {
-	this->myGridSize.setHeight(h);
-	this->myGridSize.setWidth(w);
+	this->my_grid_size.setHeight(h);
+	this->my_grid_size.setWidth(w);
 	
 	// build cell matrix
-	for (auto y = 0; y < myGridSize.getHeight(); y++)
+	for (auto y = 0; y < my_grid_size.getHeight(); y++)
 	{
-		for (auto x = 0; x < myGridSize.getWidth(); x++)
+		for (auto x = 0; x < my_grid_size.getWidth(); x++)
 		{
-			this->cellMatrix[y].push_back(Cell(x, y));
+			this->cell_matrix[y].push_back(Cell(x, y));
 		}
 	}
-	this->cellMatrix.shrink_to_fit();		// removes excess allocations
+	this->cell_matrix.shrink_to_fit();		// removes excess allocations
 }
 
 CellGrid:: ~CellGrid() 
@@ -47,16 +47,16 @@ void CellGrid::setCharMatrix(void)
 {
 	// Set the char_matrix to their appropriate characters 
 	// based on the status of the cells.
-	for (auto y = 0; y < myGridSize.getHeight(); y++)
+	for (auto y = 0; y < my_grid_size.getHeight(); y++)
 	{
-		for (auto x = 0; x < myGridSize.getWidth(); x++)
+		for (auto x = 0; x < my_grid_size.getWidth(); x++)
 		{
-			this->charMatrix[y][x] = this->cellMatrix[y][x].getSymbol();
+			this->char_matrix[y][x] = this->cell_matrix[y][x].getSymbol();
 		}
 	}
 }
 
-void CellGrid::findAdjoinedCells(int x, int y) 
+std::vector<std::pair<int, int> > CellGrid::findAdjoinedCells(int x, int y)
 {
 	// using the xand y position provided in conjunction with its data 
 	// on the cell matrix, finds the cells within one space of it
@@ -64,8 +64,8 @@ void CellGrid::findAdjoinedCells(int x, int y)
 	// DO logic off of borders
 	int x_start = 0;
 	int y_start = 0;
-	int x_border = myGridSize.getWidth();
-	int y_border = myGridSize.getHeight();
+	int x_border = my_grid_size.getWidth();
+	int y_border = my_grid_size.getHeight();
 	std::pair<int, int> viable_pair = std::make_pair(x, y);
 	int i;
 	int j;
@@ -75,11 +75,12 @@ void CellGrid::findAdjoinedCells(int x, int y)
 			if (((x + i) < x_border) && ((x + i) > x_start) && ((y + j) < y_border) && ((x + j) > y_start))
 			{
 				viable_pair = std::make_pair(x + i, y + j);
-				this->tempAdjoinedCells.push_back(viable_pair);
+				this->temp_adjoined_cells.push_back(viable_pair);
 			}
 		}
 	}
-	this->tempAdjoinedCells.shrink_to_fit();
+	this->temp_adjoined_cells.shrink_to_fit();
+	return this->temp_adjoined_cells;
 }
 
 std::vector<std::pair<int, int> > CellGrid::findAdjoinedOccupiedCells()
@@ -89,10 +90,10 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedOccupiedCells()
 	int* y = new int;
 	*x = 0;
 	*y = 0;
-	for (auto i : this->tempAdjoinedCells) {
+	for (auto i : this->temp_adjoined_cells) {
 		i.first = *x;		// store x at allocated address
 		i.first = *y;		// store y at allocated address
-		if (this->cellMatrix[*x][*y].getOccupied())	// if occupied
+		if (this->cell_matrix[*x][*y].getOccupied())	// if occupied
 		{
 			tempOccupiedCells.push_back(std::make_pair(*x, *y));
 		}
@@ -112,10 +113,10 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedCellsFood()
 	int* y = new int;
 	*x = 0;
 	*y = 0;
-	for (auto i : this->tempAdjoinedCells) {
+	for (auto i : this->temp_adjoined_cells) {
 		i.first = *x;		// store x at allocated address
 		i.first = *y;		// store y at allocated address
-		if (this->cellMatrix[*x][*y].getFoodPresent()) // if food is present
+		if (this->cell_matrix[*x][*y].getFoodPresent()) // if food is present
 		{
 			tempFoodCells.push_back(std::make_pair(*x, *y));
 		}
@@ -128,22 +129,22 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedCellsFood()
 std::vector<std::vector<Cell> > CellGrid::getMatrix(void)
 {
 	// returns the cell_matrix private variable
-	return this->cellMatrix;
+	return this->cell_matrix;
 }
 
 std::vector<std::vector<char> > CellGrid::getCharMatrix()
 {
 	// returns the char_matrix private variable
-	return this->charMatrix;
+	return this->char_matrix;
 }
 
 void CellGrid::printCharMatrix(void)
 {
-	for (auto y = 0; y < myGridSize.getHeight(); y++)
+	for (auto y = 0; y < my_grid_size.getHeight(); y++)
 	{
-		for (auto x = 0; x < myGridSize.getWidth(); x++)
+		for (auto x = 0; x < my_grid_size.getWidth(); x++)
 		{
-			std::cout << this->charMatrix[y][x];
+			std::cout << this->char_matrix[y][x];
 		}
 	}
 }
