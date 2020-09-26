@@ -9,11 +9,11 @@ class CellGrid
 {
 protected:
 	GridSize my_grid_size;		// holds the details about the CellGrid
-	std::vector<std::vector<Cell> > cell_matrix;		// holds the matrix of cell objects
 	std::vector<std::vector<char> > char_matrix;		// holds matrix of the characters to represent
 	std::vector<std::pair<int, int> > temp_adjoined_cells; // holds vector of adjoined cells for a given position
 
 public:
+	std::vector<std::vector<Cell> > cell_matrix;		// holds the matrix of cell objects
 	CellGrid(int h, int w);	// creates the gridShape to the specified heightand width, then populates the cell_matrix with cell_objects initialized to each position.
 	~CellGrid(); // de-allocates memory for CellGrid object
 	

@@ -56,6 +56,7 @@ void CellGrid::setCharMatrix(void)
 	}
 }
 
+// Goal: tell a DOCO what it’s adjoined occupied cells are. Update the DOCO’s private adjoined_food_cells matrix with this information
 std::vector<std::pair<int, int> > CellGrid::findAdjoinedCells(int x, int y)
 {
 	// using the xand y position provided in conjunction with its data 
@@ -83,6 +84,8 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedCells(int x, int y)
 	return this->temp_adjoined_cells;
 }
 
+// tell a DOCO what it’s adjoined occupied cells are.Update the DOCO’s
+// private adjoined_occupied_cells matrix with this informatio
 std::vector<std::pair<int, int> > CellGrid::findAdjoinedOccupiedCells()
 {
 	std::vector<std::pair<int, int> > tempOccupiedCells;
@@ -103,6 +106,8 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedOccupiedCells()
 	delete y;
 }
 
+// tell a DOCO what it’s adjoined cells are. Update the DOCO’s
+// private adjoined_cells matrix with this information.
 std::vector<std::pair<int, int> > CellGrid::findAdjoinedCellsFood()
 {
 	// checks each of the temp_adjoining_cells and returns the 
@@ -125,6 +130,10 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedCellsFood()
 	delete x;
 	delete y;
 }
+
+
+// Goal: will set the possible move options for the DOCO based off 
+// of the adjoined cell information it gathered.
 
 std::vector<std::vector<Cell> > CellGrid::getMatrix(void)
 {
