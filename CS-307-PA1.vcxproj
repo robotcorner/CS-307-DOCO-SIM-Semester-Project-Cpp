@@ -145,6 +145,7 @@
     <ClInclude Include="DataParser.h" />
     <ClInclude Include="GridSize.h" />
     <ClInclude Include="Simulator.h" />
+    <ClInclude Include="Viewer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cell.cpp" />
@@ -153,6 +154,7 @@
     <ClCompile Include="GridSize.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Simulator.cpp" />
+    <ClCompile Include="Viewer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="DOCOData01.xml" />
