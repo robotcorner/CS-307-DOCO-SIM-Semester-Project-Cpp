@@ -1,4 +1,6 @@
 #include "Simulator.h"
+#include <chrono>
+#include <thread>
 
 Simulator::Simulator() {
 
@@ -33,14 +35,20 @@ void Simulator::setUpdateInterval(int newInterval)
 	this->update_interval = newInterval;
 }
 
+void Simulator::setDisplayInterval(int newInterval)
+{
+	this->display_interval = newInterval; 
+	// add error handling to ignore anything to fast and set to it's
+	// ideal maximum
+}
+
+void Simulator::turnInc() {
+	this->turn_num += 1;
+}
+
 long int Simulator::getTurnNum()
 {
 	return this->turn_num;
-}
-
-long int Simulator::getTurnsProcessed()
-{
-	return this->turns_processed;
 }
 
 int Simulator::getUpdateInterval()
@@ -48,7 +56,20 @@ int Simulator::getUpdateInterval()
 	return this->update_interval;
 }
 
+int Simulator::getDisplayInterval()
+{
+	return this->display_interval;
+}
+
+
 bool Simulator::getPausedState()
 {
 	return this->paused;
+}
+
+void Simulator::delay(int seconds_delay) {
+	using namespace std::this_thread; // sleep_for, sleep_until
+	using namespace std::chrono;	  // nanoseconds, system_clock, seconds
+	sleep_for(nanoseconds(10));
+	sleep_until(system_clock::now() + seconds(seconds_delay));
 }

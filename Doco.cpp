@@ -45,7 +45,7 @@ void Doco::addEnergy(int added_energy) {
 	this->energy_level += added_energy;
 }
 
-void Doco::eat(int amount_eaten, std::string type="default") { // type is selected without needing to specify
+void Doco::eat(int amount_eaten, const std::string& type="default") { // type is selected without needing to specify
 	if (type == "default")
 	{
 		int food_e_value = 50;				// food energy value -> could make this a class if needed later.
@@ -55,6 +55,12 @@ void Doco::eat(int amount_eaten, std::string type="default") { // type is select
 }
 
 // Does energy stay the same if move to orginal location as a final option?
+// Default move to rand direction, but make sure in the future it is able to
+// prioritize cells based off food amounts or some other status.
+// make sure that a two docos say at (0, 1) and (0,3) don't both try to move into (0,2) on an iteration.
+// maybe circumvent this by providing an order that the doco's moves are decided. make sure once one has decided,
+// the board status for that cell gets updated to occupied. // could create a occupied_pending variable in Cell
+// object to prevent grid locks of some kind...
 void Doco::move(void)
 {
 	// TODO: do movement based off of the private variables available. Choose best option
@@ -87,6 +93,14 @@ void Doco::move(std::vector<std::pair<int, int> >) // choose your own move
 	// and direction.second (-1,0) which holds a cordinate pair accessible through
 	// direction.second.first, and direction.second.second
 }
+
+/*	REQUIREMENTS
+o	Before the simulation starts each DOCO will randomly select a starting direction in which to move. This may be to the North, Northeast, East, Southeast, South, Southwest, West, or Northwest.
+o	Each DOCO will always move in a straight line in its' current direction of movement unless that movement is modified by the constraints given below.
+o	If a DOCO encounters an edge of the world that prevents it from proceeding on its current path it will select a random direction as its new heading. The new heading, however, must not take it into the cell of another DOCO.
+o	If there is another DOCO in the next cell along a DOCO's current heading then the DOCO will select a random direction other than its current heading. The new heading, however, must not take it into the cell of another DOCO.
+o	If a DOCO "smells" a food pellet in a cell bordering its' current location it will alter its heading to take it into that cell on the next move and that direction will become its new heading.
+*/
 
 bool Doco::getAlive()
 {

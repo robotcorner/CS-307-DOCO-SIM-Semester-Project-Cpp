@@ -77,9 +77,12 @@ void Cell::setCustomSymbol(char newSymbol)
 	this->symbol = newSymbol;
 }
 
-void Cell::setFoodPresent(bool foodAvailable)
+void Cell::setFoodPresent()
 {
-	this->food_present = foodAvailable;
+	if (this->food_count == 0) {
+		this->food_present = false;
+	}
+	this->food_present = true;
 }
 
 void Cell::addFood(int foodAdded)

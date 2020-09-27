@@ -9,7 +9,7 @@ class Doco
 private:
 	bool alive;	// whether or not the DOCO is alive or dead, if it’s dead it should be removed or become invisible on the screen.
 	std::pair<int, int> position; // the x position of the DOCO, the y position of the DOCO
-	int energy_level; // the amount of energy the DOCO has.It will be initialized to 500 by default.
+	int energy_level = 500; // the amount of energy the DOCO has.It will be initialized to 500 by default.
 	std::pair<std::string, std::pair<int, int>> direction; // A direction that the DOCO is currently heading. It will be be one of the following strings “N”, “NE”, “E”, “SE”, “S”, “SW”, “W”, “NW”.
 public:
 	std::vector<std::pair<int, int> > adjoined_cells; // this will contain the matrix of adjoining cells to a DOCO.Adjoining means only the cells are touching, diagonal included.
@@ -26,7 +26,7 @@ public:
 	void setAlive(bool); // updates the alive status of the DOCO.
 	void setEnergy(int); // set the energy_level of the DOCO to a specified amount.
 	void addEnergy(int); // add the specified amount of energy to the DOCO’s energy_level
-	void eat(int amount_eaten, std::string type);	// eats the food on it's current cell, type is if new food types are added
+	void eat(int amount_eaten, const std::string& type="default");	// eats the food on it's current cell, type is if new food types are added
 	// the DOCO regenerates 50 energy for each pellet eaten, 
 	// and it eats all the pellets at this location. This call the
 	// CellGrid.Matrix.SpecificCell.setFoodPresent(bool) and setSymbol(char),

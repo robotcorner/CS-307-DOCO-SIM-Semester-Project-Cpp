@@ -148,6 +148,7 @@
     <ClInclude Include="GridSize.h" />
     <ClInclude Include="Simulator.h" />
     <ClInclude Include="Viewer.h" />
+    <ClInclude Include="WorldBoard.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cell.cpp" />
@@ -159,6 +160,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Simulator.cpp" />
     <ClCompile Include="Viewer.cpp" />
+    <ClCompile Include="WorldBoard.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="DOCOData01.xml" />

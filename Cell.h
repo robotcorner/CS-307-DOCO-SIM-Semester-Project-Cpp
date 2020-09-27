@@ -27,7 +27,7 @@ public:
 	void setOccupied(bool);		// set whether the cell is occupied or not by a DOCO
 	void setSymbol();			// set the symbol for the grid based off whether it’s occupied or not, or food is present. 
 	void setCustomSymbol(char);	// set character symbol for the cell to the char provided.
-	void setFoodPresent(bool);	// set whether there is any food in the Cell
+	void setFoodPresent();		// set whether there is any food in the cell based on food _count
 	void addFood(int);			// add food to the Cell with the amount specified
 	void removeFood(int);		// remove food pellets from cell with amount specified
 	void removeAllFood(void);	// set the food count to zero
