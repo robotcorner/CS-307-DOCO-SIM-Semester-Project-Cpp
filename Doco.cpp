@@ -52,6 +52,7 @@ void Doco::eat(int amount_eaten, const std::string& type="default") { // type is
 		int total_replished_e = food_e_value * amount_eaten;
 		this->addEnergy(total_replished_e);
 	}
+	// TODO: make sure the following are updated: This call the CellGrid.Matrix.SpecificCell.setFoodPresent(bool) and setSymbol(char), removeAllFood() commands for the cell being eaten off of.
 }
 
 // Does energy stay the same if move to orginal location as a final option?
@@ -95,6 +96,7 @@ void Doco::move(std::vector<std::pair<int, int> >) // choose your own move
 }
 
 /*	REQUIREMENTS
+TODO:
 o	Before the simulation starts each DOCO will randomly select a starting direction in which to move. This may be to the North, Northeast, East, Southeast, South, Southwest, West, or Northwest.
 o	Each DOCO will always move in a straight line in its' current direction of movement unless that movement is modified by the constraints given below.
 o	If a DOCO encounters an edge of the world that prevents it from proceeding on its current path it will select a random direction as its new heading. The new heading, however, must not take it into the cell of another DOCO.

@@ -34,16 +34,21 @@ void WorldBoard::readFile(char* inFile)
 	int doco_count = this->myParser->getDOCOCount();
 	int food_count = this->myParser->getFoodCount();
 	// For initial doco spawn
-	char* direction, int * x_pos, int * y_pos;
+	char* direction = new char;
+	int* x_pos = new int;
+	int* y_pos = new int;
 	while (this->myParser->getDOCOData(direction, x_pos, y_pos)) // parse all docos in file.
 	{
 		std::string docoDir = direction;
 		std::cout << "Read in Direction: " << direction << "\n";
 		this->doco_vect.push_back(Doco(*x_pos, *y_pos, docoDir)); // add to the doco_vect
 	}
+	delete direction;
+	delete x_pos;
+	delete y_pos;
 	this->doco_vect.shrink_to_fit();
 	this->generateFoodLocations(width, height, food_count);
-	this->spawnInitialDocos();
+	this->updateDocos();
 }
 
 void WorldBoard::generateFoodLocations(int w, int h, int foodCount)

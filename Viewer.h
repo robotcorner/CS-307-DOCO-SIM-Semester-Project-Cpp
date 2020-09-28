@@ -21,7 +21,7 @@ public:
 	void setHeaderMessage(std::string); // update header_message
 	void setFooterMessage(std::string); // update footer_message
 	void setProgramStateMessage(std::string);	// update paused / play message
-	void setLineCountRange(int); // update line_count_range
+	void setLineCountWorld(int); // update line_count_range
 	void setSeparatorLength(int); // set length of the separator
 	void setSeparatorChar(char); // set the separator character
 	void setNewSeparatorLine(void); // create new separator based off new settings

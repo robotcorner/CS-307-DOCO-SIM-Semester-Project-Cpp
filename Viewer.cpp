@@ -41,9 +41,14 @@ void Viewer::setProgramStateMessage(std::string newState)
 	this->program_state_message;
 }
 
-void Viewer::setLineCountRange(int lineCount)
+void Viewer::setLineCountWorld(int lineCount)
 {
 	this->line_count_world = lineCount;
+}
+
+void Viewer::setSeparatorChar(char myChar)
+{
+	this->separator_char = myChar;
 }
 
 void Viewer::setSeparatorLength(int newLength)

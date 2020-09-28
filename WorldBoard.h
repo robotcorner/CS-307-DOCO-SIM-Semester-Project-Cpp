@@ -24,7 +24,6 @@ private:
 
 public:
 	CellGrid* worldCellGrid; // will hold the CellGrid Object which contains all the Cells and GridSize
-	
 	DataParser* myParser; // the DataParser obejct for the class. 
 	// DatParser = DataParser(char *filename). This filename will be DOCOData01.xml
 	
