@@ -7,6 +7,7 @@ std::mt19937 rng(seed()); // generate random num with Merseene_Twister engine
 int generateRandomNum(int min, int max) {
 	std::uniform_int_distribution<int> uni(min, max);
 	auto rand_int = uni(rng);
+	return rand_int;
 }
 
 WorldBoard::WorldBoard()
@@ -28,8 +29,8 @@ WorldBoard::~WorldBoard()
 void WorldBoard::readFile(char* inFile)
 {
 	this->myParser = new DataParser(inFile);
-	int width = this->myParser->getDOCOWorldWidth();
-	int height = this->myParser->getDOCOWorldHeight();
+	this->width = this->myParser->getDOCOWorldWidth();
+	this->height = this->myParser->getDOCOWorldHeight();
 	this->worldCellGrid = new CellGrid(width, height);
 	int doco_count = this->myParser->getDOCOCount();
 	int food_count = this->myParser->getFoodCount();
@@ -47,13 +48,14 @@ void WorldBoard::readFile(char* inFile)
 	delete x_pos;
 	delete y_pos;
 	this->doco_vect.shrink_to_fit();
-	this->generateFoodLocations(width, height, food_count);
+	this->generateFoodLocations(this->width, this->height, food_count);
 	this->updateDocos();
 }
 
+// --- FOOD SPAWNER --------------------------------------
+
 void WorldBoard::generateFoodLocations(int w, int h, int foodCount)
 {
-	if(!foodCount) foodCount = generateRandomNum(1, 10);	// NO idea if this line actually works...
 	// generate spawn locations
 	int x_pos;
 	int y_pos;
@@ -75,59 +77,44 @@ void WorldBoard::generateFoodLocations(int w, int h, int foodCount)
 void WorldBoard::updateCellsWithNewFood() 
 {
 	for (auto food : this->food_positions) {
-		this->updateCellWithNewFood(food.first, food.second);
+		this->setCellWithNewFood(food.first, food.second);
 	}
 	food_positions.clear();
 }
 
-void WorldBoard::updateCellWithNewFood(int x, int y)
+void WorldBoard::setCellWithNewFood(int x, int y)
 {
 	this->worldCellGrid->cell_matrix[y][x].addFood(1);
 }
 
-int WorldBoard::updateCellWithNoFood(int x, int y) 
+
+// --- DOCO ACTIONs ------------------------------------------
+
+int WorldBoard::setCellWithNoFood(int x, int y) 
 {
 	int count = this->worldCellGrid->cell_matrix[y][x].getFoodCount();
 	this->worldCellGrid->cell_matrix[y][x].removeAllFood();
 	return count;
 }
 
-void WorldBoard::updateDocos(void)
-{
-	int food_eaten;
-	// Check Doco's to kill first
-	int size = this->doco_vect.size();
-	while (size > 0) 
-	{
-		if (!this->doco_vect[size].getAlive()) {
-			this->doco_vect.erase(this->doco_vect.begin()+size);
-			size -= 1; // remove an extra item as the doco has been erased.
-		}
-		size -= 1;
-	}
-	for (auto doco : this->doco_vect)
-	{
-		food_eaten = this->updateCellWithADoco(doco.getXPos(), doco.getYPos());
-		doco.eat(food_eaten);
-	}
-	this->updateAllDocoSurroundings();
-}
-
+// Helper Function for updateDocos
 int WorldBoard::updateCellWithADoco(int x, int y)
 {
 	this->worldCellGrid->cell_matrix[y][x].setXPos(x);
 	this->worldCellGrid->cell_matrix[y][x].setYPos(y);
 	this->worldCellGrid->cell_matrix[y][x].setOccupied(true);
-	int food_count = this->updateCellWithNoFood(x, y);
+	int food_count = this->setCellWithNoFood(x, y);
 	this->worldCellGrid->cell_matrix[y][x].setFoodPresent();
-	this->worldCellGrid->cell_matrix[y][x].setSymbol();	
+	this->worldCellGrid->cell_matrix[y][x].setSymbol();
+	return food_count;
 }
 
+// Helper Function for updateDocos
 void WorldBoard::updateAllDocoSurroundings()
 {
 	int x;
 	int y;
-	for (auto doco : this->doco_vect) 
+	for (auto doco : this->doco_vect)
 	{
 		x = doco.getXPos();
 		y = doco.getYPos();
@@ -137,14 +124,41 @@ void WorldBoard::updateAllDocoSurroundings()
 	}
 }
 
-// SOMEWHERE THEY NEED TO MAKE a DESCISION TO MOVE!!!!!
 
+void WorldBoard::updateDocos(void)
+{
+	int food_eaten;
+	// --- Check Doco's to kill first
+	int size = this->doco_vect.size();
+	while (size > 0) 
+	{
+		if (!this->doco_vect[size].getAlive()) {
+			this->doco_vect.erase(this->doco_vect.begin()+size);
+			size -= 1; // remove an extra item as the doco has been erased.
+		}
+		size -= 1;
+	}
+	// --- Update the current cells with DOCO actions that were decided the previous turn / round.
+	for (auto doco : this->doco_vect)
+	{
+		food_eaten = this->updateCellWithADoco(doco.getXPos(), doco.getYPos());
+		doco.eat(food_eaten, "default");
+	}
+	this->updateAllDocoSurroundings();
+
+	// --- Set Move Positions for next round updates
+	for (auto doco : this->doco_vect)
+	{
+		doco.move();	// all doco's in list make new move decision at same time
+	}
+}
+
+
+// this does a **SINGLE** update of the board
 void WorldBoard::updateWorldState()
 {
-	// this does a **SINGLE** update of the board
-	// game updater - VERY important!!!
-	// maybe this is where move desicion is made
-	// can make decisions to update here ... this needs fleshed out slightly more sorry!
+	generateFoodLocations(this->width, this->height, generateRandomNum(1, 10));
+	updateDocos();
 }
 
 void WorldBoard::printWorld()

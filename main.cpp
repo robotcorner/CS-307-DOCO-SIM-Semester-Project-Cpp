@@ -18,6 +18,9 @@ int main() {
 	
 	char inFile[] = "DOCOData01.xml";
 	WorldBoard* myDocoWorld = new WorldBoard(inFile);
+	
+	// Initialize World.
+	
 	while (mySim->getPausedState())
 		myDocoWorld->updateWorldState();
 		mySim->delay(1);

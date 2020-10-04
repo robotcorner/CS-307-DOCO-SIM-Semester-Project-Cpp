@@ -10,6 +10,9 @@
 class WorldBoard
 {
 private:
+	int width;
+	int height;
+
 	std::vector<std::pair<int, int> > food_positions; // will hold a matrix 
 	// that will populate from the readFile() function with the positions
 	// on the CellGridand amounts for some food particles. (Alternatively
@@ -18,8 +21,7 @@ private:
 	// populate from the readFile() function with the starting positions,
 	// directions, etc of DOCOs. (Alternatively could add them to the vector as 
 	// your reading… maybe)
-	void generateFoodLocations(int x_range, int y_range, int food_count);
-	void spawnInitialDocos(void);
+	void generateFoodLocations(int x_range, int y_range, int foodCount=NULL);
 	void readFile(char* inFile);
 
 public:
@@ -36,8 +38,8 @@ public:
 	~WorldBoard();
 
 	void updateCellsWithNewFood();
-	void updateCellWithNewFood(int x, int y);
-	int  updateCellWithNoFood(int x, int y);  // return the number of foods eaten, set new food to zero
+	void setCellWithNewFood(int x, int y);
+	int  setCellWithNoFood(int x, int y);  // return the number of foods eaten, set new food to zero
 	
 	void updateDocos();
 	int updateCellWithADoco(int x, int y);		// helper function to set cell status for cells with DOCOs, return food amount
@@ -54,6 +56,6 @@ public:
 	void spawnOneFoodAtPos(int x, int y);
 	void spawnOneFoodAtPos(std::pair<int, int>);
 	*/
-	void updateWorldState();
+	void updateWorldState(); // x and y range to update.
 	void printWorld();
 };

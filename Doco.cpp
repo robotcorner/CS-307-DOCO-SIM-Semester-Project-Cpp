@@ -1,6 +1,10 @@
+#pragma once
 #include "Doco.h"
 #include "Directions.h"
 #include "CellGrid.h"
+#include <vector>
+#include <algorithm>
+#include <iterator>
 
 Directions directions = Directions();
 
@@ -32,6 +36,12 @@ void Doco::setAlive(bool life)
 	this->alive = life;
 }
 
+void Doco::setAlive(void) 
+{
+	if (this->energy_level <= 0) this->alive = false;
+	else this->alive = true;
+}
+
 void Doco::setEnergy(int new_e_level) 
 {
 	if (new_e_level >= 0) {
@@ -55,24 +65,79 @@ void Doco::eat(int amount_eaten, const std::string& type="default") { // type is
 	// TODO: make sure the following are updated: This call the CellGrid.Matrix.SpecificCell.setFoodPresent(bool) and setSymbol(char), removeAllFood() commands for the cell being eaten off of.
 }
 
+/*	REQUIREMENTS
+TODO:
+o	Each DOCO will always move in a straight line in its' current direction of movement unless that movement is modified by the constraints given below.
+o	If a DOCO encounters an edge of the world that prevents it from proceeding on its current path it will select a random direction as its new heading. The new heading, however, must not take it into the cell of another DOCO.
+o	If there is another DOCO in the next cell along a DOCO's current heading then the DOCO will select a random direction other than its current heading. The new heading, however, must not take it into the cell of another DOCO.
+o	If a DOCO "smells" a food pellet in a cell bordering its' current location it will alter its heading to take it into that cell on the next move and that direction will become its new heading.
+*/
+
 // Does energy stay the same if move to orginal location as a final option?
-// Default move to rand direction, but make sure in the future it is able to
 // prioritize cells based off food amounts or some other status.
 // make sure that a two docos say at (0, 1) and (0,3) don't both try to move into (0,2) on an iteration.
 // maybe circumvent this by providing an order that the doco's moves are decided. make sure once one has decided,
 // the board status for that cell gets updated to occupied. // could create a occupied_pending variable in Cell
-// object to prevent grid locks of some kind...
-void Doco::move(void)
+
+// TODO: needs work
+std::pair<int, int> Doco::move(void) // returns the pair that moved too.
 {
-	// TODO: do movement based off of the private variables available. Choose best option
-	// do NOT collide with other DOCOs. Choose new directions when going to hit past edge
-	// or collide.
-	// chooses random spot based off available options.... maybe prioritze one with more food.
-	// moving = subtract 10 energy
-	// check if energy = 0, kill DOCO if case
-	// base next position based off of direction.first ("N") 
-	// and direction.second (-1,0) which holds a cordinate pair accessible through
-	// direction.second.first, and direction.second.second
+	// Setup move pair that is choosen
+	std::pair<int, int> moving_here;		// new (x, y) position for DOCO.
+	std::pair<int, int> temp_next_pos;
+	std::pair<int, int> temp_next_valid_pos;
+	std::pair<int, int> option;
+
+	// Clear move options from previous turn to generate new ones now that new data is in.
+	this->move_options.clear(); 
+	for (auto pair : this->adjoined_cells) {
+		this->move_options.push_back(pair);
+	}
+	
+	// Remove Move options that have DOCO's Adjacent. Don't want to move into Occupied Cell
+	for (auto pair : this->adjoined_occupied_cells) {
+		auto result = std::find(this->adjoined_cells.begin(), this->adjoined_cells.end(), pair);
+		if (result != std::end(this->adjoined_cells)) {
+			this->move_options.erase(result); // don't move into occupied cells
+		}
+	}
+	
+	// Create move pair for continuing in same direciton
+	temp_next_pos = std::make_pair(direction.second.first, direction.second.second);
+
+	// Check temp_next_pos to see if valid.
+	// Remove move options that involve out of bounds or collisions with other DOCOs.
+	bool verified = false;
+	while (!verified)
+	{
+		auto result = std::find(this->move_options.begin(), this->move_options.end(), temp_next_pos);
+		if (result != std::end(this->move_options)) {
+			// now we know that the next position for the same direction is valid.
+			temp_next_valid_pos = temp_next_pos;
+			verified = true;
+		}
+		else {
+			// Chooses random spot based off available options 
+			// if can't continue in current direction.
+			this->move_options.erase(result); // don't move into occupied cells
+			auto temp_next_dir = directions.getRandomDirectionPair();
+			temp_next_pos = std::make_pair(temp_next_dir.second.first, temp_next_dir.second.second);
+		}
+	}
+
+	moving_here = temp_next_valid_pos;
+
+	// update doco position and energy if it's still alive.
+	if (this->getAlive()) // update doco info only if it's even alive.
+	{
+		if (this->getXPos() == moving_here.first && this->getYPos() == moving_here.second) { /* do nothing */ }
+		else {
+			this->energy_level -= 10; // 10 Energy per move. Only count if they moved to a new spot.
+		}
+		this->setPos(moving_here.first, moving_here.second);
+		this->setAlive();
+	}
+	return moving_here;
 }
 
 void Doco::move(int, int) // choose your own move
@@ -94,15 +159,6 @@ void Doco::move(std::vector<std::pair<int, int> >) // choose your own move
 	// and direction.second (-1,0) which holds a cordinate pair accessible through
 	// direction.second.first, and direction.second.second
 }
-
-/*	REQUIREMENTS
-TODO:
-o	Before the simulation starts each DOCO will randomly select a starting direction in which to move. This may be to the North, Northeast, East, Southeast, South, Southwest, West, or Northwest.
-o	Each DOCO will always move in a straight line in its' current direction of movement unless that movement is modified by the constraints given below.
-o	If a DOCO encounters an edge of the world that prevents it from proceeding on its current path it will select a random direction as its new heading. The new heading, however, must not take it into the cell of another DOCO.
-o	If there is another DOCO in the next cell along a DOCO's current heading then the DOCO will select a random direction other than its current heading. The new heading, however, must not take it into the cell of another DOCO.
-o	If a DOCO "smells" a food pellet in a cell bordering its' current location it will alter its heading to take it into that cell on the next move and that direction will become its new heading.
-*/
 
 bool Doco::getAlive()
 {

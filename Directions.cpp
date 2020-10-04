@@ -1,6 +1,15 @@
 #include "Directions.h"
 #include <search.h>
 #include <iostream>
+#include <random>
+
+std::random_device seed; // initialize seed engine
+std::mt19937 rng(seed()); // generate random num with Merseene_Twister engine
+int generateRandomNum(int min, int max) {
+	std::uniform_int_distribution<int> uni(min, max);
+	auto rand_int = uni(rng);
+	return rand_int;
+}
 
 std::vector<std::string> Directions::setMoveDirections(void) {
 	static std::string move_directions[] = { "SW","W","NW","S","N","SE","E","NE" };
@@ -48,7 +57,6 @@ std::vector<std::string> Directions::getAllDirections(void)
 	return this->move_directions;
 }
 
-
 void Directions::printDirXYPairs()
 {
 	for (auto i : this->dir_xy_pairs)
@@ -72,4 +80,38 @@ std::pair<std::string, std::pair<int, int>> Directions::getPairComboForString(st
 	else if (dir == "SW") return this->dir_xy_pairs[0];
 	else if (dir == "W") return this->dir_xy_pairs[1];
 	else if (dir == "NW") return this->dir_xy_pairs[2];
+}
+
+std::pair<std::string, std::pair<int, int>> Directions::getOppositeDirectionPair(std::pair<std::string, std::pair<int, int>> dir_xy_offset) {
+	std::string direction = dir_xy_offset.first;
+	std::pair<std::string, std::pair<int, int>> opposite;
+	if (direction == "N") {
+		opposite = this->getPairComboForString("S");
+	}
+	else if (direction == "NE") {
+		opposite = this->getPairComboForString("SW");
+	}
+	else if (direction == "E") {
+		opposite = this->getPairComboForString("W");
+	}
+	else if (direction == "SE") {
+		opposite = this->getPairComboForString("NW");
+	}
+	else if (direction == "S") {
+		opposite = this->getPairComboForString("N");
+	}
+	else if (direction == "SW") {
+		opposite = this->getPairComboForString("NE");
+	}
+	else if (direction == "W") {
+		opposite = this->getPairComboForString("E");
+	}
+	else if (direction == "NW") {
+		opposite = this->getPairComboForString("SE");
+	}
+	return opposite;
+}
+
+std::pair<std::string, std::pair<int, int>> Directions::getRandomDirectionPair() {
+	return this->dir_xy_pairs.at(generateRandomNum(0, 8));
 }

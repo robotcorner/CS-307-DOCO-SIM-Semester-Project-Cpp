@@ -17,6 +17,8 @@ public:
 	std::vector<std::string> getAllDirections(void);
 	std::vector<std::pair<std::string, std::pair<int, int>>> getDirectionPairs();
 	std::pair<std::string, std::pair<int, int>> getPairComboForString(std::string);
+	std::pair<std::string, std::pair<int, int>> getOppositeDirectionPair(std::pair<std::string, std::pair<int, int>>);
+	std::pair<std::string, std::pair<int, int>> getRandomDirectionPair();
 	void printDirXYPairs();
 };
 

@@ -16,6 +16,7 @@ public:
 	std::vector<std::pair<int, int> > adjoined_occupied_cells; // this will contain the matrix of adjoining cells that are occupied.
 	std::vector<std::pair<int, int> > adjoined_food_cells; // this will contain the matrix of adjoining cells that contain food. This is why the Cell object has a food_present boolean property.
 	std::vector<std::pair<int, int> > move_options; // this will contain the matrix of movement options that are available to the DOCO based on it’s movement preferencesand requirements.
+	std::vector<std::pair<int, int> > best_move_options; 
 
 	Doco(int, int, std::string); // starting position, x, y, direction
 	// creates a DOCO object with  set positionand direction specified.These will come out of the xml file that the DataParser reads.
@@ -23,15 +24,16 @@ public:
 	void setPos(int x, int y); // updates the x and y position of the DOCO.
 	void setPos(std::pair<int, int>);
 	void setDirection(std::string); // sets the direction of the DOCO, this will be one of the following strings “N”, “NE”, “E”, “SE”, “S”, “SW”, “W”, “NW”.Upon initialization this will be random or taken from the read in file.
-	void setAlive(bool); // updates the alive status of the DOCO.
+	void setAlive(bool); // updates the alive status of the DOCO to passed in value.
+	void setAlive(void); // updates based on energy value.
 	void setEnergy(int); // set the energy_level of the DOCO to a specified amount.
 	void addEnergy(int); // add the specified amount of energy to the DOCO’s energy_level
-	void eat(int amount_eaten, const std::string& type="default");	// eats the food on it's current cell, type is if new food types are added
+	void eat(int, const std::string&);	// eats the food on it's current cell, type is if new food types are added
 	// the DOCO regenerates 50 energy for each pellet eaten, 
 	// and it eats all the pellets at this location. This call the
 	// CellGrid.Matrix.SpecificCell.setFoodPresent(bool) and setSymbol(char),
 	// removeAllFood() commands for the cell being eaten off of.
-	void move(void); // using it’s private information about direction, adjoining_cells, 
+	std::pair<int, int> move(void); // using it’s private information about direction, adjoining_cells, 
 	// adjoining_occupied_cells, adjoining_food_cells, return a new x and y position
 	// for it to jump to from it’s available options.It will prioritize it’s current 
 	// direction, but if it’s compromisedand the DOCO would run into another one or 
@@ -47,5 +49,13 @@ public:
 	std::pair<std::string, std::pair<int, int>> getDirection(void); // returns the current direction of the DOCO
 	std::string getDirectionString(void);
 	int getEnergy(); // returns the energy_level of the DOCO
+};
+
+struct compare {
+	std::pair<int, int> pair;
+	compare(std::pair<int, int> const& i) : pair(i) {}
+	bool operator()(std::pair<int, int>& i) {
+		return (i == pair);
+	}
 };
 
