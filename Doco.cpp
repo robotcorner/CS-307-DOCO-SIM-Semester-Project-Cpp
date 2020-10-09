@@ -8,11 +8,20 @@
 
 Directions directions = Directions();
 
-Doco::Doco(int x, int y, std::string start_dir)
+Doco::Doco(int x, int y, std::string &start_dir)
 {
 	this->position.first = x;
 	this->position.second = y;
-	this->direction = directions.getPairComboForString(start_dir);
+	this->setDirection(start_dir);
+}
+
+Doco::Doco(int x, int y) {
+	this->position.first = x;
+	this->position.second = y;
+}
+
+Doco::~Doco() {
+
 }
 
 void Doco::setPos(int x, int y)
@@ -180,7 +189,7 @@ int Doco::getYPos() // returns the current position of the DOCO
 	return this->position.second;
 }
 
-std::pair<std::string, std::pair<int, int>> Doco::getDirection() // returns the current direction of the DOCO
+std::pair<std::string, std::pair<int, int> > Doco::getDirection() // returns the current direction of the DOCO
 {
 	return this->direction;
 }

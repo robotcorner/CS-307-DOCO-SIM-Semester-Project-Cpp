@@ -24,13 +24,23 @@
 
 CellGrid::CellGrid(int h, int w)
 {
+	// int* arr = new int[size];
+	//this->cell_matrix.push_back(std::vector<Cell>());
 	this->my_grid_size.setHeight(h);
 	this->my_grid_size.setWidth(w);
-	
-	// build cell matrix
-	for (auto y = 0; y < my_grid_size.getHeight(); y++)
+	int height = my_grid_size.getHeight();
+	int width = my_grid_size.getWidth();
+	this->cell_matrix = std::vector<std::vector<Cell> > (height);
+	// std::vector<Cell> cell_vect;
+	// build cell matrix	
+	// cell_vect.push_back(Cell(0, 0));
+	//for (auto h : this->cell_matrix) {
+	//	this->cell_matrix.push_back(h);
+	//}
+	for (auto y = 0; y < height; y++)
 	{
-		for (auto x = 0; x < my_grid_size.getWidth(); x++)
+		//this->cell_matrix.push_back(cell_vect);
+		for (auto x = 0; x < width; x++)
 		{
 			this->cell_matrix[y].push_back(Cell(x, y));
 		}
@@ -67,12 +77,12 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedCells(int x, int y)
 	int y_start = 0;
 	int x_border = my_grid_size.getWidth();
 	int y_border = my_grid_size.getHeight();
-	std::pair<int, int> viable_pair = std::make_pair(x, y);
+	std::pair<int, int> viable_pair;
 	int i;
 	int j;
 	for (i = -1; i <= 1; i++) {
 		for (j = -1; j <= 1; j++) {
-			if (i == 0 && j == 0) break;	// TODO: or is it continue?
+			if (i == 0 && j == 0) continue;
 			if (((x + i) < x_border) && ((x + i) > x_start) && ((y + j) < y_border) && ((x + j) > y_start))
 			{
 				viable_pair = std::make_pair(x + i, y + j);

@@ -17,7 +17,7 @@ private:
 	// that will populate from the readFile() function with the positions
 	// on the CellGridand amounts for some food particles. (Alternatively
 	// could add them to the vector as your reading… maybe)
-	std::vector<std::pair<int, int> > start_docos; // will hold a matrix that will 
+	//std::vector<std::pair<int, int> > start_docos; // will hold a matrix that will 
 	// populate from the readFile() function with the starting positions,
 	// directions, etc of DOCOs. (Alternatively could add them to the vector as 
 	// your reading… maybe)

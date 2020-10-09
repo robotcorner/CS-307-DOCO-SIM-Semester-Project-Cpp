@@ -147,7 +147,7 @@ void WorldBoard::updateDocos(void)
 	{
 		x = doco.getXPos();
 		y = doco.getYPos();
-		doco.adjoined_cells = this->worldCellGrid->findAdjoinedCells(x, y); // TODO: fix, returns single cell for edge cell
+		doco.adjoined_cells = this->worldCellGrid->findAdjoinedCells(x, y); // TODO: fix, returns single cell
 		doco.adjoined_occupied_cells = this->worldCellGrid->findAdjoinedOccupiedCells();
 		food_eaten = this->updateCellWithADoco(x, y);
 		doco.eat(food_eaten, "default");

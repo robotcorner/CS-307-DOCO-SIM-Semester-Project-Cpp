@@ -10,7 +10,7 @@ private:
 	bool alive;	// whether or not the DOCO is alive or dead, if it’s dead it should be removed or become invisible on the screen.
 	std::pair<int, int> position; // the x position of the DOCO, the y position of the DOCO
 	int energy_level = 500; // the amount of energy the DOCO has.It will be initialized to 500 by default.
-	std::pair<std::string, std::pair<int, int>> direction; // A direction that the DOCO is currently heading. It will be be one of the following strings “N”, “NE”, “E”, “SE”, “S”, “SW”, “W”, “NW”.
+	std::pair<std::string, std::pair<int, int> > direction; // A direction that the DOCO is currently heading. It will be be one of the following strings “N”, “NE”, “E”, “SE”, “S”, “SW”, “W”, “NW”.
 public:
 	std::vector<std::pair<int, int> > adjoined_cells; // this will contain the matrix of adjoining cells to a DOCO.Adjoining means only the cells are touching, diagonal included.
 	std::vector<std::pair<int, int> > adjoined_occupied_cells; // this will contain the matrix of adjoining cells that are occupied.
@@ -18,7 +18,8 @@ public:
 	std::vector<std::pair<int, int> > move_options; // this will contain the matrix of movement options that are available to the DOCO based on it’s movement preferencesand requirements.
 	std::vector<std::pair<int, int> > best_move_options; 
 
-	Doco(int, int, std::string); // starting position, x, y, direction
+	Doco(int, int, std::string &start_dir); // starting position, x, y, direction
+	Doco(int x, int y); // starting position
 	// creates a DOCO object with  set positionand direction specified.These will come out of the xml file that the DataParser reads.
 	~Doco();
 	void setPos(int x, int y); // updates the x and y position of the DOCO.
@@ -46,7 +47,7 @@ public:
 	std::pair<int, int> getPosPair(void); // returns the current position of the DOCO
 	int getXPos(); // returns whether the DOCO is alive or dead.
 	int getYPos(); // returns the current position of the DOCO
-	std::pair<std::string, std::pair<int, int>> getDirection(void); // returns the current direction of the DOCO
+	std::pair<std::string, std::pair<int, int> > getDirection(void); // returns the current direction of the DOCO
 	std::string getDirectionString(void);
 	int getEnergy(); // returns the energy_level of the DOCO
 };

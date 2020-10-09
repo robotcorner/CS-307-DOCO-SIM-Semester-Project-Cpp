@@ -65,26 +65,27 @@ void Directions::printDirXYPairs()
 	}
 }
 
-std::vector<std::pair<std::string, std::pair<int, int>>> Directions::getDirectionPairs()
+std::vector<std::pair<std::string, std::pair<int, int> > > Directions::getDirectionPairs()
 {
 	return this->dir_xy_pairs;
 }
 
-std::pair<std::string, std::pair<int, int>> Directions::getPairComboForString(std::string dir)
+std::pair<std::string, std::pair<int, int> > Directions::getPairComboForString(std::string dir)
 {
-	if (dir == "N") return this->dir_xy_pairs[4];
-	else if (dir == "NE") return this->dir_xy_pairs[7];
-	else if (dir == "E") return this->dir_xy_pairs[6];
-	else if (dir == "SE") return this->dir_xy_pairs[5];
-	else if (dir == "S") return this->dir_xy_pairs[3];
-	else if (dir == "SW") return this->dir_xy_pairs[0];
-	else if (dir == "W") return this->dir_xy_pairs[1];
-	else if (dir == "NW") return this->dir_xy_pairs[2];
+	if (dir == "N") return this->dir_xy_pairs.at(4);
+	else if (dir == "NE") return this->dir_xy_pairs.at(7);
+	else if (dir == "E") return this->dir_xy_pairs.at(6);
+	else if (dir == "SE") return this->dir_xy_pairs.at(5);
+	else if (dir == "S") return this->dir_xy_pairs.at(3);
+	else if (dir == "SW") return this->dir_xy_pairs.at(0);
+	else if (dir == "W") return this->dir_xy_pairs.at(1);
+	else if (dir == "NW") return this->dir_xy_pairs.at(2);
+	else return this->dir_xy_pairs.at(4);
 }
 
-std::pair<std::string, std::pair<int, int>> Directions::getOppositeDirectionPair(std::pair<std::string, std::pair<int, int>> dir_xy_offset) {
+std::pair<std::string, std::pair<int, int> > Directions::getOppositeDirectionPair(std::pair<std::string, std::pair<int, int> > dir_xy_offset) {
 	std::string direction = dir_xy_offset.first;
-	std::pair<std::string, std::pair<int, int>> opposite;
+	std::pair<std::string, std::pair<int, int> > opposite;
 	if (direction == "N") {
 		opposite = this->getPairComboForString("S");
 	}
@@ -112,6 +113,6 @@ std::pair<std::string, std::pair<int, int>> Directions::getOppositeDirectionPair
 	return opposite;
 }
 
-std::pair<std::string, std::pair<int, int>> Directions::getRandomDirectionPair() {
-	return this->dir_xy_pairs.at(generateRandomNum(0, 8));
+std::pair<std::string, std::pair<int, int> > Directions::getRandomDirectionPair() {
+	return this->dir_xy_pairs.at(generateRandomNum(0, 7));
 }
