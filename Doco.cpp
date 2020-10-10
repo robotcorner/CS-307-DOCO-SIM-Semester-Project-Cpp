@@ -88,7 +88,22 @@ o	If a DOCO "smells" a food pellet in a cell bordering its' current location it 
 // maybe circumvent this by providing an order that the doco's moves are decided. make sure once one has decided,
 // the board status for that cell gets updated to occupied. // could create a occupied_pending variable in Cell
 
-// TODO: needs work
+template <typename T>
+std::pair<bool, int> findItemInVect(const std::vector<T>& vecItems, const T& item)
+{
+	std::pair<bool, int> result;
+	auto it = std::find(vecItems.begin(), vecItems.end(), item);
+	if (it != vecItems.end()) {
+		result.second = distance(vecItems.begin(), it);
+		result.first = true;
+	}
+	else {
+		result.first = false;
+		result.second = -1;
+	}
+	return result;
+}
+
 std::pair<int, int> Doco::move(void) // returns the pair that moved too.
 {
 	// Setup move pair that is choosen
@@ -104,13 +119,17 @@ std::pair<int, int> Doco::move(void) // returns the pair that moved too.
 	}
 	
 	// Remove Move options that have DOCO's Adjacent. Don't want to move into Occupied Cell
-	for (auto pair : this->adjoined_occupied_cells) {
-		auto result = std::find(this->adjoined_cells.begin(), this->adjoined_cells.end(), pair);
-		if (result != std::end(this->adjoined_cells)) {
-			this->move_options.erase(result); // don't move into occupied cells
+	for (auto key_pair : this->adjoined_occupied_cells) // for each ajoined pair
+	{
+		// find if that pair is in, and it's position in the adjoined_cells vector of pairs
+		std::pair<bool, int> result = findItemInVect<std::pair<int, int> >(this->adjoined_cells, key_pair); 
+		// if the pair is in
+		if (result.first) {
+			// remove the pair from the options
+			this->move_options.erase(this->adjoined_cells.begin() + result.second - 1);
 		}
 	}
-	
+
 	// Create move pair for continuing in same direciton
 	temp_next_pos = std::make_pair(direction.second.first, direction.second.second);
 
@@ -119,8 +138,9 @@ std::pair<int, int> Doco::move(void) // returns the pair that moved too.
 	bool verified = false;
 	while (!verified)
 	{
-		auto result = std::find(this->move_options.begin(), this->move_options.end(), temp_next_pos);
-		if (result != std::end(this->move_options)) {
+		// find if that pair is in, and it's position in the adjoined_cells vector of pairs
+		std::pair<bool, int> result = findItemInVect<std::pair<int, int> >(this->move_options, temp_next_pos);
+		if (result.first && this->move_options.at(result.second).first >= 0 && this->move_options.at(result.second).second >= 0) {
 			// now we know that the next position for the same direction is valid.
 			temp_next_valid_pos = temp_next_pos;
 			verified = true;
@@ -128,7 +148,7 @@ std::pair<int, int> Doco::move(void) // returns the pair that moved too.
 		else {
 			// Chooses random spot based off available options 
 			// if can't continue in current direction.
-			this->move_options.erase(result); // don't move into occupied cells
+			// this->move_options.erase(this->adjoined_cells.begin() + result.second - 1); 
 			auto temp_next_dir = directions.getRandomDirectionPair();
 			temp_next_pos = std::make_pair(temp_next_dir.second.first, temp_next_dir.second.second);
 		}

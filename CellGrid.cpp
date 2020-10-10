@@ -24,22 +24,14 @@
 
 CellGrid::CellGrid(int h, int w)
 {
-	// int* arr = new int[size];
-	//this->cell_matrix.push_back(std::vector<Cell>());
 	this->my_grid_size.setHeight(h);
 	this->my_grid_size.setWidth(w);
 	int height = my_grid_size.getHeight();
 	int width = my_grid_size.getWidth();
 	this->cell_matrix = std::vector<std::vector<Cell> > (height);
-	// std::vector<Cell> cell_vect;
-	// build cell matrix	
-	// cell_vect.push_back(Cell(0, 0));
-	//for (auto h : this->cell_matrix) {
-	//	this->cell_matrix.push_back(h);
-	//}
+	// build cell matrix
 	for (auto y = 0; y < height; y++)
 	{
-		//this->cell_matrix.push_back(cell_vect);
 		for (auto x = 0; x < width; x++)
 		{
 			this->cell_matrix[y].push_back(Cell(x, y));
@@ -73,17 +65,18 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedCells(int x, int y)
 	// on the cell matrix, finds the cells within one space of it
 	// (N, E, S, W, NE, SE, SW, NW)
 	// DO logic off of borders
+	this->temp_adjoined_cells.clear();
 	int x_start = 0;
 	int y_start = 0;
 	int x_border = my_grid_size.getWidth();
 	int y_border = my_grid_size.getHeight();
 	std::pair<int, int> viable_pair;
-	int i;
-	int j;
+	int i = 0;
+	int j = 0;
 	for (i = -1; i <= 1; i++) {
 		for (j = -1; j <= 1; j++) {
 			if (i == 0 && j == 0) continue;
-			if (((x + i) < x_border) && ((x + i) > x_start) && ((y + j) < y_border) && ((x + j) > y_start))
+			if ( ((x + i) < x_border) && ((x + i) >= x_start) && ((y + j) < y_border) && ((x + j) >= y_start))
 			{
 				viable_pair = std::make_pair(x + i, y + j);
 				this->temp_adjoined_cells.push_back(viable_pair);
@@ -111,9 +104,9 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedOccupiedCells()
 			tempOccupiedCells.push_back(std::make_pair(*x, *y));
 		}
 	}
-	return tempOccupiedCells;
 	delete x;
 	delete y;
+	return tempOccupiedCells;
 }
 
 // tell a DOCO what it’s adjoined cells are. Update the DOCO’s
@@ -136,9 +129,9 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedCellsFood()
 			tempFoodCells.push_back(std::make_pair(*x, *y));
 		}
 	}
-	return tempFoodCells;
 	delete x;
 	delete y;
+	return tempFoodCells;
 }
 
 

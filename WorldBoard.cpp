@@ -115,7 +115,7 @@ int WorldBoard::setCellWithNoFood(int x, int y)
 	return count;
 }
 
-// Helper Function for updateDocos
+// Helper Function for updateDocos  // Makes a Cell on the grid have a DOCO Present
 int WorldBoard::updateCellWithADoco(int x, int y)
 {
 	this->worldCellGrid->cell_matrix[y][x].setXPos(x);
@@ -143,21 +143,21 @@ void WorldBoard::updateDocos(void)
 	// --- Update the current cells with DOCO actions that were decided the previous turn / round.
 	int x;
 	int y;
-	for (auto doco : this->doco_vect)
+	int i;
+	for (i = 0; i < this->doco_vect.size(); i++) 
 	{
-		x = doco.getXPos();
-		y = doco.getYPos();
-		doco.adjoined_cells = this->worldCellGrid->findAdjoinedCells(x, y); // TODO: fix, returns single cell for edge cell
-		doco.adjoined_occupied_cells = this->worldCellGrid->findAdjoinedOccupiedCells();
+		x = this->doco_vect[i].getXPos();
+		y = this->doco_vect[i].getYPos();
 		food_eaten = this->updateCellWithADoco(x, y);
-		doco.eat(food_eaten, "default");
-		doco.adjoined_food_cells = this->worldCellGrid->findAdjoinedCellsFood();
-
+		this->doco_vect[i].eat(food_eaten, "default");
+		this->doco_vect[i].adjoined_cells = this->worldCellGrid->findAdjoinedCells(x, y); // TODO: fix, returns single cell for edge cell
+		this->doco_vect[i].adjoined_occupied_cells = this->worldCellGrid->findAdjoinedOccupiedCells();
+		this->doco_vect[i].adjoined_food_cells = this->worldCellGrid->findAdjoinedCellsFood();
 	}
-	// --- Set Move Positions for next round updates
-	for (auto doco : this->doco_vect)
+	 // --- Set Move Positions for next round updates
+	for (i = 0; this->doco_vect.size(); i++)
 	{
-		doco.move();	// all doco's in list make new move decision one at a time
+		this->doco_vect[i].move();	// all doco's in list make new move decision one at a time
 	}
 }
 

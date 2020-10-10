@@ -6,7 +6,7 @@ private:
 	long int turn_num = 0;
 	int update_interval = 1;
 	int display_interval = 1;
-	bool paused = true;
+	bool paused_state = false;
 
 public:
 	Simulator();	// creates simulator object with default settings

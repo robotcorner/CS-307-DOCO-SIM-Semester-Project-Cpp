@@ -6,7 +6,7 @@ Viewer::Viewer()
 	this->header_message = "DOCO World Simulation";
 	this->footer_message = "- Stephen Stammen";
 	this->separator_line = std::string(this->separator_length, this->separator_char);
-	this->program_state_message = "paused";
+	this->program_state_message = "running";
 }
 
 Viewer::~Viewer()

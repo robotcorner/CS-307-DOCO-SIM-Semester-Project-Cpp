@@ -6,10 +6,10 @@ class Cell
 private:
 	int x_pos;			// x position of a cell
 	int y_pos;			// y position of a cell
-	bool occupied;		// whether a cell is currently occupied by a DOCO or other organism.
-	bool food_present;	// whether there is food present in a cell so that the DOCO can smell it and go to it when nearby
-	int food_count;		// food count in the cell
-	char symbol;		// symbol to print to the board for the location
+	bool occupied = false;		// whether a cell is currently occupied by a DOCO or other organism.
+	bool food_present = false;	// whether there is food present in a cell so that the DOCO can smell it and go to it when nearby
+	int food_count = 0;		// food count in the cell
+	char symbol = '-';		// symbol to print to the board for the location
 
 public:
 	Cell(int x, int y); // create the cell object, it can not be created without a position on the board.

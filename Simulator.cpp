@@ -19,12 +19,12 @@ Simulator::~Simulator()
 
 void Simulator::pause() 
 {
-	this->paused = true;
+	this->paused_state = true;
 }
 
 void Simulator::run()
 {
-	this->paused = false;
+	this->paused_state = false;
 }
 
 void Simulator::setUpdateInterval(int newInterval)
@@ -64,7 +64,7 @@ int Simulator::getDisplayInterval()
 
 bool Simulator::getPausedState()
 {
-	return this->paused;
+	return this->paused_state;
 }
 
 void Simulator::delay(int seconds_delay) {

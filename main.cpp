@@ -5,12 +5,6 @@
 #define DEBUG_1
 
 int main() {
-
-	#ifdef DEBUG_1
-	std::cout << "Hi";
-	#endif	
-	// Not sure I'm using update rate or display rate right ....
-
 	int update_rate = 1;
 	int display_rate = 1;
 	Simulator* mySim = new Simulator(update_rate, display_rate); // containers the DocoSim Object to adjust the sim.
@@ -18,14 +12,20 @@ int main() {
 	
 	char inFile[] = "DOCOData01.xml";
 	WorldBoard* myDocoWorld = new WorldBoard(inFile);
-	
+	Viewer view = Viewer();
+
 	// Initialize World.
-	
 	while (mySim->getPausedState())
-		myDocoWorld->updateWorldState();
+		std::cout << view.getHeaderMessage() << endl;
+		std::cout << view.getNewSeparatorLine() << endl;
 		mySim->delay(1);
+		myDocoWorld->updateWorldState();
+		myDocoWorld->printWorld();
 		myDocoWorld->printWorld();
 		mySim->turnInc();
 		if (mySim->getTurnNum() == max_updates) mySim->pause();
+		std::cout << view.getNewSeparatorLine() << endl;
+		std::cout << view.getLineCountWorld() << endl;
+		std::cout << view.getFooterMessage() << endl;
 	return 0;
 }
