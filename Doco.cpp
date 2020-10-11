@@ -71,24 +71,15 @@ void Doco::eat(int amount_eaten, const std::string& type="default") { // type is
 		int total_replished_e = food_e_value * amount_eaten;
 		this->addEnergy(total_replished_e);
 	}
-	// CellGrid.Matrix.SpecificCell.setFoodPresent(bool) and setSymbol(char),
-	// TODO: make sure the following are updated: This call the CellGrid.Matrix.SpecificCell.setFoodPresent(bool) and setSymbol(char), removeAllFood() commands for the cell being eaten off of.
 }
 
 /*	REQUIREMENTS
 TODO:
-o	Each DOCO will always move in a straight line in its' current direction of movement unless that movement is modified by the constraints given below.
-o	If a DOCO encounters an edge of the world that prevents it from proceeding on its current path it will select a random direction as its new heading. The new heading, however, must not take it into the cell of another DOCO.
-o	If there is another DOCO in the next cell along a DOCO's current heading then the DOCO will select a random direction other than its current heading. The new heading, however, must not take it into the cell of another DOCO.
-o	If a DOCO "smells" a food pellet in a cell bordering its' current location it will alter its heading to take it into that cell on the next move and that direction will become its new heading.
+- [x] Each DOCO will always move in a straight line in its' current direction of movement unless that movement is modified by the constraints given below.
+- [x] If a DOCO encounters an edge of the world that prevents it from proceeding on its current path it will select a random direction as its new heading. The new heading, however, must not take it into the cell of another DOCO.
+- [x] If there is another DOCO in the next cell along a DOCO's current heading then the DOCO will select a random direction other than its current heading. The new heading, however, must not take it into the cell of another DOCO.
+- [ ] If a DOCO "smells" a food pellet in a cell bordering its' current location it will alter its heading to take it into that cell on the next move and that direction will become its new heading.
 */
-
-// Does energy stay the same if move to orginal location as a final option?
-// prioritize cells based off food amounts or some other status.
-// make sure that a two docos say at (0, 1) and (0,3) don't both try to move into (0,2) on an iteration.
-// maybe circumvent this by providing an order that the doco's moves are decided. make sure once one has decided,
-// the board status for that cell gets updated to occupied. // could create a occupied_pending variable in Cell
-//&
 
 template <typename T>
 std::pair<bool, int> findItemInVect(const std::vector<T>& vecItems, const T& item)
@@ -107,7 +98,6 @@ std::pair<bool, int> findItemInVect(const std::vector<T>& vecItems, const T& ite
 	}
 	return result;
 }
-
 
 std::pair<int, int> Doco::move(int world_w, int world_h) // returns the pair that moved too.
 {
@@ -157,27 +147,25 @@ std::pair<int, int> Doco::move(int world_w, int world_h) // returns the pair tha
 	bool verified = false;
 	while (!verified)
 	{
-		// find if that pair is in, and it's position in the adjoined_cells vector of pairs
+		// --- Find if that pair is in, and it's position in the adjoined_cells vector of pairs
 		std::pair<bool, int> result = findItemInVect<std::pair<int, int> >(this->move_options, temp_next_pos);
 		if (result.first && (this->move_options.at(result.second).first >= 0) && (this->move_options.at(result.second).second >= 0) &&
 			(this->move_options.at(result.second).first < world_w) && (this->move_options.at(result.second).second < world_h)) 
 		{
-			// now we know that the next position for the same direction is valid.
+			// --- The next position for the same direction is valid.
 			temp_next_valid_pos = temp_next_pos;
 			verified = true;
 		}
 		else {
-			// Chooses random spot based off available options 
-			// if can't continue in current direction.
-			// this->move_options.erase(this->adjoined_cells.begin() + result.second - 1); 
+			// --- Chooses random spot based off available options if it can't continue in current direction.
 			auto temp_next_dir = directions.getRandomDirectionPair();
 			temp_next_pos = std::make_pair(x + temp_next_dir.second.first, y + temp_next_dir.second.second);
 		}
 	}
 	moving_here = temp_next_valid_pos;
 	
-	// update doco position and energy if it's still alive.
-	if (this->getAlive()) // update doco info only if it's even alive.
+	// --- Update doco position and energy if it's still alive.
+	if (this->getAlive())
 	{
 		if (x == moving_here.first && y == moving_here.second) { /* do nothing */ }
 		else {
@@ -187,17 +175,6 @@ std::pair<int, int> Doco::move(int world_w, int world_h) // returns the pair tha
 		this->setAlive();
 	}
 	return moving_here;
-}
-
-
-void Doco::move(std::vector<std::pair<int, int> >) // choose your own move
-{
-	// check to make sure withing bounds first and nearbly cells.
-	// moving = subtract 10 energy
-	// check if energy = 0, kill DOCO if case
-	// base next position based off of direction.first ("N") 
-	// and direction.second (-1,0) which holds a cordinate pair accessible through
-	// direction.second.first, and direction.second.second
 }
 
 bool Doco::getAlive()

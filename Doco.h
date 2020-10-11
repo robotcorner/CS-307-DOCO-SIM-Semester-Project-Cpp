@@ -9,7 +9,7 @@ class Doco
 private:
 	bool alive;	// whether or not the DOCO is alive or dead, if it’s dead it should be removed or become invisible on the screen.
 	std::pair<int, int> position; // the x position of the DOCO, the y position of the DOCO
-	int energy_level = 70; // the amount of energy the DOCO has.It will be initialized to 500 by default.
+	int energy_level = 40; // the amount of energy the DOCO has.It will be initialized to 500 by default.
 	std::pair<std::string, std::pair<int, int> > direction; // A direction that the DOCO is currently heading. It will be be one of the following strings “N”, “NE”, “E”, “SE”, “S”, “SW”, “W”, “NW”.
 public:
 	std::vector<std::pair<int, int> > adjoined_cells; // this will contain the matrix of adjoining cells to a DOCO.Adjoining means only the cells are touching, diagonal included.
@@ -30,18 +30,13 @@ public:
 	void setEnergy(int); // set the energy_level of the DOCO to a specified amount.
 	void addEnergy(int); // add the specified amount of energy to the DOCO’s energy_level
 	void eat(int, const std::string&);	// eats the food on it's current cell, type is if new food types are added
-	// the DOCO regenerates 50 energy for each pellet eaten, 
-	// and it eats all the pellets at this location. This call the
-	// CellGrid.Matrix.SpecificCell.setFoodPresent(bool) and setSymbol(char),
-	// removeAllFood() commands for the cell being eaten off of.
+	// the DOCO regenerates 50 energy for each pellet eaten, and it eats all the pellets at this location.
 	std::pair<int, int> move(int, int); // using it’s private information about direction, adjoining_cells, 
 	// adjoining_occupied_cells, adjoining_food_cells, return a new x and y position
 	// for it to jump to from it’s available options.It will prioritize it’s current 
 	// direction, but if it’s compromisedand the DOCO would run into another one or 
-	// the end of the world it will pick a new random direction to move. If there are
-	// no cell_options available, it will move to it’s current location for this turn.
+	// the end of the world it will pick a new random direction to move.
 	// Moving will also subtract 10 units of energy from the DOCO.
-	void move(std::vector<std::pair<int, int> >); // choose your own move
 	bool getAlive(); // returns whether the DOCO is alive or dead.
 	std::pair<int, int> getPosPair(void); // returns the current position of the DOCO
 	int getXPos(); // returns whethser the DOCO is alive or dead.

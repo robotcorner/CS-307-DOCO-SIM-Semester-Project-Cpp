@@ -3,7 +3,7 @@
 
 Viewer::Viewer()
 {
-	this->header_message = " ========== DOCO World Simulation ==========";
+	this->header_message = "============= DOCO World Simulation =============";
 	this->footer_message = "Created by: Stephen Stammen\n";
 	this->separator_line = std::string(this->separator_length, this->separator_char);
 	this->program_state_message = "running";

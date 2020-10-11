@@ -67,11 +67,15 @@ void CellGrid::setCharMatrix(void)
 	// based on the status of the cells.
 	int x = 0;
 	int y = 0;
+	this->food_char_count = 0;
+	this->doco_char_count = 0;
 	for (y = 0; y < my_grid_size.getHeight(); y++)
 	{
 		for (x = 0; x < my_grid_size.getWidth(); x++)
 		{
 			this->char_matrix[y][x] = this->cell_matrix[y][x].getSymbol();
+			if (this->cell_matrix[y][x].getFoodPresent()) this->food_char_count += 1;
+			if (this->cell_matrix[y][x].getOccupied()) this->doco_char_count += 1;
 		}
 	}
 }
@@ -153,6 +157,20 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedCellsFood()
 	return tempFoodCells;
 }
 
+
+// Goal: know how much food or DOCO's are on board
+int CellGrid::getFoodCharCount(void) // find total food on board
+{
+	return this->food_char_count;
+}
+int CellGrid::getDocoCharCount(void)
+{
+	return this->doco_char_count;
+}
+int CellGrid::getDocoCount(void) // find total DOCOs on board
+{
+	return this->doco_count;
+}
 
 // Goal: will set the possible move options for the DOCO based off 
 // of the adjoined cell information it gathered.
