@@ -106,7 +106,8 @@ void WorldBoard::generateFoodLocations(int w, int h, int foodCount)
 	{
 		x_pos = generateRandomNum2(0, w-1);
 		y_pos = generateRandomNum2(0, h-1);
-		while (this->worldCellGrid->cell_matrix[y_pos][x_pos].getFoodCount() > 3) // Food count > 3, generate new x and y position.
+		while ((this->worldCellGrid->cell_matrix[y_pos][x_pos].getFoodCount() > 3) // Food count > 3, generate new x and y position.
+			|| (this->worldCellGrid->cell_matrix[y_pos][x_pos].getOccupied()) ) // Don't spawn food in occupied cells
 		{
 			x_pos = generateRandomNum2(0, w-1);
 			y_pos = generateRandomNum2(0, h-1);
@@ -144,8 +145,8 @@ int WorldBoard::setCellWithNoFood(int x, int y)
 // Helper Function for updateDocos - Makes a Cell on the grid have a DOCO Present
 int WorldBoard::updateCellWithADoco(int x, int y)
 {
-	this->worldCellGrid->cell_matrix[y][x].setXPos(x);
-	this->worldCellGrid->cell_matrix[y][x].setYPos(y);
+	// this->worldCellGrid->cell_matrix[y][x].setXPos(x);
+	// this->worldCellGrid->cell_matrix[y][x].setYPos(y);
 	this->worldCellGrid->cell_matrix[y][x].setOccupied(true);
 	int food_count = this->setCellWithNoFood(x, y);
 	this->worldCellGrid->cell_matrix[y][x].setFoodPresent();
@@ -160,6 +161,8 @@ void WorldBoard::updateDocos(void)
 	while (size > 0)  // Go through doco_vect, delete item if it's dead
 	{
 		if (!this->doco_vect[size-1].getAlive()) {
+			this->worldCellGrid->cell_matrix[this->doco_vect[size-1].getYPos()][this->doco_vect[size-1].getXPos()].setOccupied(false);
+			this->worldCellGrid->cell_matrix[this->doco_vect[size-1].getYPos()][this->doco_vect[size-1].getXPos()].setSymbol();
 			auto pos = this->doco_vect.begin() + size - 1;
 			this->doco_vect.erase(pos);
 			size -= 1; // remove an extra item as the doco has been erased.
@@ -179,20 +182,30 @@ void WorldBoard::updateDocos(void)
 		// --- Current X any Y Pos
 		x = this->doco_vect[i].getXPos();
 		y = this->doco_vect[i].getYPos();
+
 		// --- Eat Food for Current Cell. Gain Energy.
 		food_eaten = this->updateCellWithADoco(x, y);
 		this->doco_vect[i].eat(food_eaten, "default");
+
+		// ------------------
 		// --- Tell the DOCO what it's surrounding are, so it knows its options.
 		this->doco_vect[i].adjoined_cells = this->worldCellGrid->findAdjoinedCells(x, y); // TODO: fix, returns single cell for edge cell
 		this->doco_vect[i].adjoined_occupied_cells = this->worldCellGrid->findAdjoinedOccupiedCells();
 		this->doco_vect[i].adjoined_food_cells = this->worldCellGrid->findAdjoinedCellsFood();
-		// --- Find NEW Cell to move to from available options.
+
+		// --- Find NEW Cell to move to from available options. Chooses desirable X_Y position and assingns the DOCO with that new X_Y position
 		auto moved_to = this->doco_vect[i].move(this->width, this->height);	// all doco's in list make new move decision one at a time
-		this->worldCellGrid->cell_matrix[this->doco_vect[i].getYPos()][this->doco_vect[i].getXPos()].setOccupied(true); // set the cell as populated
-		this->worldCellGrid->cell_matrix[this->doco_vect[i].getYPos()][this->doco_vect[i].getXPos()].setSymbol();
+		// ------------------
+
 		// --- Update it's previous cell with data on being non-occupied now.			
 		this->worldCellGrid->cell_matrix[y][x].setOccupied(false);
+		this->worldCellGrid->cell_matrix[y][x].setFoodPresent();
 		this->worldCellGrid->cell_matrix[y][x].setSymbol();
+
+		// --- Update cell properties of new cell DOCO is at
+		this->worldCellGrid->cell_matrix[this->doco_vect[i].getYPos()][this->doco_vect[i].getXPos()].setOccupied(true); // set the cell as populated
+		this->worldCellGrid->cell_matrix[this->doco_vect[i].getYPos()][this->doco_vect[i].getXPos()].setFoodPresent();
+		this->worldCellGrid->cell_matrix[this->doco_vect[i].getYPos()][this->doco_vect[i].getXPos()].setSymbol();
 	}
 }
 

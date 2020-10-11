@@ -83,6 +83,22 @@ std::pair<std::string, std::pair<int, int> > Directions::getPairComboForString(s
 	else return this->dir_xy_pairs.at(4);
 }
 
+std::string Directions::getDirForPair(std::pair<int, int> presentPair, std::pair<int, int> movePair)
+{
+	int d_y = movePair.second - presentPair.second;
+	int d_x = movePair.first - presentPair.first;
+	if (this->dir_xy_pairs.at(4).second.first == d_x && this->dir_xy_pairs.at(4).second.second == d_y) return "N";
+	if (this->dir_xy_pairs.at(7).second.first == d_x && this->dir_xy_pairs.at(7).second.second == d_y) return "NE";
+	if (this->dir_xy_pairs.at(6).second.first == d_x && this->dir_xy_pairs.at(6).second.second == d_y) return "E";
+	if (this->dir_xy_pairs.at(5).second.first == d_x && this->dir_xy_pairs.at(5).second.second == d_y) return "SE";
+	if (this->dir_xy_pairs.at(3).second.first == d_x && this->dir_xy_pairs.at(3).second.second == d_y) return "S";
+	if (this->dir_xy_pairs.at(0).second.first == d_x && this->dir_xy_pairs.at(0).second.second == d_y) return "SW";
+	if (this->dir_xy_pairs.at(1).second.first == d_x && this->dir_xy_pairs.at(1).second.second == d_y) return "W";
+	if (this->dir_xy_pairs.at(2).second.first == d_x && this->dir_xy_pairs.at(2).second.second == d_y) return "NW";
+	else return "N";
+}
+
+
 std::pair<std::string, std::pair<int, int> > Directions::getOppositeDirectionPair(std::pair<std::string, std::pair<int, int> > dir_xy_offset) {
 	std::string direction = dir_xy_offset.first;
 	std::pair<std::string, std::pair<int, int> > opposite;

@@ -20,6 +20,7 @@ public:
 	std::pair<std::string, std::pair<int, int> > getPairComboForString(std::string);
 	std::pair<std::string, std::pair<int, int> > getOppositeDirectionPair(std::pair<std::string, std::pair<int, int> >);
 	std::pair<std::string, std::pair<int, int> > getRandomDirectionPair();
+	std::string getDirForPair(std::pair<int, int> presentPair, std::pair<int, int> movePair);
 	void printDirXYPairs();
 };
 

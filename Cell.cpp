@@ -82,7 +82,9 @@ void Cell::setFoodPresent()
 	if (this->food_count == 0) {
 		this->food_present = false;
 	}
-	this->food_present = true;
+	else {
+		this->food_present = true;
+	}
 }
 
 void Cell::addFood(int foodAdded)

@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
+#include <stdlib.h>
 
 Directions directions = Directions();
 
@@ -119,8 +120,9 @@ std::pair<int, int> Doco::move(int world_w, int world_h) // returns the pair tha
 	// --- Remove move_options that contain occupied cells
 	for (it = this->move_options.begin(); it != this->move_options.end(); )
 	{
+		// --- Find the location of where the move_option pair is that matches the adjoined_occupied_cell
 		identifying_value = std::find(this->adjoined_occupied_cells.begin(), adjoined_occupied_cells.end(), *it);
-		if (identifying_value != this->adjoined_occupied_cells.end())
+		if (identifying_value != this->adjoined_occupied_cells.end()) 
 		{
 			if (it->first == identifying_value->first && it->second == identifying_value->second)
 			{
@@ -136,10 +138,30 @@ std::pair<int, int> Doco::move(int world_w, int world_h) // returns the pair tha
 			++it;
 		}
 	}
+	
+	//	auto i = rand() % this->food_move_options.size();
+	// --- Find nearby food in the valid move options that aren't occupied.
+	for (it = this->move_options.begin(); it != this->move_options.end(); )
+	{
+		// --- Find the location of where the move_option pair is that matches a adjoined_food_cell
+		identifying_value = std::find(this->adjoined_food_cells.begin(), adjoined_food_cells.end(), *it);
+		if (identifying_value != this->adjoined_food_cells.end()) // If the value was found
+		{
+			// --- If the pairs match for the value found:
+			if (it->first == identifying_value->first && it->second == identifying_value->second)
+			{
+				this->food_move_options.push_back(*identifying_value);
+				// --- Choose last found pair to go to that contains food.
+				// --- Extract Direction from this pair. 
+				auto direction = directions.getDirForPair(std::make_pair(x, y), std::make_pair(identifying_value->first, identifying_value->second));
+				// --- Set Current Direction to the pair.
+				this->setDirection(direction);
+			}
+		}
+		++it;
+	}
 
-	// TODO: Add Perfered option for nearby food. If food nearby go to that one instead.
-
-	// --- Create move pair for continuing in same direciton
+	// --- Create move pair for continuing in same direciton or the direction of food
 	temp_next_pos = std::make_pair(x + direction.second.first, y + direction.second.second); // actual x-y cord
 
 	// Check temp_next_pos to see if valid.
@@ -159,6 +181,7 @@ std::pair<int, int> Doco::move(int world_w, int world_h) // returns the pair tha
 		else {
 			// --- Chooses random spot based off available options if it can't continue in current direction.
 			auto temp_next_dir = directions.getRandomDirectionPair();
+			this->setDirection(temp_next_dir.first);
 			temp_next_pos = std::make_pair(x + temp_next_dir.second.first, y + temp_next_dir.second.second);
 		}
 	}

@@ -15,7 +15,7 @@ int main() {
 	WorldBoard* myDocoWorld = new WorldBoard(inFile);	
 	while (!mySim->getPausedState()) // while not false
 	{
-		mySim->delay(3);
+		mySim->delay(2);
 		system("cls");
 		std::cout << view->getHeaderMessage() << "\n";
 		std::cout << view->getNewSeparatorLine() << "\n";
