@@ -96,6 +96,7 @@ void WorldBoard::generateFoodLocations(int w, int h, int foodCount)
 void WorldBoard::setCellWithNewFood(int x, int y)
 {
 	this->worldCellGrid->cell_matrix[y][x].addFood(1);
+	this->worldCellGrid->cell_matrix[y][x].setFoodPresent();
 	this->worldCellGrid->cell_matrix[y][x].setSymbol();
 }
 

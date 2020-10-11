@@ -71,6 +71,7 @@ void Doco::eat(int amount_eaten, const std::string& type="default") { // type is
 		int total_replished_e = food_e_value * amount_eaten;
 		this->addEnergy(total_replished_e);
 	}
+	// CellGrid.Matrix.SpecificCell.setFoodPresent(bool) and setSymbol(char),
 	// TODO: make sure the following are updated: This call the CellGrid.Matrix.SpecificCell.setFoodPresent(bool) and setSymbol(char), removeAllFood() commands for the cell being eaten off of.
 }
 
@@ -88,6 +89,7 @@ o	If a DOCO "smells" a food pellet in a cell bordering its' current location it 
 // maybe circumvent this by providing an order that the doco's moves are decided. make sure once one has decided,
 // the board status for that cell gets updated to occupied. // could create a occupied_pending variable in Cell
 //&
+
 template <typename T>
 std::pair<bool, int> findItemInVect(const std::vector<T>& vecItems, const T& item)
 {
