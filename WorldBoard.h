@@ -43,7 +43,6 @@ public:
 	
 	void updateDocos();
 	int updateCellWithADoco(int x, int y);		// helper function to set cell status for cells with DOCOs, return food amount
-	void updateAllDocoSurroundings();			// helper function of updateDocos()
 
 	// TODO:: DECIDE IF I NEED THEESE!
 	// function overloading because unkown if direction is provided.

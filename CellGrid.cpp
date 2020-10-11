@@ -71,7 +71,7 @@ void CellGrid::setCharMatrix(void)
 	{
 		for (x = 0; x < my_grid_size.getWidth(); x++)
 		{
-			this->char_matrix[y][x] = this->cell_matrix[y][x].getSymbol();	// TODO: Check order
+			this->char_matrix[y][x] = this->cell_matrix[y][x].getSymbol();
 		}
 	}
 }
@@ -94,7 +94,7 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedCells(int x, int y)
 	for (i = -1; i <= 1; i++) {
 		for (j = -1; j <= 1; j++) {
 			if (i == 0 && j == 0) continue;
-			if ( ((x + i) < x_border) && ((x + i) >= x_start) && ((y + j) < y_border) && ((x + j) >= y_start))
+			if ( ((x + i) < x_border) && ((x + i) >= x_start) && ((y + j) < y_border) && ((y + j) >= y_start))
 			{
 				viable_pair = std::make_pair(x + i, y + j);
 				this->temp_adjoined_cells.push_back(viable_pair);

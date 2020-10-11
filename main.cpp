@@ -15,18 +15,17 @@ int main() {
 	WorldBoard* myDocoWorld = new WorldBoard(inFile);	
 	while (!mySim->getPausedState()) // while not false
 	{
-		mySim->delay(5);
+		mySim->delay(1);
 		system("cls");
 		std::cout << view->getHeaderMessage() << endl;
 		std::cout << view->getNewSeparatorLine() << endl;
 		myDocoWorld->updateWorldState();
 		myDocoWorld->printWorld();
-		mySim->turnInc();
 		std::cout << view->getNewSeparatorLine() << endl;
 		std::cout << view->getLineCountWorld() << endl;
 		std::cout << view->getFooterMessage() << endl;
-		if (mySim->getTurnNum() == max_updates) mySim->pause();
-		
+		mySim->turnInc();
+		if (mySim->getTurnNum() == max_updates) mySim->pause();	
 	}
 	return 0;
 }

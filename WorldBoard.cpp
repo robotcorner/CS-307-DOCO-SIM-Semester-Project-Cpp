@@ -82,7 +82,7 @@ void WorldBoard::generateFoodLocations(int w, int h, int foodCount)
 	{
 		x_pos = generateRandomNum2(0, w-1);
 		y_pos = generateRandomNum2(0, h-1);
-		while (this->worldCellGrid->cell_matrix[y_pos][x_pos].getFoodCount() > 3) 
+		while (this->worldCellGrid->cell_matrix[y_pos][x_pos].getFoodCount() > 3) // Food count > 3, generate new x and y position.
 		{
 			x_pos = generateRandomNum2(0, w-1);
 			y_pos = generateRandomNum2(0, h-1);
@@ -93,17 +93,18 @@ void WorldBoard::generateFoodLocations(int w, int h, int foodCount)
 	this->food_positions.shrink_to_fit();
 }
 
-void WorldBoard::updateCellsWithNewFood() 
+void WorldBoard::setCellWithNewFood(int x, int y)
+{
+	this->worldCellGrid->cell_matrix[y][x].addFood(1);
+	this->worldCellGrid->cell_matrix[y][x].setSymbol();
+}
+
+void WorldBoard::updateCellsWithNewFood()
 {
 	for (auto food : this->food_positions) {
 		this->setCellWithNewFood(food.first, food.second);
 	}
-	food_positions.clear();
-}
-
-void WorldBoard::setCellWithNewFood(int x, int y)
-{
-	this->worldCellGrid->cell_matrix[y][x].addFood(1);
+	food_positions.clear(); // all new food positions have been processed.
 }
 
 // --- DOCO ACTIONs ------------------------------------------
@@ -153,7 +154,6 @@ void WorldBoard::updateDocos(void)
 		this->doco_vect[i].adjoined_cells = this->worldCellGrid->findAdjoinedCells(x, y); // TODO: fix, returns single cell for edge cell
 		this->doco_vect[i].adjoined_occupied_cells = this->worldCellGrid->findAdjoinedOccupiedCells();
 		this->doco_vect[i].adjoined_food_cells = this->worldCellGrid->findAdjoinedCellsFood();
-		// --- Set Move Positions for next round updates
 		this->doco_vect[i].move(this->width, this->height);	// all doco's in list make new move decision one at a time
 	}
 }
@@ -161,8 +161,9 @@ void WorldBoard::updateDocos(void)
 // this does a **SINGLE** update of the board
 void WorldBoard::updateWorldState()
 {
-	generateFoodLocations(this->width, this->height, generateRandomNum2(1, 10));
-	updateDocos();
+	this->generateFoodLocations(this->width, this->height, generateRandomNum2(1, 10));
+	this->updateCellsWithNewFood();
+	this->updateDocos();
 	this->worldCellGrid->initCharMatrix(this->width, this->height);
 	this->worldCellGrid->setCharMatrix();
 }

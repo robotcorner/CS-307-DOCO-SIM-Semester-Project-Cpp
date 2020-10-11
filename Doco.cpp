@@ -21,7 +21,7 @@ Doco::Doco(int x, int y) {
 }
 
 Doco::~Doco() {
-
+	
 }
 
 void Doco::setPos(int x, int y)
@@ -158,7 +158,7 @@ std::pair<int, int> Doco::move(int world_w, int world_h) // returns the pair tha
 		// find if that pair is in, and it's position in the adjoined_cells vector of pairs
 		std::pair<bool, int> result = findItemInVect<std::pair<int, int> >(this->move_options, temp_next_pos);
 		if (result.first && (this->move_options.at(result.second).first >= 0) && (this->move_options.at(result.second).second >= 0) &&
-			(this->move_options.at(result.second).first < world_w) && (this->move_options.at(result.first).second < world_h)) 
+			(this->move_options.at(result.second).first < world_w) && (this->move_options.at(result.second).second < world_h)) 
 		{
 			// now we know that the next position for the same direction is valid.
 			temp_next_valid_pos = temp_next_pos;
