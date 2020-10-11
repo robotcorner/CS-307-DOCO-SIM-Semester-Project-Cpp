@@ -3,8 +3,8 @@
 
 Viewer::Viewer()
 {
-	this->header_message = "DOCO World Simulation";
-	this->footer_message = "- Stephen Stammen";
+	this->header_message = " ========== DOCO World Simulation ==========";
+	this->footer_message = "Created by: Stephen Stammen\n";
 	this->separator_line = std::string(this->separator_length, this->separator_char);
 	this->program_state_message = "running";
 }
@@ -17,7 +17,7 @@ Viewer::~Viewer()
 void Viewer::setHeaderMessage(std::string newHeader)
 {
 	if (newHeader.length() < 100) {
-		this->header_message;
+		this->header_message = newHeader;
 	}
 	else
 	{
@@ -28,7 +28,7 @@ void Viewer::setHeaderMessage(std::string newHeader)
 void Viewer::setFooterMessage(std::string newFooter)
 {
 	if (newFooter.length() < 100) {
-		this->footer_message;
+		this->footer_message = newFooter;
 	}
 	else
 	{
@@ -38,7 +38,7 @@ void Viewer::setFooterMessage(std::string newFooter)
 
 void Viewer::setProgramStateMessage(std::string newState)
 {
-	this->program_state_message;
+	this->program_state_message = newState;
 }
 
 void Viewer::setLineCountWorld(int lineCount)

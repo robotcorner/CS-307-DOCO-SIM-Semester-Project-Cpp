@@ -61,7 +61,6 @@ int Simulator::getDisplayInterval()
 	return this->display_interval;
 }
 
-
 bool Simulator::getPausedState()
 {
 	return this->paused_state;

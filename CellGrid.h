@@ -8,15 +8,15 @@
 class CellGrid
 {
 protected:
-	GridSize my_grid_size;		// holds the details about the CellGrid
-	std::vector<std::vector<char> > char_matrix;		// holds matrix of the characters to represent
+	GridSize my_grid_size;		// holds the details about the 
 	std::vector<std::pair<int, int> > temp_adjoined_cells; // holds vector of adjoined cells for a given position
-
+	std::vector<std::vector<char> > char_matrix;		// holds matrix of the characters to represent
 public:
 	std::vector<std::vector<Cell> > cell_matrix;		// holds the matrix of cell objects
 	CellGrid(int h, int w);	// creates the gridShape to the specified heightand width, then populates the cell_matrix with cell_objects initialized to each position.
 	~CellGrid(); // de-allocates memory for CellGrid object
 	
+	void initCharMatrix(int world_w, int world_h);
 	void setCharMatrix(void);  // Set the char_matrix to their appropriate characters based on the status of the cells.
 	std::vector<std::pair<int, int> > findAdjoinedCells(int x, int y); // using the xand y position provided in conjunction with its data on the cell matrix, finds the cells within one space of it(N, E, S, W, NE, SE, SW, NW).
 	std::vector<std::pair<int, int> > findAdjoinedOccupiedCells();

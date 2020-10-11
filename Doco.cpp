@@ -87,14 +87,16 @@ o	If a DOCO "smells" a food pellet in a cell bordering its' current location it 
 // make sure that a two docos say at (0, 1) and (0,3) don't both try to move into (0,2) on an iteration.
 // maybe circumvent this by providing an order that the doco's moves are decided. make sure once one has decided,
 // the board status for that cell gets updated to occupied. // could create a occupied_pending variable in Cell
-
+//&
 template <typename T>
 std::pair<bool, int> findItemInVect(const std::vector<T>& vecItems, const T& item)
 {
 	std::pair<bool, int> result;
 	auto it = std::find(vecItems.begin(), vecItems.end(), item);
 	if (it != vecItems.end()) {
+		// dynamic_cast<std::vector<std::pair<int, int> >::iterator>()
 		result.second = distance(vecItems.begin(), it);
+		//auto item = result.second;
 		result.first = true;
 	}
 	else {
@@ -104,34 +106,49 @@ std::pair<bool, int> findItemInVect(const std::vector<T>& vecItems, const T& ite
 	return result;
 }
 
-std::pair<int, int> Doco::move(void) // returns the pair that moved too.
+
+std::pair<int, int> Doco::move(int world_w, int world_h) // returns the pair that moved too.
 {
 	// Setup move pair that is choosen
+	int x = this->getXPos();
+	int y = this->getYPos();
 	std::pair<int, int> moving_here;		// new (x, y) position for DOCO.
 	std::pair<int, int> temp_next_pos;
 	std::pair<int, int> temp_next_valid_pos;
 	std::pair<int, int> option;
 
-	// Clear move options from previous turn to generate new ones now that new data is in.
-	this->move_options.clear(); 
+	this->move_options.clear(); // Clear move options from previous turn to generate new ones now that new data is in.
 	for (auto pair : this->adjoined_cells) {
 		this->move_options.push_back(pair);
 	}
-	
-	// Remove Move options that have DOCO's Adjacent. Don't want to move into Occupied Cell
-	for (auto key_pair : this->adjoined_occupied_cells) // for each ajoined pair
+
+	std::vector<std::pair<int, int> >::iterator it;
+	std::vector<std::pair<int, int> >::iterator identifying_value;
+	// --- Remove move_options that contain occupied cells
+	for (it = this->move_options.begin(); it != this->move_options.end(); )
 	{
-		// find if that pair is in, and it's position in the adjoined_cells vector of pairs
-		std::pair<bool, int> result = findItemInVect<std::pair<int, int> >(this->adjoined_cells, key_pair); 
-		// if the pair is in
-		if (result.first) {
-			// remove the pair from the options
-			this->move_options.erase(this->adjoined_cells.begin() + result.second - 1);
+		identifying_value = std::find(this->adjoined_occupied_cells.begin(), adjoined_occupied_cells.end(), *it);
+		if (identifying_value != this->adjoined_occupied_cells.end())
+		{
+			if (it->first == identifying_value->first && it->second == identifying_value->second)
+			{
+				it = this->move_options.erase(it);
+			}
+			else
+			{
+				++it;
+			}
+		}
+		else
+		{
+			++it;
 		}
 	}
 
-	// Create move pair for continuing in same direciton
-	temp_next_pos = std::make_pair(direction.second.first, direction.second.second);
+	// TODO: Add Perfered option for nearby food. If food nearby go to that one instead.
+
+	// --- Create move pair for continuing in same direciton
+	temp_next_pos = std::make_pair(x + direction.second.first, y + direction.second.second); // actual x-y cord
 
 	// Check temp_next_pos to see if valid.
 	// Remove move options that involve out of bounds or collisions with other DOCOs.
@@ -140,7 +157,9 @@ std::pair<int, int> Doco::move(void) // returns the pair that moved too.
 	{
 		// find if that pair is in, and it's position in the adjoined_cells vector of pairs
 		std::pair<bool, int> result = findItemInVect<std::pair<int, int> >(this->move_options, temp_next_pos);
-		if (result.first && this->move_options.at(result.second).first >= 0 && this->move_options.at(result.second).second >= 0) {
+		if (result.first && (this->move_options.at(result.second).first >= 0) && (this->move_options.at(result.second).second >= 0) &&
+			(this->move_options.at(result.second).first < world_w) && (this->move_options.at(result.first).second < world_h)) 
+		{
 			// now we know that the next position for the same direction is valid.
 			temp_next_valid_pos = temp_next_pos;
 			verified = true;
@@ -150,16 +169,15 @@ std::pair<int, int> Doco::move(void) // returns the pair that moved too.
 			// if can't continue in current direction.
 			// this->move_options.erase(this->adjoined_cells.begin() + result.second - 1); 
 			auto temp_next_dir = directions.getRandomDirectionPair();
-			temp_next_pos = std::make_pair(temp_next_dir.second.first, temp_next_dir.second.second);
+			temp_next_pos = std::make_pair(x + temp_next_dir.second.first, y + temp_next_dir.second.second);
 		}
 	}
-
 	moving_here = temp_next_valid_pos;
-
+	
 	// update doco position and energy if it's still alive.
 	if (this->getAlive()) // update doco info only if it's even alive.
 	{
-		if (this->getXPos() == moving_here.first && this->getYPos() == moving_here.second) { /* do nothing */ }
+		if (x == moving_here.first && y == moving_here.second) { /* do nothing */ }
 		else {
 			this->energy_level -= 10; // 10 Energy per move. Only count if they moved to a new spot.
 		}
@@ -169,15 +187,6 @@ std::pair<int, int> Doco::move(void) // returns the pair that moved too.
 	return moving_here;
 }
 
-void Doco::move(int, int) // choose your own move
-{
-	// check to make sure withing bounds first
-	// moving = subtract 10 energy
-	// check if energy = 0, kill DOCO if case
-	// base next position based off of direction.first ("N") 
-	// and direction.second (-1,0) which holds a cordinate pair accessible through
-	// direction.second.first, and direction.second.second
-}
 
 void Doco::move(std::vector<std::pair<int, int> >) // choose your own move
 {
@@ -223,3 +232,4 @@ int Doco::getEnergy() // returns the energy_level of the DOCO
 {
 	return this->energy_level;
 }
+

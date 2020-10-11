@@ -45,13 +45,31 @@ CellGrid:: ~CellGrid()
 	// de-allocates memory for CellGrid object
 }
 
+void CellGrid::initCharMatrix(int world_w, int world_h) {
+	// Set the char_matrix to their appropriate characters 
+	// based on the status of the cells.
+	int x = 0;
+	int y = 0;
+	this->char_matrix = std::vector<std::vector<char> >(world_h);
+	for (y = 0; y < world_h; y++)
+	{
+		for (x = 0; x < world_w; x++)
+		{
+			this->char_matrix[y].push_back(' ');
+		}
+	}
+}
+
+
 void CellGrid::setCharMatrix(void)
 {
 	// Set the char_matrix to their appropriate characters 
 	// based on the status of the cells.
-	for (auto y = 0; y < my_grid_size.getHeight(); y++)
+	int x = 0;
+	int y = 0;
+	for (y = 0; y < my_grid_size.getHeight(); y++)
 	{
-		for (auto x = 0; x < my_grid_size.getWidth(); x++)
+		for (x = 0; x < my_grid_size.getWidth(); x++)
 		{
 			this->char_matrix[y][x] = this->cell_matrix[y][x].getSymbol();	// TODO: Check order
 		}
@@ -96,10 +114,11 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedOccupiedCells()
 	int* y = new int;
 	*x = 0;
 	*y = 0;
-	for (auto i : this->temp_adjoined_cells) {
-		i.first = *x;		// store x at allocated address
-		i.first = *y;		// store y at allocated address
-		if (this->cell_matrix[*x][*y].getOccupied())	// if occupied
+	for (auto pair : this->temp_adjoined_cells) {
+		*x = pair.first;		// store x at allocated address
+		*y = pair.second;		// store y at allocated address
+		bool occupied = this->cell_matrix[*y][*x].getOccupied();
+		if (occupied)	// if occupied
 		{
 			tempOccupiedCells.push_back(std::make_pair(*x, *y));
 		}
@@ -121,10 +140,10 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedCellsFood()
 	int* y = new int;
 	*x = 0;
 	*y = 0;
-	for (auto i : this->temp_adjoined_cells) {
-		i.first = *x;		// store x at allocated address
-		i.first = *y;		// store y at allocated address
-		if (this->cell_matrix[*x][*y].getFoodPresent()) // if food is present
+	for (auto pair : this->temp_adjoined_cells) {
+		*x = pair.first;		// store x at allocated address
+		*y = pair.second;		// store y at allocated address
+		if (this->cell_matrix[*y][*x].getFoodPresent()) // if food is present
 		{
 			tempFoodCells.push_back(std::make_pair(*x, *y));
 		}
@@ -156,8 +175,9 @@ void CellGrid::printCharMatrix(void)
 	{
 		for (auto x = 0; x < my_grid_size.getWidth(); x++)
 		{
-			std::cout << this->char_matrix[y][x];
+			std::cout << this->char_matrix[y][x] << ' ';
 		}
+		std::cout << "\n";
 	}
 }
 

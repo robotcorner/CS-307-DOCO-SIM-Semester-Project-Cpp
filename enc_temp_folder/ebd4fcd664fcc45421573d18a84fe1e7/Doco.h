@@ -49,4 +49,5 @@ public:
 	std::pair<std::string, std::pair<int, int> > getDirection(void); // returns the current direction of the DOCO
 	std::string getDirectionString(void);
 	int getEnergy(); // returns the energy_level of the DOCO
+	bool removeOccupiedCell(std::vector<std::pair<int, int>* >& pairList, int pairToRemove);
 };

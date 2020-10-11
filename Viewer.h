@@ -7,8 +7,8 @@ class Viewer
 {
 private:
 	std::string header_message; // holds the start message at the top of the console.
-	int line_count_world; // keeps the total line count, basically number of matrix rows.
-	int separator_length = 75;
+	int line_count_world = 0; // keeps the total line count, basically number of matrix rows.
+	int separator_length = 50;
 	char separator_char = '.';
 	std::string separator_line;
 	std::string footer_message; // text at bottom of console.

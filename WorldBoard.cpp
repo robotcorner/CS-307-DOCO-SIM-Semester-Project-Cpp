@@ -66,8 +66,9 @@ void WorldBoard::readFile(char* inFile)
 	delete ptr_x_pos;
 	delete ptr_y_pos;
 	this->doco_vect.shrink_to_fit();
-	this->generateFoodLocations(this->width, this->height, food_count);
-	this->updateDocos();
+	this->worldCellGrid->initCharMatrix(this->width, this->height);
+	// this->generateFoodLocations(this->width, this->height, food_count);
+	// this->updateDocos();
 }
 
 // --- FOOD SPAWNER --------------------------------------
@@ -75,16 +76,16 @@ void WorldBoard::readFile(char* inFile)
 void WorldBoard::generateFoodLocations(int w, int h, int foodCount)
 {
 	// generate spawn locations
-	int x_pos;
-	int y_pos;
+	int x_pos = 0;
+	int y_pos = 0;
 	for (int i = 0; i < foodCount; ++i)
 	{
-		x_pos = generateRandomNum2(0, w);
-		y_pos = generateRandomNum2(0, h);
+		x_pos = generateRandomNum2(0, w-1);
+		y_pos = generateRandomNum2(0, h-1);
 		while (this->worldCellGrid->cell_matrix[y_pos][x_pos].getFoodCount() > 3) 
 		{
-			x_pos = generateRandomNum2(0, w);
-			y_pos = generateRandomNum2(0, h);
+			x_pos = generateRandomNum2(0, w-1);
+			y_pos = generateRandomNum2(0, h-1);
 		}
 		auto location = std::make_pair(x_pos, y_pos);
 		this->food_positions.push_back(location);
@@ -104,7 +105,6 @@ void WorldBoard::setCellWithNewFood(int x, int y)
 {
 	this->worldCellGrid->cell_matrix[y][x].addFood(1);
 }
-
 
 // --- DOCO ACTIONs ------------------------------------------
 
@@ -132,7 +132,7 @@ void WorldBoard::updateDocos(void)
 	int food_eaten;
 	// --- Check Doco's to kill first
 	int size = this->doco_vect.size();
-	while (size > 0) 
+	while (size > 0)  // Go through doco_vect, delete item if it's dead
 	{
 		if (!this->doco_vect[size-1].getAlive()) {
 			this->doco_vect.erase(this->doco_vect.begin()+size-1);
@@ -141,9 +141,9 @@ void WorldBoard::updateDocos(void)
 		size -= 1;
 	}
 	// --- Update the current cells with DOCO actions that were decided the previous turn / round.
-	int x;
-	int y;
-	int i;
+	int x = 0;
+	int y = 0;
+	int i = 0;
 	for (i = 0; i < this->doco_vect.size(); i++) 
 	{
 		x = this->doco_vect[i].getXPos();
@@ -153,20 +153,18 @@ void WorldBoard::updateDocos(void)
 		this->doco_vect[i].adjoined_cells = this->worldCellGrid->findAdjoinedCells(x, y); // TODO: fix, returns single cell for edge cell
 		this->doco_vect[i].adjoined_occupied_cells = this->worldCellGrid->findAdjoinedOccupiedCells();
 		this->doco_vect[i].adjoined_food_cells = this->worldCellGrid->findAdjoinedCellsFood();
-	}
-	 // --- Set Move Positions for next round updates
-	for (i = 0; this->doco_vect.size(); i++)
-	{
-		this->doco_vect[i].move();	// all doco's in list make new move decision one at a time
+		// --- Set Move Positions for next round updates
+		this->doco_vect[i].move(this->width, this->height);	// all doco's in list make new move decision one at a time
 	}
 }
-
 
 // this does a **SINGLE** update of the board
 void WorldBoard::updateWorldState()
 {
 	generateFoodLocations(this->width, this->height, generateRandomNum2(1, 10));
 	updateDocos();
+	this->worldCellGrid->initCharMatrix(this->width, this->height);
+	this->worldCellGrid->setCharMatrix();
 }
 
 void WorldBoard::printWorld()
