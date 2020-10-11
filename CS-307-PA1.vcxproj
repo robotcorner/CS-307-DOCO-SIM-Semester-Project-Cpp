@@ -146,6 +146,7 @@
     <ClInclude Include="Directions.h" />
     <ClInclude Include="Doco.h" />
     <ClInclude Include="GridSize.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Simulator.h" />
     <ClInclude Include="Viewer.h" />
     <ClInclude Include="WorldBoard.h" />
@@ -164,6 +165,10 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="DOCOData01.xml" />
+    <Xml Include="DOCOData02.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CS-307-PA.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

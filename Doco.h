@@ -2,14 +2,12 @@
 #include <string>
 #include <vector>
 
-//DOCO
-
 class Doco
 {
 private:
 	bool alive;	// whether or not the DOCO is alive or dead, if it’s dead it should be removed or become invisible on the screen.
 	std::pair<int, int> position; // the x position of the DOCO, the y position of the DOCO
-	int energy_level = 70; // the amount of energy the DOCO has.It will be initialized to 500 by default.
+	int energy_level = 500; // the amount of energy the DOCO has.It will be initialized to 500 by default.
 	std::pair<std::string, std::pair<int, int> > direction; // A direction that the DOCO is currently heading. It will be be one of the following strings “N”, “NE”, “E”, “SE”, “S”, “SW”, “W”, “NW”.
 public:
 	std::vector<std::pair<int, int> > adjoined_cells; // this will contain the matrix of adjoining cells to a DOCO.Adjoining means only the cells are touching, diagonal included.
@@ -19,7 +17,6 @@ public:
 	std::vector<std::pair<int, int> > food_move_options; 
 
 	Doco(int, int, std::string &start_dir); // starting position, x, y, direction
-	Doco(int x, int y); // starting position
 	// creates a DOCO object with  set positionand direction specified.These will come out of the xml file that the DataParser reads.
 	~Doco();
 	void setPos(int x, int y); // updates the x and y position of the DOCO.

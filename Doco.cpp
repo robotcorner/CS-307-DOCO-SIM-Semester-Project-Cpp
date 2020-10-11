@@ -16,11 +16,6 @@ Doco::Doco(int x, int y, std::string &start_dir)
 	this->setDirection(start_dir);
 }
 
-Doco::Doco(int x, int y) {
-	this->position.first = x;
-	this->position.second = y;
-}
-
 Doco::~Doco() {
 	
 }
@@ -74,12 +69,11 @@ void Doco::eat(int amount_eaten, const std::string& type="default") { // type is
 	}
 }
 
-/*	REQUIREMENTS
-TODO:
+/*	REQUIREMENTS:
 - [x] Each DOCO will always move in a straight line in its' current direction of movement unless that movement is modified by the constraints given below.
 - [x] If a DOCO encounters an edge of the world that prevents it from proceeding on its current path it will select a random direction as its new heading. The new heading, however, must not take it into the cell of another DOCO.
 - [x] If there is another DOCO in the next cell along a DOCO's current heading then the DOCO will select a random direction other than its current heading. The new heading, however, must not take it into the cell of another DOCO.
-- [ ] If a DOCO "smells" a food pellet in a cell bordering its' current location it will alter its heading to take it into that cell on the next move and that direction will become its new heading.
+- [x] If a DOCO "smells" a food pellet in a cell bordering its' current location it will alter its heading to take it into that cell on the next move and that direction will become its new heading.
 */
 
 template <typename T>
@@ -127,6 +121,9 @@ std::pair<int, int> Doco::move(int world_w, int world_h) // returns the pair tha
 			if (it->first == identifying_value->first && it->second == identifying_value->second)
 			{
 				it = this->move_options.erase(it);
+				// --- Create new random direction when nearby another doco in current heading
+				auto temp_next_dir = directions.getRandomDirectionPair();
+				this->setDirection(temp_next_dir.first);
 			}
 			else
 			{
@@ -139,7 +136,8 @@ std::pair<int, int> Doco::move(int world_w, int world_h) // returns the pair tha
 		}
 	}
 	
-	//	auto i = rand() % this->food_move_options.size();
+
+
 	// --- Find nearby food in the valid move options that aren't occupied.
 	for (it = this->move_options.begin(); it != this->move_options.end(); )
 	{

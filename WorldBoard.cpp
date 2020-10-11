@@ -145,8 +145,6 @@ int WorldBoard::setCellWithNoFood(int x, int y)
 // Helper Function for updateDocos - Makes a Cell on the grid have a DOCO Present
 int WorldBoard::updateCellWithADoco(int x, int y)
 {
-	// this->worldCellGrid->cell_matrix[y][x].setXPos(x);
-	// this->worldCellGrid->cell_matrix[y][x].setYPos(y);
 	this->worldCellGrid->cell_matrix[y][x].setOccupied(true);
 	int food_count = this->setCellWithNoFood(x, y);
 	this->worldCellGrid->cell_matrix[y][x].setFoodPresent();
@@ -183,13 +181,9 @@ void WorldBoard::updateDocos(void)
 		x = this->doco_vect[i].getXPos();
 		y = this->doco_vect[i].getYPos();
 
-		// --- Eat Food for Current Cell. Gain Energy.
-		food_eaten = this->updateCellWithADoco(x, y);
-		this->doco_vect[i].eat(food_eaten, "default");
-
 		// ------------------
 		// --- Tell the DOCO what it's surrounding are, so it knows its options.
-		this->doco_vect[i].adjoined_cells = this->worldCellGrid->findAdjoinedCells(x, y); // TODO: fix, returns single cell for edge cell
+		this->doco_vect[i].adjoined_cells = this->worldCellGrid->findAdjoinedCells(x, y);
 		this->doco_vect[i].adjoined_occupied_cells = this->worldCellGrid->findAdjoinedOccupiedCells();
 		this->doco_vect[i].adjoined_food_cells = this->worldCellGrid->findAdjoinedCellsFood();
 
@@ -203,6 +197,10 @@ void WorldBoard::updateDocos(void)
 		this->worldCellGrid->cell_matrix[y][x].setSymbol();
 
 		// --- Update cell properties of new cell DOCO is at
+		// --- Eat Food for Current Cell. Gain Energy.
+		food_eaten = this->updateCellWithADoco(this->doco_vect[i].getXPos(), this->doco_vect[i].getYPos());
+		this->doco_vect[i].eat(food_eaten, "default");
+		
 		this->worldCellGrid->cell_matrix[this->doco_vect[i].getYPos()][this->doco_vect[i].getXPos()].setOccupied(true); // set the cell as populated
 		this->worldCellGrid->cell_matrix[this->doco_vect[i].getYPos()][this->doco_vect[i].getXPos()].setFoodPresent();
 		this->worldCellGrid->cell_matrix[this->doco_vect[i].getYPos()][this->doco_vect[i].getXPos()].setSymbol();
