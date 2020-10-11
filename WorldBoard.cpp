@@ -149,22 +149,26 @@ void WorldBoard::updateDocos(void)
 	{
 		x = this->doco_vect[i].getXPos();
 		y = this->doco_vect[i].getYPos();
-		food_eaten = this->updateCellWithADoco(x, y);
-		this->doco_vect[i].eat(food_eaten, "default");
 		this->doco_vect[i].adjoined_cells = this->worldCellGrid->findAdjoinedCells(x, y); // TODO: fix, returns single cell for edge cell
 		this->doco_vect[i].adjoined_occupied_cells = this->worldCellGrid->findAdjoinedOccupiedCells();
 		this->doco_vect[i].adjoined_food_cells = this->worldCellGrid->findAdjoinedCellsFood();
 		this->doco_vect[i].move(this->width, this->height);	// all doco's in list make new move decision one at a time
+		food_eaten = this->updateCellWithADoco(x, y);
+		this->doco_vect[i].eat(food_eaten, "default");
+		// Reset Symbols for Old Cell
+		this->worldCellGrid->cell_matrix[y][x].setOccupied(false);
+		this->worldCellGrid->cell_matrix[y][x].setFoodPresent();
+		this->worldCellGrid->cell_matrix[y][x].setSymbol();
 	}
 }
 
 // this does a **SINGLE** update of the board
 void WorldBoard::updateWorldState()
 {
+	this->worldCellGrid->initCharMatrix(this->width, this->height);
 	this->generateFoodLocations(this->width, this->height, generateRandomNum2(1, 10));
 	this->updateCellsWithNewFood();
 	this->updateDocos();
-	this->worldCellGrid->initCharMatrix(this->width, this->height);
 	this->worldCellGrid->setCharMatrix();
 }
 
