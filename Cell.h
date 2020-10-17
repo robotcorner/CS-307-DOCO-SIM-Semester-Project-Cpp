@@ -6,6 +6,7 @@ class Cell
 private:
 	int x_pos;			// x position of a cell
 	int y_pos;			// y position of a cell
+	bool obstacle = false;
 	bool occupied = false;		// whether a cell is currently occupied by a DOCO or other organism.
 	bool food_present = false;	// whether there is food present in a cell so that the DOCO can smell it and go to it when nearby
 	int food_count = 0;		// food count in the cell

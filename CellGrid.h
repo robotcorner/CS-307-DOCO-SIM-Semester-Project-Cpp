@@ -14,6 +14,7 @@ protected:
 	int food_char_count = 0; // number of food spots on grid printed
 	int doco_char_count = 0; // number of doco spots on grid printed
 	int doco_count = 0;	// number of DOCOs on the grid
+	int obstacle_count = 0; // number of Obstacles on the grid
 public:
 	std::vector<std::vector<Cell> > cell_matrix; // holds the matrix of cell objects
 	CellGrid(int h, int w);	// creates the gridShape to the specified heightand width, then populates the cell_matrix with cell_objects initialized to each position.
@@ -27,6 +28,7 @@ public:
 	int getFoodCharCount(void); // return food_char_count
 	int getDocoCharCount(void); // return doco_char_count
 	int getDocoCount(void);		// return doco_count
+	int getObstacleCount(void); // return obstacle_count
 	std::vector<std::vector<Cell> > getMatrix(void); // returns cell_matrix
 	std::vector<std::vector<char> > getCharMatrix(); // returns char_matrix
 	void printCharMatrix(); // returns the character matrix in printed to the console based off of the char_matrix class property.

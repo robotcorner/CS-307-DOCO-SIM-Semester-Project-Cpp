@@ -171,6 +171,10 @@ int CellGrid::getDocoCount(void) // find total DOCOs on board
 {
 	return this->doco_count;
 }
+int CellGrid::getObstacleCount(void) // return obstacle_count
+{
+	return this->obstacle_count;
+}
 
 // Goal: will set the possible move options for the DOCO based off 
 // of the adjoined cell information it gathered.

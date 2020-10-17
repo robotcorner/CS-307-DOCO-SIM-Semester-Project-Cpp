@@ -12,7 +12,8 @@ class WorldBoard
 private:
 	int width;
 	int height;
-	std::vector<std::pair<int, int> > food_positions; 
+	std::vector<std::pair<int, int> > food_positions;
+	std::vector<std::pair<int, int> > obstacle_positions;
 	void generateFoodLocations(int x_range, int y_range, int foodCount=NULL);
 	void readFile(char* inFile);
 

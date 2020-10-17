@@ -1,0 +1,322 @@
+@startuml
+
+title PA-1: Class Outline
+
+class DataParser 
+{
+    -inFile: ifstream *
+    -m_FoodCount : int
+    -m_iNextDOCOIndex : int
+    -m_iNumDOCOs : int
+    -m_iWorldHeight : int
+    -m_iWorldWidth : int
+    -m_sFileName : char[64]
+
+    +DataParser(char *fileName)
+    +~DataParser()
+
+    +getDOCOCount() : int
+    +getDOCOData(char *movement, int *xpos, int *ypos) : bool
+    +getDOCOWorldHeight() : int
+    +getDOCOWorldWidth() : int
+    +getFoodCount() : int
+    +getNextLine(char *buffer, int n) : bool
+}
+
+class ModifiedDataParser
+{
+
+}
+
+class Directions 
+{
+    -move_directions : vector<string>
+    -xy_modifiers : vector<pair<int,int>>
+    -horizontal_offsets_with_dir : vector<pair<string, pair<int, int> > >
+	-horizontal_pair_offsets : vector<pair<int, int> >
+	-vertical_offsets_with_dir : vector<pair<string, pair<int, int> > >
+	-vertical_pair_offsets : vector<pair<int, int> >
+	-diagonal_offsets_with_dir : vector<pair<string, pair<int, int> > >
+	-diagonal_pair_offsets : vector<pair<int, int> >
+    +dir_xy_pairs : vector<pair<string,pair<int,int> > >
+    
+    +Directions()
+    +~Directions()
+    
+    -setDirXYPairs() : void
+    -setMoveDirections() : vector<string>
+    -setXYModifiers() : void
+    +getAllDirections() : vector<string>
+    +getDirectionPairs() : vector<pair<string,pair<int,int>>>
+    
+    +getHorizontalPairsOffsetsWithDir() : vector<pair<string, pair<int, int>>>
+    +getHorizontalPairOffsets() : vector<pair<int,int>>
+    +getVerticalPairOffsetsWithDir() : vector<pair<string, pair<int, int>>>
+    +getVerticalPairOffsets() : vector<pair<int,int>>
+    +getDiagonalPairOffsetsWithDir() : vector<pair<string, pair<int, int>>>
+    +getDiagonalPairOffsets() : vector<pair<int,int>>
+    
+    +getDirForPair(presentPair, movePair) : string
+    +getOppositeDirectionPair(pair<string, pair<int,int>>) : pair<string, pair<int,int>>
+    +getPairComboForString(string) : pair<string,pair<int,int>>
+    +getRandomDirectionPair() : pair<string, pair<int, int>>
+    +printDirXYPairs() : Void
+}
+
+class Simulator 
+{
+    -display_interval : int
+    -paused_state : bool
+    -turn_num : long int
+    -update_interval : int
+
+    +Simulator()
+    +Simulator(int updateInt, displayInt)
+    +~Simulator()
+    
+    +delay(int)
+    +getDisplayInterval() : int
+    +getPausedState() : bool
+    +getTurnNum() : int
+    +getUpdateInterval() : int
+    +pause()
+    +run()
+    +setDisplayInterval(int);
+    +setUpdateInterval(int);
+    +turnInc() :   
+}
+
+class GridSize 
+{
+    -height : int
+    -width : int
+    
+    +GridSize() ; 
+    +GridSize(int w, int h)
+    +~GridSize()
+
+    +getHeight() : int
+    +getWidth() : int
+    +setHeight(int)
+    +setWidth(int)
+}
+
+class Cell 
+{
+    -x_pos : int
+    -y_pos : int
+    -obstacle : bool
+    -occupied : bool
+    -food_present : bool
+    -food_count : int 
+    -symbol : char
+
+    +Cell(int, int)
+    +~Cell()
+
+    +addFood(int)
+    +getFoodCount() : int
+    +getFoodPresent() : bool
+    +getOccupied() : bool
+    +getSymbol() : char
+    +getXPos() : int
+    +getYPos() : int
+    +removeAllFood()
+    +removeFood(int)
+    +setCustomSymbol(char)
+    +setFoodPresent()
+    +setOccupied(bool)
+    +setObstacle(bool)
+    +setSymbol()
+    +setXPos(int)
+    +setYPos(int) 
+}
+
+class MoveDoco
+{
+    -*moveStrategy : DocoMoveStrategy
+    +move()
+}
+
+interface DocoMoveStrategy
+{
+    +moveStrategy()
+}
+
+class DocoMovePatternDiagonal 
+{
+    +moveStrategy()
+}
+
+class DocoMovePatternHorizontal 
+{
+    +moveStrategy()
+}
+
+class DocoMovePatternVertical 
+{
+    +moveStrategy()
+}
+
+
+class Doco 
+{
+
+    -alive: bool
+    -direction : pair string pair int
+    -energy_level : int
+    -position : pair int
+    +adjoined_cells : vector pair int
+    +adjoined_occupied_cells : vector pair int
+    +adjoined_food_cells : vector pair int
+    +move_options : vector pair int
+  
+    +Doco(int, int, string) : 
+    +~Doco()
+
+    +addEnergy(int)
+    +eat(int, string)
+    +getAlive() : bool
+    +getDirection(void) : pair string pair int
+    +getDirectionString(void) : string
+    +getEnergy() : int
+    +getPosPair(void) :pair int
+    +getXPos()  :  int
+    +getYPos()  : int
+    +move(int, int)
+    +move(vector pair int)
+    +move(void)
+    +setAlive(bool)
+    +setDirection(string)
+    +setEnergy(int)
+    +setPos(int, int)
+    +setPos(pair int)     
+}
+
+
+interface AbstractDOCOFactory
+{
+    +abstract_factory
+    +version_simple_factory
+    +implemented_as_singleton
+    +createDOCOsOfReqType()
+}
+
+class DocoFactory
+{
+
+}
+
+interface AbstractDoco 
+{
+
+}
+
+class DocoProduct
+{
+
+}
+
+AbstractDOCOFactory <|-- DocoFactory
+AbstractDoco <|-- DocoProduct
+Doco --> AbstractDoco
+Doco --> AbstractDOCOFactory
+
+class CellGrid 
+{
+    #doco_char_count : int
+    #doco_count : int
+    #food_char_count : int
+    #obstacle_count : int
+    #my_grid_size : GridSize
+    #char_matrix :  vector<vector<char> >
+    #temp_adjoined_cells :  vector<pair<int,int> >
+    +cell_matrix : vector<vector<Cell> >
+
+    +CellGrid(int, int) : CellGrid 
+    +~CellGrid()
+
+    +findAjoinedCells(int, int) : vector<pair<int,int> >
+    +findAjoinedCellsFood() :  vector<pair<int,int> >
+    +findAdjoinedOccupiedCells() : vector<pair<int,int> >
+    +getCharMatrix() :  vector<vector<char> >
+    +getMatrix() : vector<vector<Cell> >
+    +initCharMatrix(int world_w, int world_h)
+    +printCharMatrix() : void
+    +setCharMatrix(void)
+}
+
+class WorldBoard 
+{
+    -food_positions : vector<pair<int, int> >
+    -obstacle_positions: vector<pair<int, int> >
+    -height : int
+    -width : int
+    +doco_vect : vector<Doco>
+    
+    +myParser : * DataParser
+    +worldCellGrid : * CellGrid
+    
+    -generateFoodLocations(int, int, int)
+    -readFile(char8 filename)    
+    -spawnInitalDocos()
+    
+    +WorldBoard()
+    +WorldBoard(char* filename)  
+    +~WorldBoard()
+    
+    +generateRandom() : int
+    +printWorld()
+    +updateAllDocoSurroundings()
+    +updateCellsWithNewFood()
+    +updateCellWithADoco(int,int) : int
+    +updateCellWithNewFood(int, int)
+    +updateCellWithNoFood(int, int) : int
+    +updateDocos()
+    +updateWorldState()
+}
+
+class Viewer {
+    -footer_message : string
+    -header_message : string
+    -line_count_world : int
+    -program_state_message : string
+    -seperator_char :char
+    -seperator_length : int
+    -seperator_line : string
+    
+    +Viewer()
+    +~Viewer()
+    +getFooterMessage() : string
+    +getHeaderMessage() : string
+    +getLineCountWorld() : int
+    +getNewSeperatorLine()  : string
+    +getProgramStateMessage() : string
+    +getSeperatorChar() : character
+    +getSeperatorLength() : int
+    +printSeperator()
+    +setFooterMessage(string)
+    +setHeaderMessage(string)
+    +setLineCountWorld(int)
+    +setNewSeperatorLine()
+    +setProgramStateMessage(string)
+    +setSeperatorChar(char)
+    +setSeperatorLength(int)
+}
+
+CellGrid "1" *-down- "*" Cell
+CellGrid "1" *-down- "1" GridSize
+Doco "1" *-down- "1" Directions
+WorldBoard "1" o-down- "1" CellGrid
+WorldBoard "1" *-down- "*" Doco
+WorldBoard "1" o-- "1" DataParser
+WorldBoard "1" o-- "1" Simulator
+
+DocoMoveStrategy <|-- DocoMovePatternDiagonal
+DocoMoveStrategy <|-- DocoMovePatternHorizontal
+DocoMoveStrategy <|-- DocoMovePatternVertical
+MoveDoco <|-- DocoMoveStrategy
+Doco <|-- MoveDoco
+
+
+@enduml
