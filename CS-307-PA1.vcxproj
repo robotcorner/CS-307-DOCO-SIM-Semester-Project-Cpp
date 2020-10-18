@@ -172,11 +172,12 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="ClassOutlineUML.txt" />
+    <Text Include="ClassPrelimDiagramUML.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassOutlineUML.svg" />
+    <None Include="ClassPrelimDiagramUML.svg" />
     <None Include="CS307Prog2.docx" />
-    <None Include="uml1.bin" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

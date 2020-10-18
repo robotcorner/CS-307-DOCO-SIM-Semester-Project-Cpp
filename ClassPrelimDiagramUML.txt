@@ -1,0 +1,94 @@
+@startuml
+
+title PA-1: Class Outline
+
+
+interface DocoMoveStrategy
+{
+    +moveStrategy()
+}
+
+class Doco 
+{
+    -*moveStrategy : DocoMoveStrategy
+    -direction : pair string pair int
+    -position : pair int
+    +adjoined_cells : vector pair int
+    +adjoined_occupied_cells : vector pair int
+    +adjoined_food_cells : vector pair int
+    +move_options : vector pair int
+    +move(int world_w, int world_h)
+}
+
+interface AbstractSimpleDocoFactory
+{
+    +note--implemented_as_singleton
+    +createDocoDefault()
+    +createDocoDiagonal()
+    +createDocoHorizontal()
+    +createDocoVertical()
+}
+
+class CellGrid 
+{
+    #my_grid_size : GridSize
+    #char_matrix :  vector<vector<char> >
+    #temp_adjoined_cells :  vector<pair<int,int> >
+    +cell_matrix : vector<vector<Cell> >
+    +findAjoinedCells(int, int) : vector<pair<int,int> >
+    +findAjoinedCellsFood() :  vector<pair<int,int> >
+    +findAdjoinedOccupiedCells() : vector<pair<int,int> >
+}
+
+class WorldBoard 
+{
+    -food_positions : vector<pair<int, int> >
+    -obstacle_positions: vector<pair<int, int> >
+    +doco_vect : vector<Doco>
+}
+
+class main
+class DataParser 
+class Directions 
+class Simulator 
+class GridSize 
+class Cell 
+class Viewer
+class DocoFactory {
+    +createDocoDefault()
+    +createDocoDiagonal()
+    +createDocoHorizontal()
+    +createDocoVertical()
+}
+interface AbstractDoco 
+class DocoMovePatternDiagonal 
+class DocoMovePatternHorizontal 
+class DocoMovePatternVertical 
+class DocoMovePatternDefault
+
+CellGrid "1" *-down- "*" Cell
+CellGrid "1" *-down- "1" GridSize
+WorldBoard "1" o-down- "1" CellGrid
+WorldBoard "1" o-- "1" DataParser
+main "1" o-- "1" Simulator
+
+Doco "1" *-- "1" Directions
+Doco ..|> AbstractDoco : implements
+class DocoMovePatternDiagonal extends DocoMoveStrategy
+class DocoMovePatternHorizontal extends DocoMoveStrategy
+class DocoMovePatternVertical extends DocoMoveStrategy 
+class DocoMovePatternDefault extends DocoMoveStrategy
+interface DocoMoveStrategy extends Doco
+AbstractSimpleDocoFactory <|.. DocoFactory : implements
+DocoFactory ..> Doco : creates
+
+WorldBoard ..> AbstractDoco : uses
+WorldBoard ..> AbstractSimpleDocoFactory : uses
+
+
+main <-- Viewer
+main <-- WorldBoard
+
+
+
+@enduml

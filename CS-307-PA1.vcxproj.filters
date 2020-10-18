@@ -91,12 +91,11 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="ClassOutlineUML.txt" />
+    <Text Include="ClassPrelimDiagramUML.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassOutlineUML.svg" />
-    <None Include="uml1.bin">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="CS307Prog2.docx" />
+    <None Include="ClassPrelimDiagramUML.svg" />
   </ItemGroup>
 </Project>
