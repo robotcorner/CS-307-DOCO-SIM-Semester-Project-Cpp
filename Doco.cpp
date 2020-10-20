@@ -136,8 +136,6 @@ std::pair<int, int> Doco::move(int world_w, int world_h) // returns the pair tha
 		}
 	}
 	
-
-
 	// --- Find nearby food in the valid move options that aren't occupied.
 	for (it = this->move_options.begin(); it != this->move_options.end(); )
 	{
@@ -190,7 +188,7 @@ std::pair<int, int> Doco::move(int world_w, int world_h) // returns the pair tha
 	{
 		if (x == moving_here.first && y == moving_here.second) { /* do nothing */ }
 		else {
-			this->energy_level -= 10; // 10 Energy per move. Only count if they moved to a new spot.
+			this->energy_level -= 25; // 25 Energy per move. Only count if they moved to a new spot.
 		}
 		this->setPos(moving_here.first, moving_here.second);
 		this->setAlive();

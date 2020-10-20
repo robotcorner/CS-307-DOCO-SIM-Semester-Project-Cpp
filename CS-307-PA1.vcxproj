@@ -145,6 +145,11 @@
     <ClInclude Include="DataParser.h" />
     <ClInclude Include="Directions.h" />
     <ClInclude Include="Doco.h" />
+    <ClInclude Include="DocoMovePatternDefault.h" />
+    <ClInclude Include="DocoMovePatternDiagonal.h" />
+    <ClInclude Include="DocoMovePatternHorizontal.h" />
+    <ClInclude Include="DocoMovePatternVertical.h" />
+    <ClInclude Include="DocoMoveStrategy.h" />
     <ClInclude Include="GridSize.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Simulator.h" />
@@ -157,6 +162,10 @@
     <ClCompile Include="DataParser.cpp" />
     <ClCompile Include="Directions.cpp" />
     <ClCompile Include="Doco.cpp" />
+    <ClCompile Include="DocoMovePatternDefault.cpp" />
+    <ClCompile Include="DocoMovePatternDiagonal.cpp" />
+    <ClCompile Include="DocoMovePatternHorizontal.cpp" />
+    <ClCompile Include="DocoMovePatternVertical.cpp" />
     <ClCompile Include="GridSize.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Simulator.cpp" />

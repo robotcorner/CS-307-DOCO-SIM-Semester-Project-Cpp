@@ -1,9 +1,123 @@
 @startuml
 
-title PA-1: Class Outline
+title PA-2: Class Outline
 
-class DataParser 
+interface DocoMoveStrategy
 {
+    +moveStrategy()
+}
+
+class Doco 
+{
+    -*moveStrategy : DocoMoveStrategy
+    -alive: bool
+    -energy_level : int
+    -position : pair int
+    -direction : pair<string, <pair<int, int> >
+    -position : <pair<int, int> >
+    +adjoined_cells : vector<pair<int, int> >
+    +adjoined_obstacle_cells : vector<pair<int, int> >
+    +adjoined_occupied_cells : vector<pair<int, int> >
+    +adjoined_food_cells : vector<pair<int, int> >
+    +move_options : vector<pair<int, int> >
+    
+    +Doco(int, int, string)
+    +~Doco()
+    
+    +addEnergy(int)
+    +eat(int, string)
+    +getAlive() : bool
+    +getDirection(void) : pair string pair int
+    +getDirectionString(void) : string
+    +getEnergy() : int
+    +getPosPair(void) :pair int
+    +getXPos()  :  int
+    +getYPos()  : int
+    +move(int, int)
+    +setAlive(bool)
+    +setDirection(string)
+    +setEnergy(int)
+    +setPos(int, int)
+    +setPos(pair int)     
+    +move(int world_w, int world_h)
+}
+
+interface AbstractSimpleDocoFactory
+{
+    +note--implemented_as_singleton
+    +createDocoDefault()
+    +createDocoDiagonal()
+    +createDocoHorizontal()
+    +createDocoVertical()
+}
+
+class CellGrid 
+{
+    #doco_char_count : int
+    #doco_count : int
+    #food_char_count : int
+    #obstacle_count : int
+    #my_grid_size : GridSize
+    #char_matrix :  vector<vector<char> >
+    #temp_adjoined_cells :  vector<pair<int,int> >
+    +cell_matrix : vector<vector<Cell> >
+
+    +CellGrid(int, int) : CellGrid 
+    +~CellGrid()
+    
+    +getCharMatrix() :  vector<vector<char> >
+    +getMatrix() : vector<vector<Cell> >
+    +initCharMatrix(int world_w, int world_h)
+    +printCharMatrix() : void
+    +setCharMatrix(void)
+
+    +findAjoinedCells(int, int) : vector<pair<int,int> >
+    +findAdjoinedObstacles() : vector<pair<int,int> >
+    +findAjoinedCellsFood() :  vector<pair<int,int> >
+    +findAdjoinedOccupiedCells() : vector<pair<int,int> >
+    
+}
+
+class WorldBoard 
+{
+    -food_positions : vector<pair<int, int> >
+    -obstacle_positions: vector<pair<int, int> >
+    -height : int
+    -width : int
+    +doco_vect : vector<Doco>
+    +myParser : * DataParser
+    +worldCellGrid : * CellGrid
+    
+    -generateFoodLocations(int, int, int)
+    -readFile(char filename)    
+    -spawnInitalDocos()
+
+    +WorldBoard()
+    +WorldBoard(char* filename)  
+    +~WorldBoard()
+    +generateRandom() : int
+    +printWorld()
+    +updateAllDocoSurroundings()
+    +updateCellsWithNewFood()
+    +updateCellWithADoco(int,int) : int
+    +updateCellWithNewFood(int, int)
+    +updateCellWithNoFood(int, int) : int
+    +splitDoco(iterator position)
+    +updateDocos()
+    +updateWorldState()
+}
+
+class main {
+    update_rate : int
+    display_rate : int
+    max_updates : int
+    inFile : char[]
+    mySim : Simulator
+    view : Viewer
+    myDocoWorld : WorldBoard
+}
+
+class DataParser {
     -inFile: ifstream *
     -m_FoodCount : int
     -m_iNextDOCOIndex : int
@@ -23,13 +137,7 @@ class DataParser
     +getNextLine(char *buffer, int n) : bool
 }
 
-class ModifiedDataParser
-{
-
-}
-
-class Directions 
-{
+class Directions {
     -move_directions : vector<string>
     -xy_modifiers : vector<pair<int,int>>
     -horizontal_offsets_with_dir : vector<pair<string, pair<int, int> > >
@@ -63,8 +171,7 @@ class Directions
     +printDirXYPairs() : Void
 }
 
-class Simulator 
-{
+class Simulator {
     -display_interval : int
     -paused_state : bool
     -turn_num : long int
@@ -81,13 +188,12 @@ class Simulator
     +getUpdateInterval() : int
     +pause()
     +run()
-    +setDisplayInterval(int);
-    +setUpdateInterval(int);
-    +turnInc() :   
+    +setDisplayInterval(int)
+    +setUpdateInterval(int)
+    +turnInc() 
 }
 
-class GridSize 
-{
+class GridSize {
     -height : int
     -width : int
     
@@ -101,8 +207,7 @@ class GridSize
     +setWidth(int)
 }
 
-class Cell 
-{
+class Cell {
     -x_pos : int
     -y_pos : int
     -obstacle : bool
@@ -130,150 +235,6 @@ class Cell
     +setSymbol()
     +setXPos(int)
     +setYPos(int) 
-}
-
-class MoveDoco
-{
-    -*moveStrategy : DocoMoveStrategy
-    +move()
-}
-
-interface DocoMoveStrategy
-{
-    +moveStrategy()
-}
-
-class DocoMovePatternDiagonal 
-{
-    +moveStrategy()
-}
-
-class DocoMovePatternHorizontal 
-{
-    +moveStrategy()
-}
-
-class DocoMovePatternVertical 
-{
-    +moveStrategy()
-}
-
-
-class Doco 
-{
-
-    -alive: bool
-    -direction : pair string pair int
-    -energy_level : int
-    -position : pair int
-    +adjoined_cells : vector pair int
-    +adjoined_occupied_cells : vector pair int
-    +adjoined_food_cells : vector pair int
-    +move_options : vector pair int
-  
-    +Doco(int, int, string) : 
-    +~Doco()
-
-    +addEnergy(int)
-    +eat(int, string)
-    +getAlive() : bool
-    +getDirection(void) : pair string pair int
-    +getDirectionString(void) : string
-    +getEnergy() : int
-    +getPosPair(void) :pair int
-    +getXPos()  :  int
-    +getYPos()  : int
-    +move(int, int)
-    +move(vector pair int)
-    +move(void)
-    +setAlive(bool)
-    +setDirection(string)
-    +setEnergy(int)
-    +setPos(int, int)
-    +setPos(pair int)     
-}
-
-
-interface AbstractDOCOFactory
-{
-    +abstract_factory
-    +version_simple_factory
-    +implemented_as_singleton
-    +createDOCOsOfReqType()
-}
-
-class DocoFactory
-{
-
-}
-
-interface AbstractDoco 
-{
-
-}
-
-class DocoProduct
-{
-
-}
-
-AbstractDOCOFactory <|-- DocoFactory
-AbstractDoco <|-- DocoProduct
-Doco --> AbstractDoco
-Doco --> AbstractDOCOFactory
-
-class CellGrid 
-{
-    #doco_char_count : int
-    #doco_count : int
-    #food_char_count : int
-    #obstacle_count : int
-    #my_grid_size : GridSize
-    #char_matrix :  vector<vector<char> >
-    #temp_adjoined_cells :  vector<pair<int,int> >
-    +cell_matrix : vector<vector<Cell> >
-
-    +CellGrid(int, int) : CellGrid 
-    +~CellGrid()
-
-    +findAjoinedCells(int, int) : vector<pair<int,int> >
-    +findAjoinedCellsFood() :  vector<pair<int,int> >
-    +findAdjoinedOccupiedCells() : vector<pair<int,int> >
-    +getCharMatrix() :  vector<vector<char> >
-    +getMatrix() : vector<vector<Cell> >
-    +initCharMatrix(int world_w, int world_h)
-    +printCharMatrix() : void
-    +setCharMatrix(void)
-}
-
-class WorldBoard 
-{
-    -food_positions : vector<pair<int, int> >
-    -obstacle_positions: vector<pair<int, int> >
-    -height : int
-    -width : int
-    +doco_vect : vector<Doco>
-    
-    +myParser : * DataParser
-    +worldCellGrid : * CellGrid
-    
-    -generateFoodLocations(int, int, int)
-    -readFile(char8 filename)    
-    -spawnInitalDocos()
-    
-    +WorldBoard()
-    +WorldBoard(char* filename)  
-    +~WorldBoard()
-    
-    +generateRandom() : int
-    +printWorld()
-    +updateAllDocoSurroundings()
-    +updateCellsWithNewFood()
-    +updateCellWithADoco(int,int) : int
-    +updateCellWithNewFood(int, int)
-    +updateCellWithNoFood(int, int) : int
-    +updateDocos()
-    +updateWorldState()
 }
 
 class Viewer {
@@ -304,19 +265,79 @@ class Viewer {
     +setSeperatorLength(int)
 }
 
-CellGrid "1" *-down- "*" Cell
-CellGrid "1" *-down- "1" GridSize
-Doco "1" *-down- "1" Directions
-WorldBoard "1" o-down- "1" CellGrid
-WorldBoard "1" *-down- "*" Doco
-WorldBoard "1" o-- "1" DataParser
-WorldBoard "1" o-- "1" Simulator
+class DocoFactory {
+    +createDocoDefault()
+    +createDocoDiagonal()
+    +createDocoHorizontal()
+    +createDocoVertical()
+}
 
-DocoMoveStrategy <|-- DocoMovePatternDiagonal
-DocoMoveStrategy <|-- DocoMovePatternHorizontal
-DocoMoveStrategy <|-- DocoMovePatternVertical
-MoveDoco <|-- DocoMoveStrategy
-Doco <|-- MoveDoco
+interface AbstractDoco {
+    +Doco(int, int, string)
+    +~Doco()
+    
+    +addEnergy(int)
+    +eat(int, string)
+    +getAlive() : bool
+    +getDirection(void) : pair string pair int
+    +getDirectionString(void) : string
+    +getEnergy() : int
+    +getPosPair(void) :pair int
+    +getXPos()  :  int
+    +getYPos()  : int
+    +move(int, int)
+    +setAlive(bool)
+    +setDirection(string)
+    +setEnergy(int)
+    +setPos(int, int)
+    +setPos(pair int)     
+    +move(int world_w, int world_h)
+}
 
+class DocoMovePatternDiagonal {
+    +moveStrategy()
+}
+
+class DocoMovePatternHorizontal {
+    +moveStrategy()
+}
+
+class DocoMovePatternVertical {
+    +moveStrategy()
+}
+
+class DocoMovePatternDefault {
+    +moveStrategy()
+}
+
+CellGrid "1" *-down- "*" Cell : owns
+CellGrid "1" *-down- "1" GridSize : owns
+WorldBoard "1" o-down- "1" CellGrid : has
+WorldBoard "1" o-down- "1" DataParser : has
+
+
+
+DocoMovePatternDefault .up.|> DocoMoveStrategy : implements
+DocoMovePatternDiagonal .up.|> DocoMoveStrategy : implements
+DocoMovePatternHorizontal .up.|> DocoMoveStrategy : implements
+DocoMovePatternVertical .up.|> DocoMoveStrategy : implements
+
+Doco .down.> DocoMoveStrategy : uses
+
+AbstractSimpleDocoFactory <|.right. DocoFactory : implements
+DocoFactory ..> Doco : creates
+Doco "1" *-left- "1" Directions : owns
+Doco .left.|> AbstractDoco : implements
+WorldBoard .left.> AbstractDoco : uses
+WorldBoard .left.> AbstractSimpleDocoFactory : uses
+
+DocoMovePatternDiagonal o-- Directions : has
+DocoMovePatternHorizontal o-- Directions : has
+DocoMovePatternVertical o-- Directions : has
+DocoMovePatternDefault o-- Directions : has
+
+main "1" o-down- "1" Simulator : has
+main "1" o-down- "1" Viewer : has
+main "1" o-down- "1" WorldBoard : has
 
 @enduml

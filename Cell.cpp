@@ -41,16 +41,6 @@ char Cell::getSymbol(void)
 	return this->symbol;
 }
 
-void Cell::setXPos(int x)
-{
-	this->x_pos = x;
-}
-
-void Cell::setYPos(int y)
-{
-	this->y_pos = y;
-}
-
 void Cell::setOccupied(bool isOccupied)
 {
 	this->occupied = isOccupied;
@@ -62,12 +52,26 @@ void Cell::setSymbol()
 	// '.' = one or more food pellets, and '-' = an empty cell.
 	// prioritizes the occupied symbol.
 	if (this->occupied) {
-		this->symbol = '*';
+		if (this->strategy == "horizontal") {
+			this->symbol = '=';
+		}
+		else if (this->strategy == "vertical") {
+			this->symbol = '|';
+		}
+		else if (this->strategy == "diagonal") {
+			this->symbol = 'X';
+		}
+		else {	// default DOCO movement
+			this->symbol = '*';
+		}
 	}
-	else if (this->food_present) {
+	else if (this->obstacle) { // TODO: fix symbol to be superscript 2 
+		this->symbol = int(0xB2); // obstacle
+	}
+	else if (this->food_present) { // cell with one or more food
 		this->symbol = '.';
 	}
-	else {
+	else { // empty cell
 		this->symbol = '-';
 	}
 }
@@ -100,4 +104,9 @@ void Cell::removeFood(int foodRemoved)
 void Cell::removeAllFood(void)
 {
 	this->food_count = 0;
+}
+
+void Cell::setStrategy(std::string newStrat) 
+{
+	this->strategy = newStrat;
 }

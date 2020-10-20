@@ -1,6 +1,6 @@
 @startuml
 
-title PA-1: Class Outline
+title PA-2: Class Outline
 
 
 interface DocoMoveStrategy
@@ -11,9 +11,9 @@ interface DocoMoveStrategy
 class Doco 
 {
     -*moveStrategy : DocoMoveStrategy
-    -direction : pair string pair int
-    -position : pair int
-    +adjoined_cells : vector pair int
+    -direction : pair<string, <pair<int, int> >
+    -position : <pair<int, int> >
+    +adjoined_cells : vector<pair<int, int> >
     +adjoined_occupied_cells : vector pair int
     +adjoined_food_cells : vector pair int
     +move_options : vector pair int

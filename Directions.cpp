@@ -41,12 +41,21 @@ void Directions::setDirXYPairs(void)
 
 void Directions::setPairPatterns(void) {
 	// TODO: set each one of these equal to the appropriate pairs.
-	this->horizontal_offsets_with_dir;
-	this->horizontal_pair_offsets;
-	this->vertical_offsets_with_dir;
-	this->vertical_pair_offsets;
-	this->diagonal_offsets_with_dir;
-	this->diagonal_pair_offsets;
+	
+	this->horizontal_offsets_with_dir.push_back(std::make_pair("W", std::make_pair(-1, 0)));
+	this->horizontal_offsets_with_dir.push_back(std::make_pair("E", std::make_pair(1, 0)));
+	this->horizontal_pair_offsets.push_back(std::make_pair(-1, 0));
+	this->horizontal_pair_offsets.push_back(std::make_pair(1, 0));
+	this->horizontal_offsets_with_dir.shrink_to_fit();
+
+	this->vertical_offsets_with_dir.push_back(std::make_pair("N", std::make_pair(0, -1)));
+	this->vertical_offsets_with_dir.push_back(std::make_pair("S", std::make_pair(0, 1)));
+	//this->vertical_pair_offsets.push_back(std::make_pair(0, -1)));
+	//this->vertical_pair_offsets.push_back(std::make_pair(0, 1)));
+	//this->diagonal_offsets_with_dir;
+	//this->diagonal_pair_offsets;
+	//this->perp_offsets_with_dir;
+	//this->perp_pair_offsets;
 }
 
 Directions::Directions()
@@ -81,7 +90,7 @@ std::vector<std::pair<std::string, std::pair<int, int> > > Directions::getDirect
 	return this->dir_xy_pairs;
 }
 
-std::vector<std::pair<std::string, std::pair<int, int> > > Directions::getHorizontalPairsOffsetsWithDir()
+std::vector<std::pair<std::string, std::pair<int, int> > > Directions::getHorizontalPairOffsetsWithDir()
 {
 	return this->horizontal_offsets_with_dir;
 }
@@ -110,6 +119,19 @@ std::vector<std::pair<int, int> > Directions::getDiagonalPairOffsets()
 {
 	return this->diagonal_pair_offsets;
 }
+
+std::vector<std::pair<std::string, std::pair<int, int> > > Directions::getPerpPairOffsetsWithDir()
+{
+	return this->perp_offsets_with_dir;
+}
+
+std::vector<std::pair<int, int> > Directions::getPerpPairOffsets()
+{
+	return this->perp_pair_offsets;
+}
+
+
+
 
 
 // TODO: rename to getPairComboForDir
