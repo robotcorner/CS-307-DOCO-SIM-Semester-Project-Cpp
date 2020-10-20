@@ -5,6 +5,7 @@ title PA-2: Class Outline
 interface DocoMoveStrategy
 {
     +moveStrategy()
+    +avoidanceStrategy()
 }
 
 class Doco 
@@ -156,13 +157,16 @@ class Directions {
     -setXYModifiers() : void
     +getAllDirections() : vector<string>
     +getDirectionPairs() : vector<pair<string,pair<int,int>>>
+    +getXYOffsets() : vector<pair<int, int> > 
     
     +getHorizontalPairsOffsetsWithDir() : vector<pair<string, pair<int, int>>>
-    +getHorizontalPairOffsets() : vector<pair<int,int>>
+    +getHorizontalPairOffsets() : vector<pair<int,int> >
     +getVerticalPairOffsetsWithDir() : vector<pair<string, pair<int, int>>>
-    +getVerticalPairOffsets() : vector<pair<int,int>>
+    +getVerticalPairOffsets() : vector<pair<int,int> >
     +getDiagonalPairOffsetsWithDir() : vector<pair<string, pair<int, int>>>
-    +getDiagonalPairOffsets() : vector<pair<int,int>>
+    +getDiagonalPairOffsets() : vector<pair<int,int> >
+    +getPerpPairOffsetsWithDir() : vector<pair<string, pair<int, int>>>
+    +getPerpPairOffsets() : vector<pair<int,int> >
     
     +getDirForPair(presentPair, movePair) : string
     +getOppositeDirectionPair(pair<string, pair<int,int>>) : pair<string, pair<int,int>>
@@ -212,11 +216,12 @@ class Cell {
     -y_pos : int
     -obstacle : bool
     -occupied : bool
+    -strategy : string
     -food_present : bool
     -food_count : int 
     -symbol : char
 
-    +Cell(int, int)
+    +Cell(int x, int y)
     +~Cell()
 
     +addFood(int)
@@ -226,6 +231,7 @@ class Cell {
     +getSymbol() : char
     +getXPos() : int
     +getYPos() : int
+    +getStrategy() : string
     +removeAllFood()
     +removeFood(int)
     +setCustomSymbol(char)
@@ -233,8 +239,7 @@ class Cell {
     +setOccupied(bool)
     +setObstacle(bool)
     +setSymbol()
-    +setXPos(int)
-    +setYPos(int) 
+    +setStrategy(string)
 }
 
 class Viewer {
@@ -296,18 +301,34 @@ interface AbstractDoco {
 
 class DocoMovePatternDiagonal {
     +moveStrategy()
+    +avoidanceStrategy()
 }
 
 class DocoMovePatternHorizontal {
     +moveStrategy()
+    +avoidanceStrategy()
 }
 
 class DocoMovePatternVertical {
     +moveStrategy()
+    +avoidanceStrategy()
 }
 
 class DocoMovePatternDefault {
     +moveStrategy()
+    +avoidanceStrategy()
+}
+
+class DocoMovePatternPerp {
+    +moveStrategy()
+    +avoidanceStrategy()
+}
+
+class UniformRandom 
+{
+    -active : bool
+    +UniformRandom()
+    +generateRandomNum(int min, int max) : int
 }
 
 CellGrid "1" *-down- "*" Cell : owns
@@ -315,12 +336,11 @@ CellGrid "1" *-down- "1" GridSize : owns
 WorldBoard "1" o-down- "1" CellGrid : has
 WorldBoard "1" o-down- "1" DataParser : has
 
-
-
 DocoMovePatternDefault .up.|> DocoMoveStrategy : implements
 DocoMovePatternDiagonal .up.|> DocoMoveStrategy : implements
 DocoMovePatternHorizontal .up.|> DocoMoveStrategy : implements
 DocoMovePatternVertical .up.|> DocoMoveStrategy : implements
+DocoMovePatternPerp .up.|> DocoMoveStrategy : implements
 
 Doco .down.> DocoMoveStrategy : uses
 
@@ -334,7 +354,9 @@ WorldBoard .left.> AbstractSimpleDocoFactory : uses
 DocoMovePatternDiagonal o-- Directions : has
 DocoMovePatternHorizontal o-- Directions : has
 DocoMovePatternVertical o-- Directions : has
+DocoMovePatternPerp o-- Directions : has
 DocoMovePatternDefault o-- Directions : has
+
 
 main "1" o-down- "1" Simulator : has
 main "1" o-down- "1" Viewer : has

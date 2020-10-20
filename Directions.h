@@ -28,6 +28,7 @@ public:
 	
 	std::vector<std::string> getAllDirections(void);
 	std::vector<std::pair<std::string, std::pair<int, int> > > getDirectionPairs();
+	std::vector<std::pair<int, int> > getXYOffsets();
 
 	std::vector<std::pair<std::string, std::pair<int, int> > > getHorizontalPairOffsetsWithDir();
 	std::vector<std::pair<int, int> > getHorizontalPairOffsets();
@@ -37,6 +38,7 @@ public:
 	std::vector<std::pair<int, int> > getDiagonalPairOffsets();
 	std::vector<std::pair<std::string, std::pair<int, int> > > getPerpPairOffsetsWithDir();
 	std::vector<std::pair<int, int> > getPerpPairOffsets();
+
 
 	std::pair<std::string, std::pair<int, int> > getPairComboForString(std::string);
 	std::pair<std::string, std::pair<int, int> > getOppositeDirectionPair(std::pair<std::string, std::pair<int, int> >);

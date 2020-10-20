@@ -148,11 +148,13 @@
     <ClInclude Include="DocoMovePatternDefault.h" />
     <ClInclude Include="DocoMovePatternDiagonal.h" />
     <ClInclude Include="DocoMovePatternHorizontal.h" />
+    <ClInclude Include="DocoMovePatternPerp.h" />
     <ClInclude Include="DocoMovePatternVertical.h" />
     <ClInclude Include="DocoMoveStrategy.h" />
     <ClInclude Include="GridSize.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Simulator.h" />
+    <ClInclude Include="UniformRandom.h" />
     <ClInclude Include="Viewer.h" />
     <ClInclude Include="WorldBoard.h" />
   </ItemGroup>
@@ -165,10 +167,12 @@
     <ClCompile Include="DocoMovePatternDefault.cpp" />
     <ClCompile Include="DocoMovePatternDiagonal.cpp" />
     <ClCompile Include="DocoMovePatternHorizontal.cpp" />
+    <ClCompile Include="DocoMovePatternPerp.cpp" />
     <ClCompile Include="DocoMovePatternVertical.cpp" />
     <ClCompile Include="GridSize.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Simulator.cpp" />
+    <ClCompile Include="UniformRandom.cpp" />
     <ClCompile Include="Viewer.cpp" />
     <ClCompile Include="WorldBoard.cpp" />
   </ItemGroup>

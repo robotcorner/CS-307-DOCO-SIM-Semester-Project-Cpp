@@ -60,6 +60,12 @@
     <ClInclude Include="DocoMovePatternDefault.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DocoMovePatternPerp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UniformRandom.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DataParser.cpp">
@@ -102,6 +108,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DocoMovePatternDefault.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DocoMovePatternPerp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UniformRandom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

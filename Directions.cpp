@@ -1,15 +1,9 @@
 #include "Directions.h"
 #include <search.h>
 #include <iostream>
-#include <random>
+#include "UniformRandom.h"
 
-std::random_device seed; // initialize seed engine
-std::mt19937 rng(seed()); // generate random num with Merseene_Twister engine
-int generateRandomNum(int min, int max) {
-	std::uniform_int_distribution<int> uni(min, max);
-	auto rand_int = uni(rng);
-	return rand_int;
-}
+// TODO: Possibly declare directions as a singleton
 
 std::vector<std::string> Directions::setMoveDirections(void) {
 	static std::string move_directions[] = { "SW","W","NW","S","N","SE","E","NE" };
@@ -50,12 +44,29 @@ void Directions::setPairPatterns(void) {
 
 	this->vertical_offsets_with_dir.push_back(std::make_pair("N", std::make_pair(0, -1)));
 	this->vertical_offsets_with_dir.push_back(std::make_pair("S", std::make_pair(0, 1)));
-	//this->vertical_pair_offsets.push_back(std::make_pair(0, -1)));
-	//this->vertical_pair_offsets.push_back(std::make_pair(0, 1)));
-	//this->diagonal_offsets_with_dir;
-	//this->diagonal_pair_offsets;
-	//this->perp_offsets_with_dir;
-	//this->perp_pair_offsets;
+	this->vertical_pair_offsets.push_back(std::make_pair(0, -1));
+	this->vertical_pair_offsets.push_back(std::make_pair(0, 1));
+	this->vertical_offsets_with_dir.shrink_to_fit();
+
+	this->diagonal_offsets_with_dir.push_back(std::make_pair("NW", std::make_pair(-1, -1)));
+	this->diagonal_offsets_with_dir.push_back(std::make_pair("NE", std::make_pair(1, -1)));
+	this->diagonal_offsets_with_dir.push_back(std::make_pair("SW", std::make_pair(-1, 1)));
+	this->diagonal_offsets_with_dir.push_back(std::make_pair("SE", std::make_pair(1, 1)));
+	this->diagonal_pair_offsets.push_back(std::make_pair(-1, -1));
+	this->diagonal_pair_offsets.push_back(std::make_pair(1, -1));
+	this->diagonal_pair_offsets.push_back(std::make_pair(-1, 1));
+	this->diagonal_pair_offsets.push_back(std::make_pair(1, 1));
+	this->diagonal_offsets_with_dir.shrink_to_fit();
+
+	this->perp_offsets_with_dir.push_back(std::make_pair("W", std::make_pair(-1, 0)));
+	this->perp_offsets_with_dir.push_back(std::make_pair("E", std::make_pair(1, 0)));
+	this->perp_offsets_with_dir.push_back(std::make_pair("N", std::make_pair(0, -1)));
+	this->perp_offsets_with_dir.push_back(std::make_pair("S", std::make_pair(0, 1)));
+	this->perp_pair_offsets.push_back(std::make_pair(-1, 0));
+	this->perp_pair_offsets.push_back(std::make_pair(1, 0));
+	this->perp_pair_offsets.push_back(std::make_pair(0, -1));
+	this->perp_pair_offsets.push_back(std::make_pair(0, 1));
+	this->perp_offsets_with_dir.shrink_to_fit();
 }
 
 Directions::Directions()
@@ -130,6 +141,10 @@ std::vector<std::pair<int, int> > Directions::getPerpPairOffsets()
 	return this->perp_pair_offsets;
 }
 
+std::vector<std::pair<int, int> > Directions::getXYOffsets()
+{
+	return this->xy_modifiers;
+}
 
 
 
@@ -194,6 +209,8 @@ std::pair<std::string, std::pair<int, int> > Directions::getOppositeDirectionPai
 	return opposite;
 }
 
+UniformRandom randObj = UniformRandom();
+
 std::pair<std::string, std::pair<int, int> > Directions::getRandomDirectionPair() {
-	return this->dir_xy_pairs.at(generateRandomNum(0, 7));
+	return this->dir_xy_pairs.at(randObj.generateRandomNum(0, 7));
 }
