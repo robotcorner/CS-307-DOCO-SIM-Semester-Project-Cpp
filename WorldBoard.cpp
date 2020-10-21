@@ -14,7 +14,7 @@ UniformRandom uniRand = UniformRandom();
 
 WorldBoard::WorldBoard()
 {
-	char inFile[] = "DOCOData01.xml";
+	char inFile[] = "DOCOData02.xml";
 	this->readFile(inFile);
 }
 
@@ -33,52 +33,69 @@ WorldBoard::~WorldBoard()
 void WorldBoard::readFile(char* inFile)
 {
 	// --- Create the Parser Object
-	this->myParser = new DataParser(inFile);
+	this->myParser = new DataParser();
+	this->myParser->initParser(inFile);
+	this->myParser->getInstance(inFile);
+	
 	// --- Parse World Size
 	this->width = this->myParser->getDOCOWorldWidth();
 	this->height = this->myParser->getDOCOWorldHeight();
+	
 	// --- Create the CellGrid given World Size
 	this->worldCellGrid = new CellGrid(width, height);
+	
 	// --- Get number of DOCOs to Spawn from Parser
 	int doco_count = this->myParser->getDOCOCount();
 	std::cout << "\n\nDOCO Count: " << doco_count << "\n";
+	
+	// --- Get Obstacle count from Parser
+	int obstacle_count = this->myParser->getObstacleCount();
+	std::cout << "\n\nObstacle Count: " << doco_count << "\n";
+
 	// --- Parser Paremeters
 	char* ptr_direction = new char;
+	char* ptr_strategy = new char; //Doco movement strategy
 	int* ptr_x_pos = new int;
 	int* ptr_y_pos = new int;
 	// --- Parse all DOCO information in provided file and create DOCOs from it
 	// bool DataParser::getDOCOData(char *movement, int *xpos, int *ypos) 
 	//NEW
 	// TODO: fadsfsd
-	while (this->myParser->getDOCOData(ptr_direction, ptr_x_pos, ptr_y_pos)) 
+	while (this->myParser->getDOCOData(ptr_strategy, ptr_x_pos, ptr_y_pos)) //PA2 No Direction Given
 	{
 		std::pair<std::string, std::pair<int, int> > dir_pair;
 		std::string dir;
-		// --- Spawn DOCOs at provided X, Y positions with provided direction if avaiable, 
-		// --- otherwise they are given random direction.
-		switch (*ptr_direction) {
-			// --- Cases for each posible direction being passed in. None of these will activate for PA-1
-			case 'N': 
-			case 'NE':
-			case 'E':
-			case 'SE':
-			case 'S':
-			case 'SW':
-			case 'W':
-			case 'NW':
-				dir = reinterpret_cast<char*>(*ptr_direction);
-				this->doco_vect.push_back(Doco(*ptr_x_pos, *ptr_y_pos, dir));
-			// --- Runs the "default" case if no direction specified
-			default:
-				// --- Generate a random direction. Provides pair like so: ("N", (0,1))
+		// --- Spawn DOCOs at provided X, Y positions with provided movement strategy and direction if avaiable, 
+		// --- otherwise they are given random movement stategy and direction.
+		// --- Cases for each posible movement being passed in. None of these will activate for PA-1
+		switch (*ptr_strategy) {
+			case 'horizontal': 
+				dir_pair = dirs.getRandomHorizontalDirectionPair();
+				dir = dir_pair.first;
+			case 'vertical':
+				dir_pair = dirs.getRandomVerticalDirectionPair();
+				dir = dir_pair.first;
+			case 'diagonal':
+				dir_pair = dirs.getRandomDiagonalDirectionPair();
+				dir = dir_pair.first;
+			case 'perpendicular':
+				dir_pair = dirs.getRandomPerpDirectionPair();
+				dir = dir_pair.first;
+			case 'random':
 				dir_pair = dirs.getRandomDirectionPair();
 				dir = dir_pair.first;
-				// --- Add to the DOCO vector a DOCO with random direction
-				this->doco_vect.push_back(Doco(*ptr_x_pos, *ptr_y_pos, dir)); 
+			default:
+				//	--- Generate a random direction. Provides pair like so: ("N", (0,1))
+				strcpy(ptr_strategy,'random');
+				dir_pair = dirs.getRandomDirectionPair();
+				dir = dir_pair.first;
 		}
+		//this->doco_vect.push_back(Doco(*ptr_x_pos, *ptr_y_pos, dir)); 
+		this->doco_vect.push_back(Doco(*ptr_x_pos, *ptr_y_pos, dir, *ptr_strategy));  // TODO add movement strategy
 	}
 	// --- Parser Memory Management
 	delete ptr_direction;
+	delete ptr_strategy;
 	delete ptr_x_pos;
 	delete ptr_y_pos;
 	this->doco_vect.shrink_to_fit();

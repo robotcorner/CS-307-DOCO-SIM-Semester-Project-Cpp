@@ -43,6 +43,12 @@ public:
 	std::pair<std::string, std::pair<int, int> > getPairComboForString(std::string);
 	std::pair<std::string, std::pair<int, int> > getOppositeDirectionPair(std::pair<std::string, std::pair<int, int> >);
 	std::pair<std::string, std::pair<int, int> > getRandomDirectionPair();
+	std::pair<std::string, std::pair<int, int> > getRandomVerticalDirectionPair();
+	std::pair<std::string, std::pair<int, int> > getRandomHorizontalDirectionPair();
+	std::pair<std::string, std::pair<int, int> > getRandomDiagonalDirectionPair();
+	std::pair<std::string, std::pair<int, int> > getRandomPerpDirectionPair();
+
+
 	std::string getDirForPair(std::pair<int, int> presentPair, std::pair<int, int> movePair);
 	void printDirXYPairs();
 

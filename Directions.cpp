@@ -5,6 +5,8 @@
 
 // TODO: Possibly declare directions as a singleton
 
+UniformRandom randObj = UniformRandom();
+
 std::vector<std::string> Directions::setMoveDirections(void) {
 	static std::string move_directions[] = { "SW","W","NW","S","N","SE","E","NE" };
 	return std::vector<std::string>(move_directions, (move_directions + (sizeof(move_directions) / sizeof(std::string))));
@@ -146,10 +148,6 @@ std::vector<std::pair<int, int> > Directions::getXYOffsets()
 	return this->xy_modifiers;
 }
 
-
-
-
-// TODO: rename to getPairComboForDir
 std::pair<std::string, std::pair<int, int> > Directions::getPairComboForString(std::string dir)
 {
 	if (dir == "N") return this->dir_xy_pairs.at(4);
@@ -209,8 +207,22 @@ std::pair<std::string, std::pair<int, int> > Directions::getOppositeDirectionPai
 	return opposite;
 }
 
-UniformRandom randObj = UniformRandom();
-
 std::pair<std::string, std::pair<int, int> > Directions::getRandomDirectionPair() {
 	return this->dir_xy_pairs.at(randObj.generateRandomNum(0, 7));
+}
+
+std::pair<std::string, std::pair<int, int> > Directions::getRandomVerticalDirectionPair() {
+	return this->vertical_offsets_with_dir.at(randObj.generateRandomNum(0, 1));
+}
+
+std::pair<std::string, std::pair<int, int> > Directions::getRandomHorizontalDirectionPair() {
+	return this->horizontal_offsets_with_dir.at(randObj.generateRandomNum(0,1));
+}
+
+std::pair<std::string, std::pair<int, int> > Directions::getRandomDiagonalDirectionPair() {
+	return this->diagonal_offsets_with_dir.at(randObj.generateRandomNum(0,3));
+}
+
+std::pair<std::string, std::pair<int, int> > Directions::getRandomPerpDirectionPair() {
+	return this->perp_offsets_with_dir.at(randObj.generateRandomNum(0,3));
 }

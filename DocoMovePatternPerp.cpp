@@ -9,3 +9,7 @@ std::vector<std::pair<int, int> > DocoMovePatternPerp::moveStrategy() {
 	return moveDirs->getPerpPairOffsets();	// TODO: not sure which one is needed	
 	// return moveDirs->getHorizontalPairOffsetsWithDir();	
 }
+
+std::vector<std::pair<int, int> > DocoMovePatternPerp::avoidanceStrategy() {
+	// TODO: implement the avoidance strategy
+}

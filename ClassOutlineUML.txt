@@ -120,21 +120,25 @@ class main {
 
 class DataParser {
     -inFile: ifstream *
-    -m_FoodCount : int
-    -m_iNextDOCOIndex : int
-    -m_iNumDOCOs : int
     -m_iWorldHeight : int
     -m_iWorldWidth : int
+    -m_iNumDOCOs : int
+    -m_iNextDOCOIndex : int
+    -m_FoodCount : int
+    -m_iObstacleCount : int
+    -m_iNextObsIndex : int
     -m_sFileName : char[64]
 
-    +DataParser(char *fileName)
     +~DataParser()
-
-    +getDOCOCount() : int
-    +getDOCOData(char *movement, int *xpos, int *ypos) : bool
+    +DataParser(const char *fileName) : static
+    +initParser(const char *fileName)
     +getDOCOWorldHeight() : int
     +getDOCOWorldWidth() : int
+    +getDOCOCount() : int
+    +getDOCOData(char *movement, int *xpos, int *ypos) : bool
     +getFoodCount() : int
+   	+getObstacleCount() : int
+	+getObstacleData(int* xpos, int* ypos) : bool
     +getNextLine(char *buffer, int n) : bool
 }
 
@@ -357,6 +361,7 @@ DocoMovePatternVertical o-- Directions : has
 DocoMovePatternPerp o-- Directions : has
 DocoMovePatternDefault o-- Directions : has
 
+UniformRandom --o Directions : has
 
 main "1" o-down- "1" Simulator : has
 main "1" o-down- "1" Viewer : has

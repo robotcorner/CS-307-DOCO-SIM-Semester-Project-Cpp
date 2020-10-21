@@ -4,6 +4,7 @@ class DocoMovePatternVertical :
     public DocoMoveStrategy
 {
     std::vector<std::pair<int, int> > moveStrategy();
+    std::vector<std::pair<int, int> > avoidanceStrategy();
 };
 
 //	TODO:   Behavior pattern 2 will cause the DOCO to move only in a vertical direction.

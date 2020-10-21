@@ -10,6 +10,9 @@ std::vector<std::pair<int, int> > DocoMovePatternVertical::moveStrategy() {
 	// return moveDirs->getHorizontalPairOffsetsWithDir();	
 }
 
+std::vector<std::pair<int, int> > DocoMovePatternVertical::avoidanceStrategy() {
+	// TODO: implement the avoidance strategy for vertical pattern avoidance
+}
 
 //	TODO:   Behavior pattern 2 will cause the DOCO to move only in a vertical direction.
 //          If an edge of the world is encountered the DOCO will randomly elect to move 

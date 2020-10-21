@@ -10,6 +10,14 @@ std::vector<std::pair<int, int> > DocoMovePatternHorizontal::moveStrategy() {
 	// return moveDirs->getHorizontalPairOffsetsWithDir();	
 }
 
+std::vector<std::pair<int, int> > DocoMovePatternHorizontal::avoidanceStrategy() {
+	// TODO: implement horizontal movement avoidance strategy
+	std::vector<std::pair<int, int> > avoidanceStrategy;
+	avoidanceStrategy = moveDirs->getVerticalPairOffsets(); // Option to move up / down a row.
+	// reverse direction of movement
+	return avoidanceStrategy;
+}
+
 // TODO:	Behavior pattern 1 will cause the DOCO to move only in a horizontal direction. 
 //          If an edge of the world is encountered the DOCO will randomly elect to move up
 //          or down a row and reverse its direction of movement.
