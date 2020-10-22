@@ -182,6 +182,8 @@ void WorldBoard::updateDocos(void)
 		size -= 1;
 	}
 
+
+
 	// --- Vars for the upcoming DOCO update loop
 	int food_eaten;
 	int x = 0;
@@ -199,6 +201,7 @@ void WorldBoard::updateDocos(void)
 		// --- Tell the DOCO what it's surrounding are, so it knows its options.
 		this->doco_vect[i].adjoined_cells = this->worldCellGrid->findAdjoinedCells(x, y);
 		this->doco_vect[i].adjoined_occupied_cells = this->worldCellGrid->findAdjoinedOccupiedCells();
+		this->doco_vect[i].adjoined_obstacle_cells = this->worldCellGrid->findAdjoinedObstacleCells();
 		this->doco_vect[i].adjoined_food_cells = this->worldCellGrid->findAdjoinedCellsFood();
 
 		// --- Find NEW Cell to move to from available options. Chooses desirable X_Y position and assingns the DOCO with that new X_Y position
@@ -214,6 +217,12 @@ void WorldBoard::updateDocos(void)
 		// --- Eat Food for Current Cell. Gain Energy.
 		food_eaten = this->updateCellWithADoco(this->doco_vect[i].getXPos(), this->doco_vect[i].getYPos());
 		this->doco_vect[i].eat(food_eaten, "default");
+			// TODO --- Split High Energy DOCOs if energy over 750
+			// if this->doco_vect[i].getenergy() > 750 then SPLIT
+			//    this->doco_vect[i].setenergy(this->doco_vect[i].getenergy()/2)
+			//    CREATE NEW DOCO(REVERSE DIRECTION, other half of energy)
+	
+	
 		
 		this->worldCellGrid->cell_matrix[this->doco_vect[i].getYPos()][this->doco_vect[i].getXPos()].setOccupied(true); // set the cell as populated
 		this->worldCellGrid->cell_matrix[this->doco_vect[i].getYPos()][this->doco_vect[i].getXPos()].setFoodPresent();

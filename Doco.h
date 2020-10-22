@@ -12,6 +12,7 @@ private:
 public:
 	std::vector<std::pair<int, int> > adjoined_cells; // this will contain the matrix of adjoining cells to a DOCO.Adjoining means only the cells are touching, diagonal included.
 	std::vector<std::pair<int, int> > adjoined_occupied_cells; // this will contain the matrix of adjoining cells that are occupied.
+	std::vector<std::pair<int, int> > adjoined_obstacle_cells; // this will contain the matrix of adjoining cells that are obstacles.
 	std::vector<std::pair<int, int> > adjoined_food_cells; // this will contain the matrix of adjoining cells that contain food. This is why the Cell object has a food_present boolean property.
 	std::vector<std::pair<int, int> > move_options; // this will contain the matrix of movement options that are available to the DOCO based on it’s movement preferencesand requirements.
 	std::vector<std::pair<int, int> > food_move_options; 

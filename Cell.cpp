@@ -26,6 +26,12 @@ bool Cell::getOccupied(void)
 	return this->occupied;
 }
 
+bool Cell::getObstacle(void)
+{
+	return this->obstacle;
+}
+
+
 bool Cell::getFoodPresent(void)
 {
 	return this->food_present;
@@ -66,7 +72,7 @@ void Cell::setSymbol()
 		}
 	}
 	else if (this->obstacle) { // TODO: fix symbol to be superscript 2 
-		this->symbol = int(0xB2); // obstacle
+		this->symbol = unsigned int(0xB2); // obstacle
 	}
 	else if (this->food_present) { // cell with one or more food
 		this->symbol = '.';

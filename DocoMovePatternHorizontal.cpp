@@ -6,8 +6,15 @@
 Directions* moveDirs = new Directions();
 
 std::vector<std::pair<int, int> > DocoMovePatternHorizontal::moveStrategy() {
-	return moveDirs->getVerticalPairOffsets();	// TODO: not sure which one is needed	
-	// return moveDirs->getHorizontalPairOffsetsWithDir();	
+// if vectors in (CellGrid::findAdjoinedCellsFood()) then random pick a vector	   //FOOD FIRST
+// else {if current direction is (not in findAdjoinedCells) or (in CellGrid::findAdjoinedOccupiedCells()) then reverse direction;  //HIT WALL or DOCO(REVERSE)
+//      if direction is a vector in (getHorizontalPairOffsetsWithDir()and findAdjoinedCells ) and 
+//        not in  (CellGrid::findAdjoinedObstacleCells() and  CellGrid::findAdjoinedOccupiedCells())   then pick it  //NO WALL, DOCO, OBSTACLE
+//     }
+// AVOIDENCE Need to sidestep for avoidence, Random Pick possible directions if any. //GO VERTICAL
+// else if  vectors from  (getVerticalPairOffsetsWithDir() in findAdjoinedCells ) and not in
+//      (CellGrid::findAdjoinedObstacleCells() and  CellGrid::findAdjoinedOccupiedCells()) pick random vector
+	
 }
 
 std::vector<std::pair<int, int> > DocoMovePatternHorizontal::avoidanceStrategy() {

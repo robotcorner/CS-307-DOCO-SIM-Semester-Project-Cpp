@@ -132,6 +132,30 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedOccupiedCells()
 	return tempOccupiedCells;
 }
 
+// tell a DOCO what it’s adjoined occupied cells are.Update the DOCO’s
+// private adjoined_obstacle_cells matrix with this informatio
+std::vector<std::pair<int, int> > CellGrid::findAdjoinedObstacleCells()
+{
+	std::vector<std::pair<int, int> > tempObstacleCells;
+	int* x = new int;
+	int* y = new int;
+	*x = 0;
+	*y = 0;
+	for (auto pair : this->temp_adjoined_cells) {
+		*x = pair.first;		// store x at allocated address
+		*y = pair.second;		// store y at allocated address
+		bool obstacle = this->cell_matrix[*y][*x].getObstacle();
+		if (obstacle)	// if occupied
+		{
+			tempObstacleCells.push_back(std::make_pair(*x, *y));
+		}
+	}
+	delete x;
+	delete y;
+	return tempObstacleCells;
+}
+
+
 // tell a DOCO what it’s adjoined cells are. Update the DOCO’s
 // private adjoined_cells matrix with this information.
 std::vector<std::pair<int, int> > CellGrid::findAdjoinedCellsFood()

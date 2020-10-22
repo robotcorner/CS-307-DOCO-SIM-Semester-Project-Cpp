@@ -21,6 +21,7 @@ public:
 	int getXPos(void);			// return the x_pos of the Cell
 	int getYPos(void);			// returns the y_pos of the Cell
 	bool getOccupied(void);		// returns whether or not the cell is occupied by a DOCO
+	bool getObstacle(void);		// returns whether or not the cell is an obstable
 	bool getFoodPresent(void);	// returns whether food is present or not in the cell
 	int getFoodCount(void);		// returns the number of food pellets in the cell
 	char getSymbol(void);		// gets the character symbol for this cell
