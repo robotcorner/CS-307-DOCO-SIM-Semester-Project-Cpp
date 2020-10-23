@@ -270,7 +270,7 @@ class Viewer {
     +getHeaderMessage() : string
     +getLineCountWorld() : int
     +getNewSeperatorLine()  : string
-    +getProgramStateMessage() : string
+    +getProgramStateMessa6ge() : string
     +getSeperatorChar() : character
     +getSeperatorLength() : int
     +printSeperator()
