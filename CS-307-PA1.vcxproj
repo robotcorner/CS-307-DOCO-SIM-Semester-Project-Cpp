@@ -192,9 +192,11 @@
     <Text Include="ClassPrelimDiagramUML.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassOutlineDetailed-Stephen-Stammen.odt" />
     <None Include="ClassOutlineUML.svg" />
     <None Include="ClassPrelimDiagramUML.svg" />
     <None Include="CS307Prog2.docx" />
+    <None Include="FunctionalityOutlineDetailed-Stephen-Stammen C.odt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

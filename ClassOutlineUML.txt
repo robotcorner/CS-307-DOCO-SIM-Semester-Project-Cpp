@@ -307,28 +307,43 @@ interface AbstractDoco {
 }
 
 class DocoMovePatternDiagonal {
+    +moveDirs : Directions
     +moveStrategy()
     +avoidanceStrategy()
+    +DocoMovePatternDiagonal()
+    +~DocoMovePatternDiagonal
 }
 
 class DocoMovePatternHorizontal {
+    +moveDirs : Directions
     +moveStrategy()
     +avoidanceStrategy()
+    +DocoMovePatternHorizontal()
+    +~DocoMovePatternHorizontal()
 }
 
 class DocoMovePatternVertical {
+    +moveDirs : Directions
     +moveStrategy()
     +avoidanceStrategy()
+    +DocoMovePatternVertical()
+    +~DocoMovePatternVertical()
 }
 
 class DocoMovePatternDefault {
+    +moveDirs : Directions
     +moveStrategy()
     +avoidanceStrategy()
+    +DocoMovePatternDefault()
+    +~DocoMovePatternDefault()
 }
 
 class DocoMovePatternPerp {
+    +moveDirs : Directions
     +moveStrategy()
     +avoidanceStrategy()
+    +DocoMovePatternPerp()
+    +~DocoMovePatternPerp()
 }
 
 class UniformRandom 
@@ -358,13 +373,21 @@ Doco .left.|> AbstractDoco : implements
 WorldBoard .left.> AbstractDoco : uses
 WorldBoard .left.> AbstractSimpleDocoFactory : uses
 
-DocoMovePatternDiagonal o-- Directions : has
-DocoMovePatternHorizontal o-- Directions : has
-DocoMovePatternVertical o-- Directions : has
-DocoMovePatternPerp o-- Directions : has
-DocoMovePatternDefault o-- Directions : has
+DocoMovePatternDiagonal --o DocoFactory : has
+DocoMovePatternHorizontal --o DocoFactory : has
+DocoMovePatternVertical --o DocoFactory : has
+DocoMovePatternPerp --o DocoFactory : has
+DocoMovePatternDefault --o DocoFactory : has
+
+
+DocoMovePatternDiagonal o-down- Directions : has
+DocoMovePatternHorizontal o-down- Directions : has
+DocoMovePatternVertical o-down- Directions : has
+DocoMovePatternPerp o-down- Directions : has
+DocoMovePatternDefault o-down- Directions : has
 
 UniformRandom --o Directions : has
+
 
 main "1" o-down- "1" Simulator : has
 main "1" o-down- "1" Viewer : has

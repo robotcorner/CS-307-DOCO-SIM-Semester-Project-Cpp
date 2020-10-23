@@ -148,5 +148,7 @@
     <None Include="ClassOutlineUML.svg" />
     <None Include="CS307Prog2.docx" />
     <None Include="ClassPrelimDiagramUML.svg" />
+    <None Include="ClassOutlineDetailed-Stephen-Stammen.odt" />
+    <None Include="FunctionalityOutlineDetailed-Stephen-Stammen C.odt" />
   </ItemGroup>
 </Project>
