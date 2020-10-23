@@ -6,14 +6,18 @@
 #include <algorithm>
 #include <iterator>
 #include <stdlib.h>
+#include "DocoMoveStrategy.h"
+
 
 Directions directions = Directions();
 
-Doco::Doco(int x, int y, std::string &start_dir)
+Doco::Doco(int x, int y, std::string &start_dir, std::string &strategy, DocoMoveStrategy* strat)
 {
 	this->position.first = x;
 	this->position.second = y;
 	this->setDirection(start_dir);
+	this->setStrategy(strategy);
+	this->setPtrMoveStrategy(strat);
 }
 
 Doco::~Doco() {
@@ -67,31 +71,6 @@ void Doco::eat(int amount_eaten, const std::string& type="default") { // type is
 		int total_replished_e = food_e_value * amount_eaten;
 		this->addEnergy(total_replished_e);
 	}
-}
-
-/*	REQUIREMENTS:
-- [x] Each DOCO will always move in a straight line in its' current direction of movement unless that movement is modified by the constraints given below.
-- [x] If a DOCO encounters an edge of the world that prevents it from proceeding on its current path it will select a random direction as its new heading. The new heading, however, must not take it into the cell of another DOCO.
-- [x] If there is another DOCO in the next cell along a DOCO's current heading then the DOCO will select a random direction other than its current heading. The new heading, however, must not take it into the cell of another DOCO.
-- [x] If a DOCO "smells" a food pellet in a cell bordering its' current location it will alter its heading to take it into that cell on the next move and that direction will become its new heading.
-*/
-
-template <typename T>
-std::pair<bool, int> findItemInVect(const std::vector<T>& vecItems, const T& item)
-{
-	std::pair<bool, int> result;
-	auto it = std::find(vecItems.begin(), vecItems.end(), item);
-	if (it != vecItems.end()) {
-		// dynamic_cast<std::vector<std::pair<int, int> >::iterator>()
-		result.second = distance(vecItems.begin(), it);
-		//auto item = result.second;
-		result.first = true;
-	}
-	else {
-		result.first = false;
-		result.second = -1;
-	}
-	return result;
 }
 
 std::pair<int, int> Doco::move(int world_w, int world_h) // returns the pair that moved too.
@@ -231,3 +210,30 @@ int Doco::getEnergy() // returns the energy_level of the DOCO
 	return this->energy_level;
 }
 
+void Doco::setStrategy(std::string strat)
+{
+	this->strategy = strat;
+}
+
+void Doco::setPtrMoveStrategy(DocoMoveStrategy* strat) {
+	// TODO: figure out how to set the correct stategy (VERY IMPORTANT)
+	this->ptr_moveStrategy = strat;
+}
+
+template <typename T>
+std::pair<bool, int> findItemInVect(const std::vector<T>& vecItems, const T& item)
+{
+	std::pair<bool, int> result;
+	auto it = std::find(vecItems.begin(), vecItems.end(), item);
+	if (it != vecItems.end()) {
+		// dynamic_cast<std::vector<std::pair<int, int> >::iterator>()
+		result.second = distance(vecItems.begin(), it);
+		//auto item = result.second;
+		result.first = true;
+	}
+	else {
+		result.first = false;
+		result.second = -1;
+	}
+	return result;
+}

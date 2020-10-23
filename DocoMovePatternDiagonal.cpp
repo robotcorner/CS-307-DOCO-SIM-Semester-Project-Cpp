@@ -5,6 +5,7 @@
 
 Directions* moveDirs = new Directions();
 
+
 // --- This is the default move strategy
 std::vector<std::pair<int, int> > DocoMovePatternDiagonal::moveStrategy() {
 	return moveDirs->getDiagonalPairOffsets();	// TODO: not sure which one is needed	

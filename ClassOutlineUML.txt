@@ -21,8 +21,7 @@ class Doco
     +adjoined_occupied_cells : vector<pair<int, int> >
     +adjoined_food_cells : vector<pair<int, int> >
     +move_options : vector<pair<int, int> >
-    
-    +Doco(int, int, string)
+    +Doco(int, int, string& dir, string& strategy, DocoMoveStrategy* strat)
     +~Doco()
     
     +addEnergy(int)
@@ -34,7 +33,7 @@ class Doco
     +getPosPair(void) :pair int
     +getXPos()  :  int
     +getYPos()  : int
-    +move(int, int)
+    +move(int, int) : pair<int, int>
     +setAlive(bool)
     +setDirection(string)
     +setEnergy(int)
@@ -45,11 +44,20 @@ class Doco
 
 interface AbstractSimpleDocoFactory
 {
+    +createDocoDefault(int x_pos, int y_pos, string dir) : Doco
+    +createDocoDiagonal(int, int, string) : Doco
+    +createDocoHorizontal(int, int, string) : Doco
+    +createDocoVertical(int, int, string) : Doco
+    +createDocoPerp(int, int, string) : Doco
+}
+
+class DocoFactory {
     +note--implemented_as_singleton
-    +createDocoDefault()
-    +createDocoDiagonal()
-    +createDocoHorizontal()
-    +createDocoVertical()
+    +createDocoDefault(int x_pos, int y_pos, string dir) : Doco
+    +createDocoDiagonal(int, int, string) : Doco
+    +createDocoHorizontal(int, int, string) : Doco
+    +createDocoVertical(int, int, string) : Doco
+    +createDocoPerp(int, int, string) : Doco
 }
 
 class CellGrid 
@@ -73,9 +81,9 @@ class CellGrid
     +setCharMatrix(void)
 
     +findAjoinedCells(int, int) : vector<pair<int,int> >
-    +findAdjoinedObstacles() : vector<pair<int,int> >
     +findAjoinedCellsFood() :  vector<pair<int,int> >
     +findAdjoinedOccupiedCells() : vector<pair<int,int> >
+    +findAdjoinedObstacleCells() : vector<pair<int,int> >
     
 }
 
@@ -232,6 +240,7 @@ class Cell {
     +getFoodCount() : int
     +getFoodPresent() : bool
     +getOccupied() : bool
+    +getObstacle() : bool
     +getSymbol() : char
     +getXPos() : int
     +getYPos() : int
@@ -274,12 +283,6 @@ class Viewer {
     +setSeperatorLength(int)
 }
 
-class DocoFactory {
-    +createDocoDefault()
-    +createDocoDiagonal()
-    +createDocoHorizontal()
-    +createDocoVertical()
-}
 
 interface AbstractDoco {
     +Doco(int, int, string)

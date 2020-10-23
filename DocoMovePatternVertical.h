@@ -1,8 +1,8 @@
 #pragma once
 #include "DocoMoveStrategy.h"
-class DocoMovePatternVertical :
-    public DocoMoveStrategy
+class DocoMovePatternVertical : public DocoMoveStrategy
 {
+public:
     std::vector<std::pair<int, int> > moveStrategy();
     std::vector<std::pair<int, int> > avoidanceStrategy();
 };

@@ -3,6 +3,8 @@
 #include <random>
 #include "Directions.h"
 #include "UniformRandom.h"
+#include "AbstractSimpleDocoFactory.h"
+#include "AbstractDoco.h"
 
 // --- Initialize Directions for the World
 Directions dirs = Directions();
@@ -60,7 +62,9 @@ void WorldBoard::readFile(char* inFile)
 	// --- Parse all DOCO information in provided file and create DOCOs from it
 	// bool DataParser::getDOCOData(char *movement, int *xpos, int *ypos) 
 	//NEW
-	// TODO: fadsfsd
+	// --- Create the factory
+	DocoFactory* myDocoFactory = DocoFactory::getInstance();
+	
 	while (this->myParser->getDOCOData(ptr_strategy, ptr_x_pos, ptr_y_pos)) //PA2 No Direction Given
 	{
 		std::pair<std::string, std::pair<int, int> > dir_pair;
@@ -72,6 +76,7 @@ void WorldBoard::readFile(char* inFile)
 			case 'horizontal': 
 				dir_pair = dirs.getRandomHorizontalDirectionPair();
 				dir = dir_pair.first;
+
 			case 'vertical':
 				dir_pair = dirs.getRandomVerticalDirectionPair();
 				dir = dir_pair.first;
@@ -89,9 +94,10 @@ void WorldBoard::readFile(char* inFile)
 				strcpy(ptr_strategy,'random');
 				dir_pair = dirs.getRandomDirectionPair();
 				dir = dir_pair.first;
+			//this->doco_vect.push_back(Doco(*ptr_x_pos, *ptr_y_pos, dir)); 
+			//this->doco_vect.push_back(Doco(*ptr_x_pos, *ptr_y_pos, dir, string::direction));  // TODO add movement strategy
 		}
-		//this->doco_vect.push_back(Doco(*ptr_x_pos, *ptr_y_pos, dir)); 
-		this->doco_vect.push_back(Doco(*ptr_x_pos, *ptr_y_pos, dir, *ptr_strategy));  // TODO add movement strategy
+
 	}
 	// --- Parser Memory Management
 	delete ptr_direction;
@@ -182,8 +188,6 @@ void WorldBoard::updateDocos(void)
 		size -= 1;
 	}
 
-
-
 	// --- Vars for the upcoming DOCO update loop
 	int food_eaten;
 	int x = 0;
@@ -199,8 +203,8 @@ void WorldBoard::updateDocos(void)
 
 		// ------------------
 		// --- Tell the DOCO what it's surrounding are, so it knows its options.
-		this->doco_vect[i].adjoined_cells = this->worldCellGrid->findAdjoinedCells(x, y);
-		this->doco_vect[i].adjoined_occupied_cells = this->worldCellGrid->findAdjoinedOccupiedCells();
+		this->doco_vect[i].adjoined_cells = this->worldCellGrid->findAdjoinedCells(x, y);  //Non Border Cells
+		this->doco_vect[i].adjoined_occupied_cells = this->worldCellGrid->findAdjoinedOccupiedCells();  
 		this->doco_vect[i].adjoined_obstacle_cells = this->worldCellGrid->findAdjoinedObstacleCells();
 		this->doco_vect[i].adjoined_food_cells = this->worldCellGrid->findAdjoinedCellsFood();
 

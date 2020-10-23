@@ -140,11 +140,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AbstractDoco.h" />
+    <ClInclude Include="AbstractSimpleDocoFactory.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="CellGrid.h" />
     <ClInclude Include="DataParser.h" />
     <ClInclude Include="Directions.h" />
     <ClInclude Include="Doco.h" />
+    <ClInclude Include="DocoFactory.h" />
     <ClInclude Include="DocoMovePatternDefault.h" />
     <ClInclude Include="DocoMovePatternDiagonal.h" />
     <ClInclude Include="DocoMovePatternHorizontal.h" />
@@ -164,6 +167,7 @@
     <ClCompile Include="DataParser.cpp" />
     <ClCompile Include="Directions.cpp" />
     <ClCompile Include="Doco.cpp" />
+    <ClCompile Include="DocoFactory.cpp" />
     <ClCompile Include="DocoMovePatternDefault.cpp" />
     <ClCompile Include="DocoMovePatternDiagonal.cpp" />
     <ClCompile Include="DocoMovePatternHorizontal.cpp" />

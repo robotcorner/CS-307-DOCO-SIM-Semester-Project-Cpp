@@ -6,24 +6,32 @@
 Directions* moveDirs = new Directions();
 
 std::vector<std::pair<int, int> > DocoMovePatternHorizontal::moveStrategy() {
-// if vectors in (CellGrid::findAdjoinedCellsFood()) then random pick a vector	   //FOOD FIRST
+// if vectors in (CellGrid::findAdjoinedCellsFood()) then random pick a vector	   //FOOD FIRST Stragey
 // else {if current direction is (not in findAdjoinedCells) or (in CellGrid::findAdjoinedOccupiedCells()) then reverse direction;  //HIT WALL or DOCO(REVERSE)
 //      if direction is a vector in (getHorizontalPairOffsetsWithDir()and findAdjoinedCells ) and 
 //        not in  (CellGrid::findAdjoinedObstacleCells() and  CellGrid::findAdjoinedOccupiedCells())   then pick it  //NO WALL, DOCO, OBSTACLE
 //     }
 // AVOIDENCE Need to sidestep for avoidence, Random Pick possible directions if any. //GO VERTICAL
-// else if  vectors from  (getVerticalPairOffsetsWithDir() in findAdjoinedCells ) and not in
-//      (CellGrid::findAdjoinedObstacleCells() and  CellGrid::findAdjoinedOccupiedCells()) pick random vector
-	
+// else if  vectors from  (getVerticalPairOffsetsWithDir() in findAdjoinedCells )  // CHECK FOR WALL
+//  and not in (CellGrid::findAdjoinedObstacleCells() and  CellGrid::findAdjoinedOccupiedCells()) //CHECK FOR OBSTACLE AND DOCO
+//   pick random vector
+//
+//
+//this->doco_vect[i].adjoined_cells = this->worldCellGrid->findAdjoinedCells(x, y);
+//		this->doco_vect[i].adjoined_occupied_cells = this->worldCellGrid->findAdjoinedOccupiedCells();
+//		this->doco_vect[i].adjoined_obstacle_cells = this->worldCellGrid->findAdjoinedObstacleCells();
+//		if (this->doco_vect[i].adjoined_food_cells.size > 0)    // HAVE FOOD NEARBY from this->worldCellGrid->findAdjoinedCellsFood();
+//          return this->food_cell.at(randObj.generateRandomNum(0,this->doco_vect[i].adjoined_food_cells.size));
+
 }
 
 std::vector<std::pair<int, int> > DocoMovePatternHorizontal::avoidanceStrategy() {
 	// TODO: implement horizontal movement avoidance strategy
 	std::vector<std::pair<int, int> > avoidanceStrategy;
 	avoidanceStrategy = moveDirs->getVerticalPairOffsets(); // Option to move up / down a row.
-	// reverse direction of movement
 	return avoidanceStrategy;
 }
+// reverse direction of movement
 
 // TODO:	Behavior pattern 1 will cause the DOCO to move only in a horizontal direction. 
 //          If an edge of the world is encountered the DOCO will randomly elect to move up

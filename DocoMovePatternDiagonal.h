@@ -1,10 +1,14 @@
 #pragma once
 #include "DocoMoveStrategy.h"
-class DocoMovePatternDiagonal : 
-    public DocoMoveStrategy
+#include <string>
+class DocoMovePatternDiagonal : public DocoMoveStrategy
 {
+private:
+    std::string strategy = "Diagonal";
+public:
     std::vector<std::pair<int, int> > moveStrategy();
     std::vector<std::pair<int, int> > avoidanceStrategy();
+    std::string getStrategy();
 };
 
 // TODO:    Behavior pattern 3 will cause the DOCO to move only in a diagonal direction.

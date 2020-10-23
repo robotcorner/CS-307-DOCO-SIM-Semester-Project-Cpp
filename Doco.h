@@ -1,10 +1,14 @@
 #pragma once
 #include <string>
 #include <vector>
+#include "AbstractDoco.h"
+#include "DocoMoveStrategy.h"
 
-class Doco
+class Doco : public AbstractDoco
 {
 private:
+	DocoMoveStrategy* ptr_moveStrategy; // specifies the move strategy of the Doco
+	std::string strategy;
 	bool alive;	// whether or not the DOCO is alive or dead, if it’s dead it should be removed or become invisible on the screen.
 	std::pair<int, int> position; // the x position of the DOCO, the y position of the DOCO
 	int energy_level = 500; // the amount of energy the DOCO has.It will be initialized to 500 by default.
@@ -17,12 +21,14 @@ public:
 	std::vector<std::pair<int, int> > move_options; // this will contain the matrix of movement options that are available to the DOCO based on it’s movement preferencesand requirements.
 	std::vector<std::pair<int, int> > food_move_options; 
 
-	Doco(int, int, std::string &start_dir); // starting position, x, y, direction
+	Doco(int x, int y, std::string& start_dir, std::string& strategy, DocoMoveStrategy* strat); // starting position, x, y, direction
 	// creates a DOCO object with  set positionand direction specified.These will come out of the xml file that the DataParser reads.
 	~Doco();
 	void setPos(int x, int y); // updates the x and y position of the DOCO.
 	void setPos(std::pair<int, int>);
 	void setDirection(std::string); // sets the direction of the DOCO, this will be one of the following strings “N”, “NE”, “E”, “SE”, “S”, “SW”, “W”, “NW”.Upon initialization this will be random or taken from the read in file.
+	void setStrategy(std::string);
+	void setPtrMoveStrategy(DocoMoveStrategy*);
 	void setAlive(bool); // updates the alive status of the DOCO to passed in value.
 	void setAlive(void); // updates based on energy value.
 	void setEnergy(int); // set the energy_level of the DOCO to a specified amount.

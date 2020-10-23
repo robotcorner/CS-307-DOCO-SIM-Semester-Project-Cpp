@@ -2,93 +2,123 @@
 
 title PA-2: Class Outline
 
-
 interface DocoMoveStrategy
 {
     +moveStrategy()
+    +avoidanceStrategy()
 }
 
 class Doco 
 {
-    -*moveStrategy : DocoMoveStrategy
-    -direction : pair<string, <pair<int, int> >
-    -position : <pair<int, int> >
-    +adjoined_cells : vector<pair<int, int> >
-    +adjoined_occupied_cells : vector pair int
-    +adjoined_food_cells : vector pair int
-    +move_options : vector pair int
-    +move(int world_w, int world_h)
+
 }
 
 interface AbstractSimpleDocoFactory
 {
-    +note--implemented_as_singleton
-    +createDocoDefault()
-    +createDocoDiagonal()
-    +createDocoHorizontal()
-    +createDocoVertical()
+ 
 }
 
 class CellGrid 
 {
-    #my_grid_size : GridSize
-    #char_matrix :  vector<vector<char> >
-    #temp_adjoined_cells :  vector<pair<int,int> >
-    +cell_matrix : vector<vector<Cell> >
-    +findAjoinedCells(int, int) : vector<pair<int,int> >
-    +findAjoinedCellsFood() :  vector<pair<int,int> >
-    +findAdjoinedOccupiedCells() : vector<pair<int,int> >
+    
 }
 
 class WorldBoard 
 {
-    -food_positions : vector<pair<int, int> >
-    -obstacle_positions: vector<pair<int, int> >
-    +doco_vect : vector<Doco>
+  
 }
 
-class main
-class DataParser 
-class Directions 
-class Simulator 
-class GridSize 
-class Cell 
-class Viewer
+class main {
+ 
+}
+
+class DataParser {
+  
+}
+
+class Directions {
+  
+}
+
+class Simulator {
+   
+}
+
+class GridSize {
+
+}
+
+class Cell {
+  
+}
+
+class Viewer {
+   
+}
+
 class DocoFactory {
-    +createDocoDefault()
-    +createDocoDiagonal()
-    +createDocoHorizontal()
-    +createDocoVertical()
+
 }
-interface AbstractDoco 
-class DocoMovePatternDiagonal 
-class DocoMovePatternHorizontal 
-class DocoMovePatternVertical 
-class DocoMovePatternDefault
 
-CellGrid "1" *-down- "*" Cell
-CellGrid "1" *-down- "1" GridSize
-WorldBoard "1" o-down- "1" CellGrid
-WorldBoard "1" o-- "1" DataParser
-main "1" o-- "1" Simulator
+interface AbstractDoco {
+  
+}
 
-Doco "1" *-- "1" Directions
-Doco ..|> AbstractDoco : implements
-class DocoMovePatternDiagonal extends DocoMoveStrategy
-class DocoMovePatternHorizontal extends DocoMoveStrategy
-class DocoMovePatternVertical extends DocoMoveStrategy 
-class DocoMovePatternDefault extends DocoMoveStrategy
-interface DocoMoveStrategy extends Doco
-AbstractSimpleDocoFactory <|.. DocoFactory : implements
+class DocoMovePatternDiagonal {
+  
+}
+
+class DocoMovePatternHorizontal {
+  
+}
+
+class DocoMovePatternVertical {
+   
+}
+
+class DocoMovePatternDefault {
+    
+}
+
+class DocoMovePatternPerp {
+
+}
+
+class UniformRandom 
+{
+
+}
+
+CellGrid "1" *-down- "*" Cell : owns
+CellGrid "1" *-down- "1" GridSize : owns
+WorldBoard "1" o-down- "1" CellGrid : has
+WorldBoard "1" o-down- "1" DataParser : has
+
+DocoMovePatternDefault .up.|> DocoMoveStrategy : implements
+DocoMovePatternDiagonal .up.|> DocoMoveStrategy : implements
+DocoMovePatternHorizontal .up.|> DocoMoveStrategy : implements
+DocoMovePatternVertical .up.|> DocoMoveStrategy : implements
+DocoMovePatternPerp .up.|> DocoMoveStrategy : implements
+
+Doco .down.> DocoMoveStrategy : uses
+
+AbstractSimpleDocoFactory <|.right. DocoFactory : implements
 DocoFactory ..> Doco : creates
+Doco "1" *-left- "1" Directions : owns
+Doco .left.|> AbstractDoco : implements
+WorldBoard .left.> AbstractDoco : uses
+WorldBoard .left.> AbstractSimpleDocoFactory : uses
 
-WorldBoard ..> AbstractDoco : uses
-WorldBoard ..> AbstractSimpleDocoFactory : uses
+DocoMovePatternDiagonal o-- Directions : has
+DocoMovePatternHorizontal o-- Directions : has
+DocoMovePatternVertical o-- Directions : has
+DocoMovePatternPerp o-- Directions : has
+DocoMovePatternDefault o-- Directions : has
 
+UniformRandom --o Directions : has
 
-main <-- Viewer
-main <-- WorldBoard
-
-
+main "1" o-down- "1" Simulator : has
+main "1" o-down- "1" Viewer : has
+main "1" o-down- "1" WorldBoard : has
 
 @enduml
