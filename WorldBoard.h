@@ -20,7 +20,7 @@ private:
 public:
 	CellGrid* worldCellGrid; // will hold the CellGrid Object which contains all the Cells and GridSize
 	DataParser* myParser; // the DataParser obejct for the class. 
-	std::vector<Doco> doco_vect; // will hold a vector of all the current DOCO’s on the board.
+	std::vector<Doco> doco_vect; // will hold a vector of all the current DOCOï¿½s on the board.
 	
 	WorldBoard();
 	WorldBoard(char* file_name);
@@ -29,6 +29,7 @@ public:
 	void updateCellsWithNewFood();
 	void setCellWithNewFood(int x, int y);
 	int  setCellWithNoFood(int x, int y);  // return the number of foods eaten, set new food to zero
+	Doco splitDoco();
 	void updateDocos();
 	int updateCellWithADoco(int x, int y);		// helper function to set cell status for cells with DOCOs, return food amount
 	void updateWorldState(); // x and y range to update.
