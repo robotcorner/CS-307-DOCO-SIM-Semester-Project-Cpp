@@ -1,4 +1,4 @@
-															#include "CellGrid.h"
+#include "CellGrid.h"
 #include "Cell.h"
 #include "GridSize.h"
 #include <iostream>
@@ -80,7 +80,7 @@ void CellGrid::setCharMatrix(void)
 	}
 }
 
-// Goal: tell a DOCO what it’s adjoined occupied cells are. Update the DOCO’s private adjoined_food_cells matrix with this information
+// Goal: tell a DOCO what itï¿½s adjoined occupied cells are. Update the DOCOï¿½s private adjoined_food_cells matrix with this information
 std::vector<std::pair<int, int> > CellGrid::findAdjoinedCells(int x, int y)
 {
 	// using the xand y position provided in conjunction with its data 
@@ -109,7 +109,7 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedCells(int x, int y)
 	return this->temp_adjoined_cells;
 }
 
-// tell a DOCO what it’s adjoined occupied cells are.Update the DOCO’s
+// tell a DOCO what itï¿½s adjoined occupied cells are.Update the DOCOï¿½s
 // private adjoined_occupied_cells matrix with this informatio
 std::vector<std::pair<int, int> > CellGrid::findAdjoinedOccupiedCells()
 {
@@ -132,7 +132,7 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedOccupiedCells()
 	return tempOccupiedCells;
 }
 
-// tell a DOCO what it’s adjoined occupied cells are.Update the DOCO’s
+// tell a DOCO what itï¿½s adjoined occupied cells are.Update the DOCOï¿½s
 // private adjoined_obstacle_cells matrix with this informatio
 std::vector<std::pair<int, int> > CellGrid::findAdjoinedObstacleCells()
 {
@@ -156,7 +156,7 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedObstacleCells()
 }
 
 
-// tell a DOCO what it’s adjoined cells are. Update the DOCO’s
+// tell a DOCO what itï¿½s adjoined cells are. Update the DOCOï¿½s
 // private adjoined_cells matrix with this information.
 std::vector<std::pair<int, int> > CellGrid::findAdjoinedCellsFood()
 {
