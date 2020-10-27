@@ -1,6 +1,5 @@
-// --- FINISHED
-
 #pragma once
+#include "Doco.h"
 #include "DocoFactory.h"
 #include "DocoMoveStrategy.h"
 #include "DocoMovePatternHorizontal.h"
@@ -37,38 +36,52 @@ DocoFactory* DocoFactory::getInstance() {
 	return theInstance;
 }
 
-Doco DocoFactory::createDocoDefault(int x_pos, int y_pos, std::string direction)
+Doco* DocoFactory::createDocoDefault(int x_pos, int y_pos, std::string dir)
 {
-	// return a doco of random movement type
-	DocoMovePatternDefault* strategy = new DocoMovePatternDefault;
-	return Doco(x_pos, y_pos, direction, std::string("Random"), strategy);
-
+	// --- Return a doco of random movement type
+	DocoMovePatternDefault* strategy = new DocoMovePatternDefault();
+	std::string patternName = std::string("Random");
+	Doco* newDoco = new Doco(x_pos, y_pos, dir, patternName);
+	newDoco->setPtrMoveStrategy(strategy);
+	return newDoco;
 }
 
-Doco DocoFactory::createDocoDiagonal(int x_pos, int y_pos, std::string direction)
+Doco* DocoFactory::createDocoDiagonal(int x_pos, int y_pos, std::string dir)
 {
-	// return a doco of diagonal movement type
-	DocoMovePatternDiagonal* strategy = new DocoMovePatternDiagonal;
-	return Doco(x_pos, y_pos, direction, std::string("Diagonal"), strategy);
+	// --- Return a doco of diagonal movement type
+	DocoMovePatternDiagonal* strategy = new DocoMovePatternDiagonal();
+	std::string patternName = std::string("Diagonal");
+	Doco* newDoco = new Doco(x_pos, y_pos, dir, patternName);
+	newDoco->setPtrMoveStrategy(strategy);
+	return newDoco;
 }
 
-Doco DocoFactory::createDocoHorizontal(int x_pos, int y_pos, std::string direction)
+Doco* DocoFactory::createDocoHorizontal(int x_pos, int y_pos, std::string dir)
 {
-	// return a doco of horizontal movement type
-	DocoMovePatternHorizontal* strategy = new DocoMovePatternHorizontal;
-	return Doco(x_pos, y_pos, direction, std::string("Horizontal"), strategy);
+	// --- Return a doco of horizontal movement type
+	DocoMovePatternHorizontal* strategy = new DocoMovePatternHorizontal();
+	std::string patternName = std::string("Horizontal");
+	Doco* newDoco = new Doco(x_pos, y_pos, dir, patternName);
+	newDoco->setPtrMoveStrategy(strategy);
+	return newDoco;
 }
 
-Doco DocoFactory::createDocoVertical(int x_pos, int y_pos, std::string direction)
+Doco* DocoFactory::createDocoVertical(int x_pos, int y_pos, std::string dir)
 {
-	// TODO: return a doco of vertical movement type
-	DocoMovePatternVertical* strategy = new DocoMovePatternVertical;
-	return Doco(x_pos, y_pos, direction, std::string("Vertical"), strategy);
+	// --- Return a doco of vertical movement type
+	DocoMovePatternVertical* strategy = new DocoMovePatternVertical();
+	std::string patternName = std::string("Vertical");
+	Doco* newDoco = new Doco(x_pos, y_pos, dir, patternName);
+	newDoco->setPtrMoveStrategy(strategy);
+	return newDoco;
 }
 
-Doco DocoFactory::createDocoPerp(int x_pos, int y_pos, std::string direction)
+Doco* DocoFactory::createDocoPerp(int x_pos, int y_pos, std::string dir)
 {
-	// TODO: return a doco of perpendicular movement type
-	DocoMovePatternPerp* strategy = new DocoMovePatternPerp;
-	return Doco(x_pos, y_pos, direction, std::string("Perp"), strategy);
+	// --- Return a doco of perpendicular movement type
+	DocoMovePatternPerp* strategy = new DocoMovePatternPerp();
+	std::string patternName = std::string("Perp");
+	Doco* newDoco = new Doco(x_pos, y_pos, dir, patternName);
+	newDoco->setPtrMoveStrategy(strategy);
+	return newDoco;
 }

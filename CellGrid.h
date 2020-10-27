@@ -25,6 +25,7 @@ public:
 	std::vector<std::pair<int, int> > findAdjoinedCells(int x, int y); // using the xand y position provided in conjunction with its data on the cell matrix, finds the cells within one space of it(N, E, S, W, NE, SE, SW, NW).
 	std::vector<std::pair<int, int> > findAdjoinedOccupiedCells();  // Other doco occupied cells surrounding a doco
 	std::vector<std::pair<int, int> > findAdjoinedObstacleCells();  // Obstacle Cells surounding a doco
+	std::vector<std::pair<int, int> > findAdjoinedOpenCells();  // Open Cells surounding a doco
 	std::vector<std::pair<int, int> > findAdjoinedCellsFood(); // checks each of the temp_adjoining_cells and returns the matrix of cells that contain food.Using the temp variable eliminates some error checking.
 	int getFoodCharCount(void); // return food_char_count
 	int getDocoCharCount(void); // return doco_char_count

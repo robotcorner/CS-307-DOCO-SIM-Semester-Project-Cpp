@@ -1,4 +1,5 @@
 #include <random>
+#include "UniformRandom.h"
 
 // TODO: Declare as a singleton?
 

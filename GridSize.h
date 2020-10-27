@@ -4,8 +4,8 @@
 class GridSize
 {
 private:
-	int height;
-	int width;
+	int height = 0;
+	int width = 0;
 public:
 	GridSize();
 	GridSize(int w, int h);

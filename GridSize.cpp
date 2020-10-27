@@ -2,7 +2,8 @@
 #include "GridSize.h"
 
 GridSize::GridSize() {
-
+	this->height = 0;
+	this->width = 0;
 }
 
 GridSize::GridSize(int w, int h) 

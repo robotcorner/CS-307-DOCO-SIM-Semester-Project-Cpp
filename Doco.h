@@ -1,28 +1,33 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "AbstractDoco.h"
-#include "DocoMoveStrategy.h"
+#include "AbstractDoco.h"		// Implements
+#include "DocoMoveStrategy.h"	// Uses
 
 class Doco : public AbstractDoco
 {
 private:
-	DocoMoveStrategy* ptr_moveStrategy; // specifies the move strategy of the Doco
+	DocoMoveStrategy* ptr_moveStrategy; // ptr specifies the move strategy of the Doco
+	// DocoMoveStrategy moveStrategy;	// TODO: is this what I need?
 	std::string strategy;
 	bool alive;	// whether or not the DOCO is alive or dead, if it�s dead it should be removed or become invisible on the screen.
 	std::pair<int, int> position; // the x position of the DOCO, the y position of the DOCO
 	int energy_level = 500; // the amount of energy the DOCO has.It will be initialized to 500 by default.
 	std::pair<std::string, std::pair<int, int> > direction; // A direction that the DOCO is currently heading. It will be be one of the following strings �N�, �NE�, �E�, �SE�, �S�, �SW�, �W�, �NW�.
+	std::pair<int, int> docoMoveToPos(std::pair<int, int>);
 public:
 	std::vector<std::pair<int, int> > adjoined_cells; // this will contain the matrix of adjoining cells to a DOCO.Adjoining means only the cells are touching, diagonal included.
 	std::vector<std::pair<int, int> > adjoined_occupied_cells; // this will contain the matrix of adjoining cells that are occupied.
 	std::vector<std::pair<int, int> > adjoined_obstacle_cells; // this will contain the matrix of adjoining cells that are obstacles.
+	std::vector<std::pair<int, int> > adjoined_open_cells;
 	std::vector<std::pair<int, int> > adjoined_food_cells; // this will contain the matrix of adjoining cells that contain food. This is why the Cell object has a food_present boolean property.
 	std::vector<std::pair<int, int> > move_options; // this will contain the matrix of movement options that are available to the DOCO based on it�s movement preferencesand requirements.
 	std::vector<std::pair<int, int> > food_move_options; 
 
-	Doco(int x, int y, std::string& start_dir, std::string& strategy, DocoMoveStrategy* strat); // starting position, x, y, direction
+	Doco(int x, int y, std::string start_dir, std::string strategy); // starting position, x, y, direction
+	Doco(const Doco& origObj);		//.adjoined_cells;, int y, std::string start_dir, std::string strategy); // starting position, x, y, direction
 	// creates a DOCO object with  set positionand direction specified.These will come out of the xml file that the DataParser reads.
+	
 	~Doco();
 	void setPos(int x, int y); // updates the x and y position of the DOCO.
 	void setPos(std::pair<int, int>);
@@ -43,4 +48,5 @@ public:
 	std::pair<std::string, std::pair<int, int> > getDirection(void); // returns the current direction of the DOCO
 	std::string getDirectionString(void);
 	int getEnergy(); // returns the energy_level of the DOCO
+	DocoMoveStrategy* getPtrMoveStrategy();
 };

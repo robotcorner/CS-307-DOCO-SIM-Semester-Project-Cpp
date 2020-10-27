@@ -35,9 +35,8 @@ void Directions::setDirXYPairs(void)
 	this->dir_xy_pairs.shrink_to_fit();
 }
 
-void Directions::setPairPatterns(void) {
-	// TODO: set each one of these equal to the appropriate pairs.
-	
+void Directions::setPairPatterns(void) 
+{
 	this->horizontal_offsets_with_dir.push_back(std::make_pair("W", std::make_pair(-1, 0)));
 	this->horizontal_offsets_with_dir.push_back(std::make_pair("E", std::make_pair(1, 0)));
 	this->horizontal_pair_offsets.push_back(std::make_pair(-1, 0));
@@ -226,3 +225,4 @@ std::pair<std::string, std::pair<int, int> > Directions::getRandomDiagonalDirect
 std::pair<std::string, std::pair<int, int> > Directions::getRandomPerpDirectionPair() {
 	return this->perp_offsets_with_dir.at(randObj.generateRandomNum(0,3));
 }
+

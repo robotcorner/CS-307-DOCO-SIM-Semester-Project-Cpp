@@ -71,7 +71,7 @@ void Cell::setSymbol()
 			this->symbol = '*';
 		}
 	}
-	else if (this->obstacle) { // TODO: fix symbol to be superscript 2 
+	else if (this->obstacle) {
 		this->symbol = unsigned int(0xB2); // obstacle
 	}
 	else if (this->food_present) { // cell with one or more food

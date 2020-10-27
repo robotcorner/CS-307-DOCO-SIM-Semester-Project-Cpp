@@ -11,8 +11,6 @@
 
 class DocoFactory : public AbstractSimpleDocoFactory
 {
-
-#pragma once
 	private:
 		int instanceNumber = 0;			// counter to show 1 instance only
 		DocoFactory();	// private constructor
@@ -26,11 +24,11 @@ class DocoFactory : public AbstractSimpleDocoFactory
 		// It holds a single static pointer to a AbstractSimpleDocoFactory object
 		static DocoFactory* getInstance();
 
-		Doco createDocoDefault(int x_pos, int y_pos, std::string direction);
-		Doco createDocoDiagonal(int x_pos, int y_pos, std::string direction);
-		Doco createDocoHorizontal(int x_pos, int y_pos, std::string direction);
-		Doco createDocoVertical(int x_pos, int y_pos, std::string direction);
-		Doco createDocoPerp(int x_pos, int y_pos, std::string direction);
+		Doco* createDocoDefault(int x_pos, int y_pos, std::string dir);
+		Doco* createDocoDiagonal(int x_pos, int y_pos, std::string dir);
+		Doco* createDocoHorizontal(int x_pos, int y_pos, std::string dir);
+		Doco* createDocoVertical(int x_pos, int y_pos, std::string dir);
+		Doco* createDocoPerp(int x_pos, int y_pos, std::string dir);
 
 };
 

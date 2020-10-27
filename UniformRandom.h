@@ -1,5 +1,7 @@
 #pragma once
 
+// TODO: declare as a singleton
+
 class UniformRandom
 {
 private:

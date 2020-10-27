@@ -6,10 +6,17 @@
 Directions* moveDirs = new Directions();
 
 std::vector<std::pair<int, int> > DocoMovePatternPerp::moveStrategy() {
-	return moveDirs->getPerpPairOffsets();	// TODO: not sure which one is needed	
-	// return moveDirs->getHorizontalPairOffsetsWithDir();	
+	return moveDirs->getPerpPairOffsets();
 }
 
 std::vector<std::pair<int, int> > DocoMovePatternPerp::avoidanceStrategy() {
-	// TODO: implement the avoidance strategy
+	return moveDirs->getDiagonalPairOffsets(); // TODO: decide what offsets to get
+}
+
+DocoMovePatternPerp::DocoMovePatternPerp() {
+
+}
+
+DocoMovePatternPerp::~DocoMovePatternPerp() {
+
 }

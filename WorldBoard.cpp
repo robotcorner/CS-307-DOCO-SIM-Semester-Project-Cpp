@@ -3,8 +3,9 @@
 #include <random>
 #include "Directions.h"
 #include "UniformRandom.h"
-#include "AbstractSimpleDocoFactory.h"
-#include "AbstractDoco.h"
+#include "Doco.h"
+#include "DocoFactory.h"
+#include "DataParser.h"
 
 // --- Initialize Directions for the World
 Directions dirs = Directions();
@@ -35,8 +36,6 @@ WorldBoard::~WorldBoard()
 void WorldBoard::readFile(char* inFile)
 {
 	// --- Create the Parser Object
-	this->myParser = new DataParser();
-	this->myParser->initParser(inFile);
 	this->myParser->getInstance(inFile);
 	
 	// --- Parse World Size
@@ -59,12 +58,12 @@ void WorldBoard::readFile(char* inFile)
 	char* ptr_strategy = new char; //Doco movement strategy
 	int* ptr_x_pos = new int;
 	int* ptr_y_pos = new int;
+	
 	// --- Parse all DOCO information in provided file and create DOCOs from it
-	// bool DataParser::getDOCOData(char *movement, int *xpos, int *ypos) 
-	//NEW
+	
 	// --- Create the factory
 	DocoFactory* myDocoFactory = DocoFactory::getInstance();
-	
+
 	while (this->myParser->getDOCOData(ptr_strategy, ptr_x_pos, ptr_y_pos)) //PA2 No Direction Given
 	{
 		std::pair<std::string, std::pair<int, int> > dir_pair;
@@ -73,31 +72,38 @@ void WorldBoard::readFile(char* inFile)
 		// --- otherwise they are given random movement stategy and direction.
 		// --- Cases for each posible movement being passed in. None of these will activate for PA-1
 		switch (*ptr_strategy) {
-			case 'horizontal': 
+			case 'h': 
 				dir_pair = dirs.getRandomHorizontalDirectionPair();
 				dir = dir_pair.first;
-
-			case 'vertical':
+				this->doco_vect.push_back(*myDocoFactory->createDocoHoriziontal(*ptr_x_pos, *ptr_y_pos, dir));
+				break;
+			case 'v':
 				dir_pair = dirs.getRandomVerticalDirectionPair();
 				dir = dir_pair.first;
-			case 'diagonal':
+				this->doco_vect.push_back(*myDocoFactory->createDocoVertical(*ptr_x_pos, *ptr_y_pos, dir));
+				break;
+			case 'd':
 				dir_pair = dirs.getRandomDiagonalDirectionPair();
 				dir = dir_pair.first;
-			case 'perpendicular':
+				this->doco_vect.push_back(*myDocoFactory->createDocoDiagonal(*ptr_x_pos, *ptr_y_pos, dir));
+				break;
+			case 'p':
 				dir_pair = dirs.getRandomPerpDirectionPair();
 				dir = dir_pair.first;
-			case 'random':
+				this->doco_vect.push_back(*myDocoFactory->createDocoPerp(*ptr_x_pos, *ptr_y_pos, dir));
+				break;
+			case 'r':
 				dir_pair = dirs.getRandomDirectionPair();
 				dir = dir_pair.first;
+				this->doco_vect.push_back(*myDocoFactory->createDocoDefault(*ptr_x_pos, *ptr_y_pos, dir));
+				break;
 			default:
 				//	--- Generate a random direction. Provides pair like so: ("N", (0,1))
-				strcpy(ptr_strategy,'random');
+				// strcpy(ptr_strategy,'r');
 				dir_pair = dirs.getRandomDirectionPair();
 				dir = dir_pair.first;
-			//this->doco_vect.push_back(Doco(*ptr_x_pos, *ptr_y_pos, dir)); 
-			//this->doco_vect.push_back(Doco(*ptr_x_pos, *ptr_y_pos, dir, string::direction));  // TODO add movement strategy
+				this->doco_vect.push_back(*myDocoFactory->createDocoDefault(*ptr_x_pos, *ptr_y_pos, dir));
 		}
-
 	}
 	// --- Parser Memory Management
 	delete ptr_direction;
@@ -187,12 +193,39 @@ void WorldBoard::updateDocos(void)
 		}
 		size -= 1;
 	}
+	
+	// --- Split Docos if (energy_level > 750)
+	int i = 0;
+	int currentEnergy = 0;
+	int newEnergy = 0;
+	for (i = 0; i < this->doco_vect.size(); ++i)  // Go through doco_vect, split them if high energy
+	{
+		// --- When engergy too high, split doco into 2 on cell and head in opposite dirs.
+		if (currentEnergy = this->doco_vect[i].getEnergy() > 750) { 
+			// --- Split original's energy
+			newEnergy = int(currentEnergy / 2);
+			this->doco_vect[i].setEnergy(newEnergy);
+			
+			// --- Save direction of original.
+			auto oldDir = this->doco_vect[i].getDirection();
+			
+			// --- Copy Constructor
+			// Doco docoCopy = this->doco_vect[i];
+			auto* docoCopy = new Doco(this->doco_vect[i]);
+
+			// --- Reverse direction of the new Doco
+			auto oppositeDir = dirs.getOppositeDirectionPair(oldDir);
+			docoCopy->setDirection(oppositeDir.first);
+
+			// --- Push back the copy
+			doco_vect.push_back(*docoCopy);			
+		 }
+	}
 
 	// --- Vars for the upcoming DOCO update loop
 	int food_eaten;
 	int x = 0;
 	int y = 0;
-	int i = 0;
 
 	// --- Update the current cells with DOCO actions that were decided the previous turn / round.
 	for (i = 0; i < this->doco_vect.size(); i++) 
@@ -221,13 +254,7 @@ void WorldBoard::updateDocos(void)
 		// --- Eat Food for Current Cell. Gain Energy.
 		food_eaten = this->updateCellWithADoco(this->doco_vect[i].getXPos(), this->doco_vect[i].getYPos());
 		this->doco_vect[i].eat(food_eaten, "default");
-			// TODO --- Split High Energy DOCOs if energy over 750
-			// if this->doco_vect[i].getenergy() > 750 then SPLIT
-			//    this->doco_vect[i].setenergy(this->doco_vect[i].getenergy()/2)
-			//    CREATE NEW DOCO(REVERSE DIRECTION, other half of energy)
 	
-	
-		
 		this->worldCellGrid->cell_matrix[this->doco_vect[i].getYPos()][this->doco_vect[i].getXPos()].setOccupied(true); // set the cell as populated
 		this->worldCellGrid->cell_matrix[this->doco_vect[i].getYPos()][this->doco_vect[i].getXPos()].setFoodPresent();
 		this->worldCellGrid->cell_matrix[this->doco_vect[i].getYPos()][this->doco_vect[i].getXPos()].setSymbol();
@@ -255,4 +282,9 @@ void WorldBoard::printWorld()
 	std::cout << "DOCOs on Board:          " << this->worldCellGrid->getDocoCharCount() << "\n";
 	std::cout << "DOCOs Actually Present:  " << this->doco_vect.size() << "\n";
 	std::cout << "Unique Food Spots:       " << this->worldCellGrid->getFoodCharCount() << "\n";
+	std::cout << "Obstacles on Board:      " << this->worldCellGrid->getObstacleCount() << "\n";
+}
+
+Doco* copyDoco() {
+
 }

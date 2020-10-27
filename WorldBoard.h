@@ -1,6 +1,7 @@
 #pragma once
 #include "CellGrid.h"
 #include "DataParser.h"
+#include "AbstractDoco.h"
 #include "Doco.h"
 #include <vector>
 
@@ -29,7 +30,7 @@ public:
 	void updateCellsWithNewFood();
 	void setCellWithNewFood(int x, int y);
 	int  setCellWithNoFood(int x, int y);  // return the number of foods eaten, set new food to zero
-	Doco splitDoco();
+	Doco* copyDoco();
 	void updateDocos();
 	int updateCellWithADoco(int x, int y);		// helper function to set cell status for cells with DOCOs, return food amount
 	void updateWorldState(); // x and y range to update.

@@ -3,22 +3,6 @@
 #include "GridSize.h"
 #include <iostream>
 
-/*Private Variables
-	
-	GridSize my_grid_size;		
-	// holds the details about the CellGrid
-	
-	std::vector<std::vector<Cell> > cell_matrix;		
-	// holds the matrix of cell objects
-	
-	std::vector<std::vector<char> > char_matrix;		
-	// holds matrix of the characters to represent
-	
-	std::vector<std::pair<int, int> > temp_adjoined_cells; 
-	// holds vector of adjoined cells for a given position
-
-*/
-
 // creates the gridShape to the specified heightand width, then 
 // populates the cell_matrix with cell_objects initialized to each position.
 
@@ -76,11 +60,12 @@ void CellGrid::setCharMatrix(void)
 			this->char_matrix[y][x] = this->cell_matrix[y][x].getSymbol();
 			if (this->cell_matrix[y][x].getFoodPresent()) this->food_char_count += 1;
 			if (this->cell_matrix[y][x].getOccupied()) this->doco_char_count += 1;
+			if (this->cell_matrix[y][x].getObstacle()) this->doco_char_count += 1;
 		}
 	}
 }
 
-// Goal: tell a DOCO what it�s adjoined occupied cells are. Update the DOCO�s private adjoined_food_cells matrix with this information
+// Goal: tell a DOCO what it's adjoined occupied cells are. Update the DOCOs private adjoined_food_cells matrix with this information
 std::vector<std::pair<int, int> > CellGrid::findAdjoinedCells(int x, int y)
 {
 	// using the xand y position provided in conjunction with its data 
@@ -155,6 +140,30 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedObstacleCells()
 	return tempObstacleCells;
 }
 
+// tell a DOCO what it�s adjoined occupied cells are.Update the DOCO�s
+// private adjoined_obstacle_cells matrix with this informatio
+std::vector<std::pair<int, int> > CellGrid::findAdjoinedOpenCells()
+{
+	std::vector<std::pair<int, int> > tempOpenCells;
+	int* x = new int;
+	int* y = new int;
+	*x = 0;
+	*y = 0;
+	for (auto pair : this->temp_adjoined_cells) {
+		*x = pair.first;		// store x at allocated address
+		*y = pair.second;		// store y at allocated address
+		bool obstacle = this->cell_matrix[*y][*x].getObstacle();
+		bool occupied = this->cell_matrix[*y][*x].getOccupied();
+		if (!obstacle && !occupied)	// if occupied or obstacle
+		{
+			tempOpenCells.push_back(std::make_pair(*x, *y));
+		}
+	}
+	delete x;
+	delete y;
+	return tempOpenCells;
+}
+
 
 // tell a DOCO what it�s adjoined cells are. Update the DOCO�s
 // private adjoined_cells matrix with this information.
@@ -226,8 +235,3 @@ void CellGrid::printCharMatrix(void)
 		std::cout << "\n";
 	}
 }
-
-
-
-
-
