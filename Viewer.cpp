@@ -1,4 +1,6 @@
-																						#include "Viewer.h"
+#pragma once
+#include "Viewer.h"
+#include "Viewer.h"
 #include <iostream>
 
 Viewer::Viewer()

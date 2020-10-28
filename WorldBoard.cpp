@@ -1,3 +1,4 @@
+#pragma once
 #include "WorldBoard.h"
 #include <iostream>
 #include <random>
@@ -198,7 +199,7 @@ void WorldBoard::updateDocos(void)
 	int i = 0;
 	int currentEnergy = 0;
 	int newEnergy = 0;
-	for (i = 0; i < this->doco_vect.size(); ++i)  // Go through doco_vect, split them if high energy
+	for (i = 0; i < int(this->doco_vect.size()); ++i)  // Go through doco_vect, split them if high energy
 	{
 		// --- When engergy too high, split doco into 2 on cell and head in opposite dirs.
 		if (currentEnergy = this->doco_vect[i].getEnergy() > 750) { 
@@ -228,7 +229,7 @@ void WorldBoard::updateDocos(void)
 	int y = 0;
 
 	// --- Update the current cells with DOCO actions that were decided the previous turn / round.
-	for (i = 0; i < this->doco_vect.size(); i++) 
+	for (i = 0; i < int(this->doco_vect.size()); i++) 
 	{
 		// --- Current X any Y Pos
 		x = this->doco_vect[i].getXPos();
@@ -239,6 +240,7 @@ void WorldBoard::updateDocos(void)
 		this->doco_vect[i].adjoined_cells = this->worldCellGrid->findAdjoinedCells(x, y);  //Non Border Cells
 		this->doco_vect[i].adjoined_occupied_cells = this->worldCellGrid->findAdjoinedOccupiedCells();  
 		this->doco_vect[i].adjoined_obstacle_cells = this->worldCellGrid->findAdjoinedObstacleCells();
+		this->doco_vect[i].adjoined_open_cells = this->worldCellGrid->findAdjoinedOpenCells();
 		this->doco_vect[i].adjoined_food_cells = this->worldCellGrid->findAdjoinedCellsFood();
 
 		// --- Find NEW Cell to move to from available options. Chooses desirable X_Y position and assingns the DOCO with that new X_Y position

@@ -1,4 +1,5 @@
 // Stephen Stammen - 9/25/2020
+#pragma once
 #include "GridSize.h"
 
 GridSize::GridSize() {
