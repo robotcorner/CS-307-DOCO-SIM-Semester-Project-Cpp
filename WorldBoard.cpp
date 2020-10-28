@@ -12,7 +12,7 @@
 Directions dirs = Directions();
 
 // --- Initialize Random Number Generator
-UniformRandom uniRand = UniformRandom();
+UniformRandom* uniRand = UniformRandom::getInstance();
 
 // ========= WORLD BOARD CONSTRUCTOR / DESTRUCTOR ==============================
 
@@ -131,13 +131,13 @@ void WorldBoard::generateFoodLocations(int w, int h, int foodCount)
 	int y_pos = 0;
 	for (int i = 0; i < foodCount; ++i)
 	{
-		x_pos = uniRand.generateRandomNum(0, w-1);
-		y_pos = uniRand.generateRandomNum(0, h-1);
+		x_pos = uniRand->generateRandomNum(0, w-1);
+		y_pos = uniRand->generateRandomNum(0, h-1);
 		while ((this->worldCellGrid->cell_matrix[y_pos][x_pos].getFoodCount() > 3) // Food count > 3, generate new x and y position.
 			|| (this->worldCellGrid->cell_matrix[y_pos][x_pos].getOccupied()) ) // Don't spawn food in occupied cells
 		{
-			x_pos = uniRand.generateRandomNum(0, w-1);
-			y_pos = uniRand.generateRandomNum(0, h-1);
+			x_pos = uniRand->generateRandomNum(0, w-1);
+			y_pos = uniRand->generateRandomNum(0, h-1);
 		}
 		auto location = std::make_pair(x_pos, y_pos);
 		this->food_positions.push_back(location);
@@ -269,7 +269,7 @@ void WorldBoard::updateWorldState()
 	// --- Reinitialize the Char Matrix each turn.
 	this->worldCellGrid->initCharMatrix(this->width, this->height);
 	// --- Find new positions to place food on the board that are not already at max capacity
-	this->generateFoodLocations(this->width, this->height, uniRand.generateRandomNum(1, 10));
+	this->generateFoodLocations(this->width, this->height, uniRand->generateRandomNum(1, 10));
 	// --- Update the choosen new food cells with the food and change symbol for that cell position.
 	this->updateCellsWithNewFood();
 	// --- Update every DOCO on the board. 

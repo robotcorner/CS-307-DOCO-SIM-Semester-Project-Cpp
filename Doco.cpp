@@ -10,7 +10,7 @@
 #include "UniformRandom.h"
 
 Directions* directions = new Directions();
-UniformRandom* randObj = new UniformRandom();
+UniformRandom* randObj = UniformRandom::getInstance();
 
 Doco::Doco(int x, int y, std::string start_dir, std::string strategy)
 {
