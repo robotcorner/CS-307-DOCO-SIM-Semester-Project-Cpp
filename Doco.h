@@ -14,7 +14,11 @@ private:
 	std::pair<int, int> position; // the x position of the DOCO, the y position of the DOCO
 	int energy_level = 500; // the amount of energy the DOCO has.It will be initialized to 500 by default.
 	std::pair<std::string, std::pair<int, int> > direction; // A direction that the DOCO is currently heading. It will be be one of the following strings �N�, �NE�, �E�, �SE�, �S�, �SW�, �W�, �NW�.
-	std::pair<int, int> docoMoveToPos(std::pair<int, int>);
+	
+
+	//	std::pair<int, int> docoMoveToPos(std::pair<int, int>);
+	void docoMoveToPos(std::pair<int, int>);
+	
 public:
 	std::vector<std::pair<int, int> > adjoined_cells; // this will contain the matrix of adjoining cells to a DOCO.Adjoining means only the cells are touching, diagonal included.
 	std::vector<std::pair<int, int> > adjoined_occupied_cells; // this will contain the matrix of adjoining cells that are occupied.
@@ -50,3 +54,4 @@ public:
 	int getEnergy(); // returns the energy_level of the DOCO
 	DocoMoveStrategy* getPtrMoveStrategy();
 };
+

@@ -7,6 +7,8 @@
 
 UniformRandom* randObj = UniformRandom::getInstance();
 
+
+
 std::vector<std::string> Directions::setMoveDirections(void) {
 	static std::string move_directions[] = { "SW","W","NW","S","N","SE","E","NE" };
 	return std::vector<std::string>(move_directions, (move_directions + (sizeof(move_directions) / sizeof(std::string))));

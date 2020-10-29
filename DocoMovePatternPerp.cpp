@@ -3,14 +3,14 @@
 #include <vector>
 #include "Directions.h"
 
-Directions* moveDirs = new Directions();
+Directions* movePerpDirs = new Directions();
 
 std::vector<std::pair<int, int> > DocoMovePatternPerp::moveStrategy() {
-	return moveDirs->getPerpPairOffsets();
+	return movePerpDirs->getPerpPairOffsets();
 }
 
 std::vector<std::pair<int, int> > DocoMovePatternPerp::avoidanceStrategy() {
-	return moveDirs->getDiagonalPairOffsets(); // TODO: decide what offsets to get
+	return movePerpDirs->getDiagonalPairOffsets(); // TODO: decide what offsets to get
 }
 
 DocoMovePatternPerp::DocoMovePatternPerp() {

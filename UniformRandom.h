@@ -4,8 +4,8 @@ class UniformRandom
 private:
 	int instanceNumber = 0;			// counter to show 1 instance only
 	bool active = false;
-	UniformRandom();	// private constructor
 public:
+	UniformRandom();	// private constructor
 	~UniformRandom();	// public destructor
 	int getInstanceNumber();		// return the number of this instance
 

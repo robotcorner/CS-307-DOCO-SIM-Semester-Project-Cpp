@@ -10,7 +10,8 @@
 #include "UniformRandom.h"
 
 Directions* directions = new Directions();
-UniformRandom* randObj = UniformRandom::getInstance();
+UniformRandom* randDocoObj = UniformRandom::getInstance();
+
 
 Doco::Doco(int x, int y, std::string start_dir, std::string strategy)
 {
@@ -159,7 +160,7 @@ std::pair<int, int> Doco::move(int world_w, int world_h) // returns the pair tha
 	if (this->adjoined_food_cells.size() > 0) 
 	{
 		// Create move pair for jumping once in the direction of food and keeping heading
-		temp_next_valid_pos = this->adjoined_food_cells.at(randObj->generateRandomNum(0, this->adjoined_food_cells.size() - 1)); // choose random food poition
+		temp_next_valid_pos = this->adjoined_food_cells.at(randDocoObj->generateRandomNum(0, int(this->adjoined_food_cells.size()) - 1)); // choose random food poition
 		// TODO: alter heading for the food direction?
 	}
 	
@@ -193,7 +194,7 @@ std::pair<int, int> Doco::move(int world_w, int world_h) // returns the pair tha
 		if (identifying_value->first) // if there is an obstacle
 		{
 			// --- Choose random open position
-			temp_next_valid_pos = this->adjoined_open_cells.at(randObj->generateRandomNum(0, this->adjoined_open_cells.size() - 1));
+			temp_next_valid_pos = this->adjoined_open_cells.at(randDocoObj->generateRandomNum(0, int(this->adjoined_open_cells.size()) - 1));
 		}
 		
 	}
@@ -218,7 +219,7 @@ std::pair<int, int> Doco::move(int world_w, int world_h) // returns the pair tha
 		{
 			// --- Move to a random avoidance strategy that is open
 			auto avoidance_pair_vect = this->ptr_moveStrategy->avoidanceStrategy();
-			auto temp_next_pos2 = avoidance_pair_vect.at(randObj->generateRandomNum(0, avoidance_pair_vect.size() - 1));	// does not check for obstacls or docos though :(
+			auto temp_next_pos2 = avoidance_pair_vect.at(randDocoObj->generateRandomNum(0, int(avoidance_pair_vect.size()) - 1));	// does not check for obstacls or docos though :(
 			auto identifying_value2 = std::find(this->adjoined_open_cells.begin(), this->adjoined_open_cells.end(), temp_next_pos2); // returns (bool, pos in searched vect)
 			if (identifying_value2->first)
 			{
@@ -236,7 +237,7 @@ std::pair<int, int> Doco::move(int world_w, int world_h) // returns the pair tha
 				{
 					auto pos = temp_pair_vect.begin() + identifying_value->second;
 					temp_pair_vect.erase(pos);
-					auto otherPairPos = temp_pair_vect.at(randObj->generateRandomNum(0, temp_pair_vect.size() - 1));
+					auto otherPairPos = temp_pair_vect.at(randDocoObj->generateRandomNum(0, int(temp_pair_vect.size()) - 1));
 					// get direction from point
 					std::string dir = directions->getDirForPair(this->direction.second, otherPairPos);
 					this->setDirection(dir);
@@ -271,7 +272,7 @@ std::pair<int, int> Doco::move(int world_w, int world_h) // returns the pair tha
 			{
 				// --- doco in reverse direction, so choose random avoidance stragey
 				auto temp_pair_vect = this->ptr_moveStrategy->avoidanceStrategy();
-				temp_next_pos = temp_pair_vect.at(randObj->generateRandomNum(0, temp_pair_vect.size() - 1)); // choose random position from avoidance strategy.			
+				temp_next_pos = temp_pair_vect.at(randDocoObj->generateRandomNum(0, int(temp_pair_vect.size()) - 1)); // choose random position from avoidance strategy.			
 				auto validCheck = std::find(this->adjoined_open_cells.begin(), adjoined_open_cells.end(), temp_next_pos); // returns (bool, pos in searched vect)																												 // --- Choose open position
 				if (validCheck->first) // if found in open cells
 				{
@@ -413,7 +414,9 @@ void Doco::setPtrMoveStrategy(DocoMoveStrategy* strat) {
 	this->ptr_moveStrategy = strat;
 }
 
-std::pair<int, int> Doco::docoMoveToPos(std::pair<int, int> moving_here ) {
+// std::pair<int, int> Doco::docoMoveToPos(std::pair<int, int> moving_here ) {
+	void Doco::docoMoveToPos(std::pair<int, int> moving_here) {
+
 	if (this->getXPos() == moving_here.first && this->getYPos() == moving_here.second) { /* do nothing */ }
 	else {
 		this->energy_level -= 25; // 25 Energy per move. Only count if they moved to a new spot.

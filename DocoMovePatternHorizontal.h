@@ -3,6 +3,8 @@
 #include <string>
 class DocoMovePatternHorizontal : public DocoMoveStrategy
 {
+private:
+    std::vector<std::pair<int, int> > moveDirs;
 public: 
     std::vector<std::pair<int, int> > moveStrategy();
     std::vector<std::pair<int, int> > avoidanceStrategy();

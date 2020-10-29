@@ -16,13 +16,15 @@ private:
 	std::vector<std::pair<int, int> > diagonal_pair_offsets;
 	std::vector<std::pair<std::string, std::pair<int, int> > > perp_offsets_with_dir;
 	std::vector<std::pair<int, int> > perp_pair_offsets;
-
+	
 	std::vector<std::string> setMoveDirections();
 	void setXYModifiers();
 	void setDirXYPairs();
 	void setPairPatterns();
+	
 public:
 	std::vector<std::pair<std::string, std::pair<int, int> > > dir_xy_pairs;
+
 	Directions();
 	~Directions();
 	

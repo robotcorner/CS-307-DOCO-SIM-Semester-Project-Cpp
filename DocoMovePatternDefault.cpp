@@ -4,15 +4,15 @@
 #include <vector>
 #include "Directions.h"
 
-Directions* moveDirs = new Directions();
+Directions* moveDefaultDirs = new Directions();
 
 std::vector<std::pair<int, int> > DocoMovePatternDefault::moveStrategy() {
-	return moveDirs->getXYOffsets();
+	return moveDefaultDirs->getXYOffsets();
 }
 
 std::vector<std::pair<int, int> > DocoMovePatternDefault::avoidanceStrategy() {
 	// --- Implement normal move avoidance pair options to select if others don't work.
-	return moveDirs->getXYOffsets(); // TODO: decide what offsets to get
+	return moveDefaultDirs->getXYOffsets(); // TODO: decide what offsets to get
 }
 
 DocoMovePatternDefault::DocoMovePatternDefault() {

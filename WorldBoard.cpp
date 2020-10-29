@@ -182,7 +182,7 @@ int WorldBoard::updateCellWithADoco(int x, int y)
 void WorldBoard::updateDocos(void)
 {
 	// --- Remove dead DOCOs from the list
-	int size = this->doco_vect.size();
+	auto size = this->doco_vect.size();
 	while (size > 0)  // Go through doco_vect, delete item if it's dead
 	{
 		if (!this->doco_vect[size-1].getAlive()) {
@@ -287,6 +287,6 @@ void WorldBoard::printWorld()
 	std::cout << "Obstacles on Board:      " << this->worldCellGrid->getObstacleCount() << "\n";
 }
 
-Doco* copyDoco() {
+/* Doco* copyDoco() {
 
-}
+} */

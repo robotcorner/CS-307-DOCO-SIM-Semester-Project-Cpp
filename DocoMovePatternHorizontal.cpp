@@ -3,10 +3,10 @@
 #include <vector>
 #include "Directions.h"
 
-Directions* moveDirs = new Directions();
+Directions* moveHorDirs = new Directions();
 
 std::vector<std::pair<int, int> > DocoMovePatternHorizontal::moveStrategy() {
-	return moveDirs->getHorizontalPairOffsets();
+	return moveHorDirs->getHorizontalPairOffsets();
 }
 
 std::vector<std::pair<int, int> > DocoMovePatternHorizontal::avoidanceStrategy() {
@@ -14,7 +14,7 @@ std::vector<std::pair<int, int> > DocoMovePatternHorizontal::avoidanceStrategy()
 	//          If an edge of the world is encountered the DOCO will randomly elect to move up
 	//          or down a row and reverse its direction of movement.
 	std::vector<std::pair<int, int> > avoidanceStrategy;
-	avoidanceStrategy = moveDirs->getVerticalPairOffsets(); // Option to move up / down a row.
+	avoidanceStrategy = moveHorDirs->getVerticalPairOffsets(); // Option to move up / down a row.
 	return avoidanceStrategy;
 }
 

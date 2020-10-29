@@ -5,12 +5,12 @@
 
 // Behavior pattern 3 will cause the DOCO to move only in a diagonal direction.
 
-Directions* moveDirs = new Directions();
+ Directions* moveDiagDirs = new Directions();
 
 
 // --- This is the default move strategy
 std::vector<std::pair<int, int> > DocoMovePatternDiagonal::moveStrategy() {
-	return moveDirs->getDiagonalPairOffsets();	
+	return moveDiagDirs->getDiagonalPairOffsets();	
 }
 
 // If an edge of the world is encountered the DOCO will randomly elect to move 
@@ -39,7 +39,7 @@ std::vector<std::pair<int, int> > DocoMovePatternDiagonal::avoidanceStrategy() {
 // Reverse only works on a line not all diagonals
 
 
-	return moveDirs->getPerpPairOffsets();
+	return moveDiagDirs->getPerpPairOffsets();
 }
 
 DocoMovePatternDiagonal::DocoMovePatternDiagonal() {
