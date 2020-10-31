@@ -15,7 +15,7 @@ std::vector<std::pair<int, int> > DocoMovePatternDefault::avoidanceStrategy() {
 	return moveDefaultDirs->getXYOffsets(); // TODO: decide what offsets to get
 }
 
-DocoMovePatternDefault::DocoMovePatternDefault() {
+DocoMovePatternDefault::DocoMovePatternDefault() : DocoMoveStrategy() {
 
 }
 

@@ -19,7 +19,7 @@ std::vector<std::pair<int, int> > DocoMovePatternVertical::avoidanceStrategy() {
 
 }
 
-DocoMovePatternVertical::DocoMovePatternVertical() {
+DocoMovePatternVertical::DocoMovePatternVertical() : DocoMoveStrategy() {
 
 }
 

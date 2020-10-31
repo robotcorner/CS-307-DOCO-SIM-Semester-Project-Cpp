@@ -2,18 +2,15 @@
 #include "Doco.h"
 #include "Directions.h"
 #include "CellGrid.h"
-#include <vector>
 #include <algorithm>
 #include <iterator>
 #include <stdlib.h>
-#include "DocoMoveStrategy.h"
 #include "UniformRandom.h"
 
 Directions* directions = new Directions();
 UniformRandom* randDocoObj = UniformRandom::getInstance();
 
-
-Doco::Doco(int x, int y, std::string start_dir, std::string strategy)
+Doco::Doco(int x, int y, std::string start_dir, std::string strategy) : AbstractDoco()
 {
 	this->position.first = x;
 	this->position.second = y;

@@ -4,9 +4,7 @@
 #include <random>
 #include "Directions.h"
 #include "UniformRandom.h"
-#include "Doco.h"
 #include "DocoFactory.h"
-#include "DataParser.h"
 
 // --- Initialize Directions for the World
 Directions dirs = Directions();
@@ -37,7 +35,7 @@ WorldBoard::~WorldBoard()
 void WorldBoard::readFile(char* inFile)
 {
 	// --- Create the Parser Object
-	this->myParser->getInstance(inFile);
+	this->myParser = DataParser::getInstance(inFile);
 	
 	// --- Parse World Size
 	this->width = this->myParser->getDOCOWorldWidth();
@@ -72,28 +70,29 @@ void WorldBoard::readFile(char* inFile)
 		// --- Spawn DOCOs at provided X, Y positions with provided movement strategy and direction if avaiable, 
 		// --- otherwise they are given random movement stategy and direction.
 		// --- Cases for each posible movement being passed in. None of these will activate for PA-1
-		switch (*ptr_strategy) {
-			case 'h': 
+		// Uses first char of strategy
+		switch (ptr_strategy[0]) {
+			case 'H': 
 				dir_pair = dirs.getRandomHorizontalDirectionPair();
 				dir = dir_pair.first;
-				this->doco_vect.push_back(*myDocoFactory->createDocoHoriziontal(*ptr_x_pos, *ptr_y_pos, dir));
+				this->doco_vect.push_back(*myDocoFactory->createDocoHorizontal(*ptr_x_pos, *ptr_y_pos, dir));
 				break;
-			case 'v':
+			case 'V':
 				dir_pair = dirs.getRandomVerticalDirectionPair();
 				dir = dir_pair.first;
 				this->doco_vect.push_back(*myDocoFactory->createDocoVertical(*ptr_x_pos, *ptr_y_pos, dir));
 				break;
-			case 'd':
+			case 'D':
 				dir_pair = dirs.getRandomDiagonalDirectionPair();
 				dir = dir_pair.first;
 				this->doco_vect.push_back(*myDocoFactory->createDocoDiagonal(*ptr_x_pos, *ptr_y_pos, dir));
 				break;
-			case 'p':
+			case 'P':
 				dir_pair = dirs.getRandomPerpDirectionPair();
 				dir = dir_pair.first;
 				this->doco_vect.push_back(*myDocoFactory->createDocoPerp(*ptr_x_pos, *ptr_y_pos, dir));
 				break;
-			case 'r':
+			case 'R':
 				dir_pair = dirs.getRandomDirectionPair();
 				dir = dir_pair.first;
 				this->doco_vect.push_back(*myDocoFactory->createDocoDefault(*ptr_x_pos, *ptr_y_pos, dir));
@@ -183,6 +182,7 @@ void WorldBoard::updateDocos(void)
 {
 	// --- Remove dead DOCOs from the list
 	auto size = this->doco_vect.size();
+	// TODO: 1 doco was killed at start???
 	while (size > 0)  // Go through doco_vect, delete item if it's dead
 	{
 		if (!this->doco_vect[size-1].getAlive()) {
@@ -199,6 +199,7 @@ void WorldBoard::updateDocos(void)
 	int i = 0;
 	int currentEnergy = 0;
 	int newEnergy = 0;
+	// TODO: A doco COPY with inccorect ptr_moveStra, alive, and energy level is created.
 	for (i = 0; i < int(this->doco_vect.size()); ++i)  // Go through doco_vect, split them if high energy
 	{
 		// --- When engergy too high, split doco into 2 on cell and head in opposite dirs.

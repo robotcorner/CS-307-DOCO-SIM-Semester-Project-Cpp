@@ -11,7 +11,7 @@ int main() {
 	int display_rate = 1;
 	Simulator* mySim = new Simulator(update_rate, display_rate); // containers the DocoSim Object to adjust the sim.
 	long int max_updates = 1000;
-	char inFile[] = "DOCOData01.xml";
+	char inFile[] = "DOCOData02.xml";
 	Viewer* view = new Viewer();
 	WorldBoard* myDocoWorld = new WorldBoard(inFile);	
 	while (!mySim->getPausedState()) // while not false

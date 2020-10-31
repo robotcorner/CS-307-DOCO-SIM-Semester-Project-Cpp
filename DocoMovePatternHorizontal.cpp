@@ -18,7 +18,7 @@ std::vector<std::pair<int, int> > DocoMovePatternHorizontal::avoidanceStrategy()
 	return avoidanceStrategy;
 }
 
-DocoMovePatternHorizontal::DocoMovePatternHorizontal() {
+DocoMovePatternHorizontal::DocoMovePatternHorizontal() : DocoMoveStrategy() {
 
 }
 

@@ -42,7 +42,7 @@ std::vector<std::pair<int, int> > DocoMovePatternDiagonal::avoidanceStrategy() {
 	return moveDiagDirs->getPerpPairOffsets();
 }
 
-DocoMovePatternDiagonal::DocoMovePatternDiagonal() {
+DocoMovePatternDiagonal::DocoMovePatternDiagonal() : DocoMoveStrategy() {
 
 }
 

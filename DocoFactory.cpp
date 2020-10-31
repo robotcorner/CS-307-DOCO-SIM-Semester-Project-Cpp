@@ -1,5 +1,4 @@
 #pragma once
-#include "Doco.h"
 #include "DocoFactory.h"
 #include "DocoMoveStrategy.h"
 #include "DocoMovePatternHorizontal.h"
@@ -9,7 +8,7 @@
 #include "DocoMovePatternPerp.h"
 
 // --- Private class constructor
-DocoFactory::DocoFactory() {
+DocoFactory::DocoFactory() : AbstractSimpleDocoFactory() {
 
 }
 
@@ -55,7 +54,6 @@ Doco* DocoFactory::createDocoDiagonal(int x_pos, int y_pos, std::string dir)
 	newDoco->setPtrMoveStrategy(strategy);
 	return newDoco;
 }
-
 Doco* DocoFactory::createDocoHorizontal(int x_pos, int y_pos, std::string dir)
 {
 	// --- Return a doco of horizontal movement type
