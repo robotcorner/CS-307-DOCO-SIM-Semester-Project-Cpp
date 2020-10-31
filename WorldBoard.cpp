@@ -243,6 +243,7 @@ void WorldBoard::updateDocos(void)
 		this->doco_vect[i].adjoined_obstacle_cells = this->worldCellGrid->findAdjoinedObstacleCells();
 		this->doco_vect[i].adjoined_open_cells = this->worldCellGrid->findAdjoinedOpenCells();
 		this->doco_vect[i].adjoined_food_cells = this->worldCellGrid->findAdjoinedCellsFood();
+		this->doco_vect[i].adjoined_open_cells_with_food = this->worldCellGrid->findAdjoinedOpenCellsWithFood();
 
 		// --- Find NEW Cell to move to from available options. Chooses desirable X_Y position and assingns the DOCO with that new X_Y position
 		auto moved_to = this->doco_vect[i].move(this->width, this->height);	// all doco's in list make new move decision one at a time

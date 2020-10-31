@@ -190,6 +190,28 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedCellsFood()
 	return tempFoodCells;
 }
 
+std::vector<std::pair<int, int> > CellGrid::findAdjoinedOpenCellsWithFood() {
+	std::vector<std::pair<int, int> > tempOpenCellsWithFood;
+	int* x = new int;
+	int* y = new int;
+	*x = 0;
+	*y = 0;
+	for (auto pair : this->temp_adjoined_cells) {
+		*x = pair.first;		// store x at allocated address
+		*y = pair.second;		// store y at allocated address
+		bool obstacle = this->cell_matrix[*y][*x].getObstacle();
+		bool occupied = this->cell_matrix[*y][*x].getOccupied();
+		bool food = this->cell_matrix[*y][*x].getFoodPresent();
+		if (!obstacle && !occupied && food)	// if occupied or obstacle
+		{
+			tempOpenCellsWithFood.push_back(std::make_pair(*x, *y));
+		}
+	}
+	delete x;
+	delete y;
+	return tempOpenCellsWithFood;
+}
+
 
 // Goal: know how much food or DOCO's are on board
 int CellGrid::getFoodCharCount(void) // find total food on board

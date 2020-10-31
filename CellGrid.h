@@ -27,6 +27,7 @@ public:
 	std::vector<std::pair<int, int> > findAdjoinedObstacleCells();  // Obstacle Cells surounding a doco
 	std::vector<std::pair<int, int> > findAdjoinedOpenCells();  // Open Cells surounding a doco
 	std::vector<std::pair<int, int> > findAdjoinedCellsFood(); // checks each of the temp_adjoining_cells and returns the matrix of cells that contain food.Using the temp variable eliminates some error checking.
+	std::vector<std::pair<int, int> > findAdjoinedOpenCellsWithFood();
 	int getFoodCharCount(void); // return food_char_count
 	int getDocoCharCount(void); // return doco_char_count
 	int getDocoCount(void);		// return doco_count

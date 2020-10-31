@@ -10,7 +10,7 @@ UniformRandom* randObj = UniformRandom::getInstance();
 
 
 std::vector<std::string> Directions::setMoveDirections(void) {
-	static std::string move_directions[] = { "SW","W","NW","S","N","SE","E","NE" };
+	static std::string move_directions[] = { "NW","W","SW","N","S","NE","E","SE" };
 	return std::vector<std::string>(move_directions, (move_directions + (sizeof(move_directions) / sizeof(std::string))));
 }
 
@@ -164,7 +164,7 @@ std::pair<std::string, std::pair<int, int> > Directions::getPairComboForString(s
 
 std::string Directions::getDirForPair(std::pair<int, int> presentPair, std::pair<int, int> movePair)
 {
-	int d_y = movePair.second - presentPair.second;
+	int d_y = -movePair.second + presentPair.second;
 	int d_x = movePair.first - presentPair.first;
 	if (this->dir_xy_pairs.at(4).second.first == d_x && this->dir_xy_pairs.at(4).second.second == d_y) return "N";
 	if (this->dir_xy_pairs.at(7).second.first == d_x && this->dir_xy_pairs.at(7).second.second == d_y) return "NE";
