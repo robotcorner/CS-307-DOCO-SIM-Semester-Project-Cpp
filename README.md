@@ -13,16 +13,14 @@
 - They will avoid walking into each other too. 
 - They now also avoid running into obstacles. 
 - Additionally, strategy pattern and factory pattern have been implemented to allow for different types of DOCOs. 
-- The initial world specifications (height, width, DOCO’s and positions, and food locations) will be read in from a provided file in XML format. 
+- The initial world specifications (height, width, DOCOâ€™s and positions, and food locations) will be read in from a provided file in XML format. 
 - As part of version two, the DOCO strategy is also read in. There are a lot of details involved and they are specified below.
 
 #### Class Outline UML - Preliminary 
-![Alt text](./PrelimDiagramUML.svg)
-<img src="./PrelimDiagramUML.svg">
+![Alt text](./PrelimDiagramUML.svg)<img src="./PrelimDiagramUML.svg">
 
 #### Class Outline UML - Detailed
-![Alt text](./ClassOutlineUML.svg)
-<img src="./ClassOutlineUML.svg">
+![Alt text](./ClassOutlineUML.svg)<img src="./ClassOutlineUML.svg">
 
 ### Tasks and Errors to Fix Prioritized:
 1. Doco movement occasionally returns move pairs that are out of bounds of the world, thus crashing the program.
