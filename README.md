@@ -18,14 +18,11 @@
 
 #### Class Outline UML - Preliminary 
 
-![Alt text](ClassPrelimDiagramUML.svg)<img src="./ClassPrelimDiagramUML.svg">
-<p><img src='//example.com/foo.svg'></p>
 <p><img src='ClassPrelimDiagramUML.svg'></p>
-
 
 #### Class Outline UML - Detailed
 
-![Alt text](./ClassOutlineUML.svg)<img src="./ClassOutlineUML.svg">
+<p><img src='ClassOutlineUML.svg'></p>
 
 ### Tasks and Errors to Fix Prioritized:
 1. Doco movement occasionally returns move pairs that are out of bounds of the world, thus crashing the program.
