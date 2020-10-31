@@ -19,6 +19,9 @@
 #### Class Outline UML - Preliminary 
 
 ![Alt text](ClassPrelimDiagramUML.svg)<img src="./ClassPrelimDiagramUML.svg">
+<p><img src='//example.com/foo.svg'></p>
+<p><img src='ClassPrelimDiagramUML.svg'></p>
+
 
 #### Class Outline UML - Detailed
 
