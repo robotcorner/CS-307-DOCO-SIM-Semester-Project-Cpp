@@ -17,9 +17,11 @@
 - As part of version two, the DOCO strategy is also read in. There are a lot of details involved and they are specified below.
 
 #### Class Outline UML - Preliminary 
-![Alt text](./PrelimDiagramUML.svg)<img src="./PrelimDiagramUML.svg">
+
+![Alt text](ClassPrelimDiagramUML.svg)<img src="./ClassPrelimDiagramUML.svg">
 
 #### Class Outline UML - Detailed
+
 ![Alt text](./ClassOutlineUML.svg)<img src="./ClassOutlineUML.svg">
 
 ### Tasks and Errors to Fix Prioritized:
