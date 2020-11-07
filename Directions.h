@@ -30,6 +30,7 @@ public:
 	
 	std::vector<std::string> getAllDirections(void);
 	std::vector<std::pair<std::string, std::pair<int, int> > > getDirectionPairs();
+
 	std::vector<std::pair<int, int> > getXYOffsets();
 
 	std::vector<std::pair<std::string, std::pair<int, int> > > getHorizontalPairOffsetsWithDir();
@@ -52,6 +53,7 @@ public:
 
 
 	std::string getDirForPair(std::pair<int, int> presentPair, std::pair<int, int> movePair);
+	std::string getDirForOffset(std::pair<int, int> offsetPair);
 	void printDirXYPairs();
 
 };

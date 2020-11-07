@@ -9,7 +9,7 @@ private:
 	int y_pos;					// y position of a cell
 	bool obstacle = false;		// whether the cell is an obstacle
 	bool occupied = false;		// whether a cell is currently occupied by a DOCO or other organism.
-	std::string strategy = "horizontal";		// indicates the strategy of the Doco on the cell
+	std::string strategy = "Horizontal";		// indicates the strategy of the Doco on the cell
 	bool food_present = false;	// whether there is food present in a cell so that the DOCO can smell it and go to it when nearby
 	int food_count = 0;			// food count in the cell
 	char symbol = '-';			// symbol to print to the board for the location empty cell
@@ -24,6 +24,7 @@ public:
 	bool getObstacle(void);		// returns whether or not the cell is an obstable
 	bool getFoodPresent(void);	// returns whether food is present or not in the cell
 	int getFoodCount(void);		// returns the number of food pellets in the cell
+	std::string getStrategy(void); // get strategy for the cell
 	char getSymbol(void);		// gets the character symbol for this cell
 	void setOccupied(bool);		// set whether the cell is occupied or not by a DOCO
 	void setStrategy(std::string); // set strategy for the cell

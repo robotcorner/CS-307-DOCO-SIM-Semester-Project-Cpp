@@ -47,6 +47,11 @@ char Cell::getSymbol(void)
 	return this->symbol;
 }
 
+std::string Cell::getStrategy(void)
+{
+	return this->strategy;
+}
+
 void Cell::setOccupied(bool isOccupied)
 {
 	this->occupied = isOccupied;
@@ -58,16 +63,19 @@ void Cell::setSymbol()
 	// '.' = one or more food pellets, and '-' = an empty cell.
 	// prioritizes the occupied symbol.
 	if (this->occupied) {
-		if (this->strategy == "horizontal") {
+		if (this->strategy == "Horizontal") {
 			this->symbol = '=';
 		}
-		else if (this->strategy == "vertical") {
+		else if (this->strategy == "Vertical") {
 			this->symbol = '|';
 		}
-		else if (this->strategy == "diagonal") {
+		else if (this->strategy == "Diagonal") {
 			this->symbol = 'X';
 		}
-		else {	// default DOCO movement
+		else if (this->strategy == "Perp") {
+			this->symbol = '+';
+		}
+		else {	// default DOCO movement Random
 			this->symbol = '*';
 		}
 	}

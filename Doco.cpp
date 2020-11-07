@@ -82,8 +82,10 @@ void Doco::setEnergy(int new_e_level)
 	if (new_e_level >= 0) {
 		this->energy_level = new_e_level;
 	}
-	else new_e_level = 0;
-	this->alive = false;
+	else {
+		new_e_level = 0;
+		this->alive = false;
+	}
 }
 
 void Doco::addEnergy(int added_energy) {
@@ -100,7 +102,7 @@ void Doco::eat(int amount_eaten, const std::string& type="default") { // type is
 }
 
 std::pair<int, int> Doco::move(int world_w, int world_h) // returns the pair that moved too.
-{	
+{
 	// --- Setup move pair that is choosen
 	int x = this->getXPos();
 	int y = this->getYPos();
@@ -110,211 +112,204 @@ std::pair<int, int> Doco::move(int world_w, int world_h) // returns the pair tha
 	std::pair<int, int> option;
 	std::vector<std::pair<int, int> >::iterator it;
 	std::vector<std::pair<int, int> >::iterator identifying_value;
+	std::pair<bool, int> searchResult;
 
-	bool verified = false;
-	this->move_options.clear(); // Clear move options from previous turn to generate new ones now that new data is in.
-	for (auto pair : this->adjoined_cells) {
-		this->move_options.push_back(pair);
-	}
-
-	/*
-	// --- Remove move_options that contain occupied cells
-	for (it = this->move_options.begin(); it != this->move_options.end(); )
-	{
-		// --- Find the location of where the move_option pair is that matches the adjoined_occupied_cell
-		identifying_value = std::find(this->adjoined_occupied_cells.begin(), adjoined_occupied_cells.end(), *it);
-		if (identifying_value != this->adjoined_occupied_cells.end())
-		{
-			if (it->first == identifying_value->first && it->second == identifying_value->second)
-			{
-				it = this->move_options.erase(it);
-				// --- Create new random direction when nearby another doco in current heading
-				auto temp_next_dir = directions->getRandomDirectionPair();
-				this->setDirection(temp_next_dir.first);
-			}
-			else
-			{
-				++it;
-			}
-		}
-		else
-		{
-			++it;
-		}
-	}
-	 */
-
-	 // --- Find nearby food in the valid move options that aren't occupied.
-	 /*
-	 for (it = this->move_options.begin(); it != this->move_options.end(); )
-	 {
-		 // --- Find the location of where the move_option pair is that matches a adjoined_food_cell
-		 identifying_value = std::find(this->adjoined_food_cells.begin(), adjoined_food_cells.end(), *it);
-		 if (identifying_value != this->adjoined_food_cells.end()) // If the value was found
-		 {
-			 // --- If the pairs match for the value found:
-			 if (it->first == identifying_value->first && it->second == identifying_value->second)
-			 {
-				 this->food_move_options.push_back(*identifying_value);
-				 // --- Choose last found pair to go to that contains food.
-				 // --- Extract Direction from this pair.
-				 auto direction = directions->getDirForPair(std::make_pair(x, y), std::make_pair(identifying_value->first, identifying_value->second));
-				 // --- Set Current Direction to the pair.
-				 this->setDirection(direction);
-			 }
-		 }
-		 ++it;
-	 }
-	 */
-
-	/*
-	- Each DOCO will always move in a straight line in its' current direction of movement unless that movement is modified by the constraints given below.
-	*/
-
-	// ----------------------------------------------------------------------------
-	// | 1 | CONTINUE IN SAME DIRECTION IF POSSIBLE	
+	
+	bool found_next_valid_pos = false;
+	temp_next_valid_pos = this->position;  // move to same spot if nothing else found
+	
 	auto temp_next_dir = this->direction;
 	temp_next_pos = std::make_pair(x + temp_next_dir.second.first, y + temp_next_dir.second.second);
-	identifying_value = std::find(this->adjoined_open_cells.begin(), adjoined_open_cells.end(), temp_next_pos); // returns (bool, pos in searched vect)
-	std::pair<bool, int> searchResult = findItemInVect<std::pair<int, int> >(this->adjoined_open_cells, temp_next_pos);
-	bool verified_bounds = false;
-	while (!verified_bounds) {
-		/*
-		- Behavior Patterns
-
-			o	Behavior pattern 1 will cause the DOCO to move only in a horizontal direction.If an edge of the
-			world is encountered the DOCO will randomly elect to move up or down a row and reverse its direction
-			of movement.
-
-			o	Behavior pattern 2 will cause the DOCO to move only in a vertical direction.If an edge of the world
-			is encountered the DOCO will randomly elect to move left or right a column and reverse its direction
-			of movement.
-
-			o	Behavior pattern 3 will cause the DOCO to move only in a diagonal direction.If an edge of the world
-			is encountered the DOCO will randomly elect to move left, right, up, or down and either reverse its
-			direction of movement or move in the other diagonal direction.
-
-		*/
-		
-		if (searchResult.first) // if there is an open position in that direction
+	        ///////////////////////////////////////////////
+			// TRY CURRENT DIRECTION UNLESS FOOD IS AROUND
+			///////////////////////////////////////////////
+	if (!found_next_valid_pos) {     // | 0 | CONTINUE IN SAME DIRECTION IF POSSIBLE	
+		//identifying_value = std::find(this->adjoined_open_cells.begin(), adjoined_open_cells.end(), temp_next_pos); // returns (bool, pos in searched vect)
+		// the above fails, need to prevent the following to execute...heap error
+		if(temp_next_pos.first > world_w || temp_next_pos.first < 0 || temp_next_pos.second > world_h || temp_next_pos.second < 0)
+			searchResult.first=false; //outside range, don't bother checking
+		else
+		   searchResult = findItemInVect<std::pair<int, int> >(this->adjoined_open_cells, temp_next_pos);
+		if (searchResult.first) // Found an open position in current direction, otherwise try something else
 		{
-			temp_next_valid_pos = this->adjoined_open_cells.at(searchResult.second);		// --- Choose open position
-			// | 5 | GO FOR FOOD IF AVAILABLE
-			//  The cell containing food does not have to be along its' path defined by its movement behavior.
-			if (this->adjoined_open_cells_with_food.size() > 0)
+			if (this->adjoined_open_cells_with_food.size() == 0)  // No surrounding food
 			{
-				// Create move pair for jumping once in the direction of food and keeping heading
-				temp_next_valid_pos = this->adjoined_open_cells_with_food.at(randDocoObj->generateRandomNum(0, int(this->adjoined_open_cells_with_food.size()) - 1)); // choose random food poition
+				temp_next_valid_pos = this->adjoined_open_cells.at(searchResult.second);		// --- Choose current open position no food
+				found_next_valid_pos = true;
+			}
+			else  // Check for food in current direction, 1st choice
+			{
+				std::pair<bool, int> searchResult = findItemInVect<std::pair<int, int> >(this->adjoined_open_cells_with_food, temp_next_pos);
+				if (searchResult.first)  //Food in current Direction, YumYum, otherwise find food in other directions below
+				{
+					temp_next_valid_pos = this->adjoined_open_cells_with_food.at(searchResult.second); // choose current open poition food
+					found_next_valid_pos = true;
+				}
 			}
 		}
-		else // if can't continue in straight direction or jump to food, check if it's an obstacle in the way, check if it's a wall
+	}
+	                                 ///////////////////////////////////////////////
+	                                 // | 1 | LOOK FOR FOOD IN AJOINING CELLS
+									 ///////////////////////////////////////////////
+	if (!found_next_valid_pos) {    
+		if (this->adjoined_open_cells_with_food.size() > 0) // Food is avail, Pick one
 		{
-			// | 2 | WHEN A WALL IS HIT, USE AVOIDANCE STRATEGY
-			if (this->adjoined_cells.size() < 8)
+			// Create move pair for jumping once in the direction of food and keeping current heading
+			temp_next_valid_pos = this->adjoined_open_cells_with_food.at(randDocoObj->generateRandomNum(0, int(this->adjoined_open_cells_with_food.size()) - 1)); // choose random food poition
+			found_next_valid_pos = true;
+		}
+	}
+	                                   ///////////////////////////////////////////////
+                                       // | 2 | CHECK IF HIT WALL, USE AVOIDANCE STRATEGY
+                                       ///////////////////////////////////////////////
+	if (!found_next_valid_pos) { 
+		if (this->adjoined_cells.size() < 8)  // Walls somewhere around doco
+		{
+			// --- Check if wall in current direction path, if it is, pick a direction from movement stategy
+			// Check for direction in adjoined_cells, if not in there then it hit a wall..
+			//searchResult = std::find(this->adjoined_cells.begin(), adjoined_cells.end(), temp_next_pos); // returns (bool, pos in searched vect)
+			searchResult = findItemInVect<std::pair<int, int> >(this->adjoined_cells, temp_next_pos); // searchResult = wall pair
+			if (!searchResult.first) // If there is not an position for this, it's a wall 
 			{
-				// --- Check if wall in current direction path, if it is, pick a direction from movement stategy
-				// Check for direction in adjoined_cells, if not in there then it hit a wall..
-				//searchResult = std::find(this->adjoined_cells.begin(), adjoined_cells.end(), temp_next_pos); // returns (bool, pos in searched vect)
-				searchResult = findItemInVect<std::pair<int, int> >(this->adjoined_cells, temp_next_pos); // searchResult = wall pair
-				if (!searchResult.first) // If there is not an position for this, it's a wall 
-				{
-					// --- Move to a random avoidance strategy that is open
-					auto avoidance_pair_vect = this->ptr_moveStrategy->avoidanceStrategy();
-
-					auto rand_avoid_pair = avoidance_pair_vect.at(randDocoObj->generateRandomNum(0, int(avoidance_pair_vect.size()) - 1));
-					temp_next_pos = std::make_pair(x + rand_avoid_pair.first, y + rand_avoid_pair.second);
-					auto avoid_pair_available = findItemInVect<std::pair<int, int> >(this->adjoined_open_cells, temp_next_pos); // returns (bool, pos in searched vect)
-					int attempts = 12;
-					while (!avoid_pair_available.first && attempts < 15) {
-						auto rand_avoid_pair = avoidance_pair_vect.at(randDocoObj->generateRandomNum(0, int(avoidance_pair_vect.size()) - 1));
-						temp_next_pos = std::make_pair(x + rand_avoid_pair.first, y + rand_avoid_pair.second);
-						auto avoid_pair_available = findItemInVect<std::pair<int, int> >(this->adjoined_open_cells, temp_next_pos); // returns (bool, pos in searched vect)
-						attempts++;
-					}
-
-					if (avoid_pair_available.first) // if avoid pair found in open cells
-					{
-						temp_next_valid_pos = temp_next_pos; // valid avoidence pair found.
-
-						// --- Set reverse direction and allow the special case for diagonal.
-						auto temp_pair_vect = this->ptr_moveStrategy->moveStrategy(); // Check if next position for direction is in the path
-						auto viablePos = findItemInVect<std::pair<int, int> >(temp_pair_vect, temp_next_pos); // returns (bool, pos in searched vect)
-
-						if (viablePos.first) // If next position is available for it's current path...
-						{
-							auto pos = temp_pair_vect.begin() + identifying_value->second;
-							temp_pair_vect.erase(pos);
-							auto otherPairPos = temp_pair_vect.at(randDocoObj->generateRandomNum(0, int(temp_pair_vect.size()) - 1));
-							// get direction from point
-							std::string dir = directions->getDirForPair(this->direction.second, otherPairPos);
-							this->setDirection(dir);
-						}
-					}
-				}
-			}
-			// | 3 | WHEN OBSTACLE IS IN PATH, PICK RANDOM DIRECTION in an OPEN PATH.
-			else if (this->adjoined_obstacle_cells.size() > 0)
-			{
-				// --- Check if obstacle in current direction path, if it is, pick a random open direction
+				// --- Change Direction to a random movement strategy minus current direction
 				auto temp_next_dir = this->direction;
-				temp_next_pos = std::make_pair(x + temp_next_dir.second.first, y + temp_next_dir.second.second);
-				std::pair<bool, int> searchResult = findItemInVect<std::pair<int, int> >(this->adjoined_obstacle_cells, temp_next_pos); // returns (bool, pos in searched vect)
-				if (searchResult.first) // if there is an obstacle
-				{
-					// --- Choose random open position
-					temp_next_valid_pos = this->adjoined_open_cells.at(randDocoObj->generateRandomNum(0, int(this->adjoined_open_cells.size()) - 1));
+				// Create movement vectors
+				std::pair<bool, int> movement_pair;
+				auto movement_pair_vect = this->ptr_moveStrategy->moveStrategy();
+				std::pair<int, int> temp_movement_pos;
+				//for (auto i = movement_pair_vect.end(); i > movement_pair_vect.begin(); --i)
+				for (auto i = int(movement_pair_vect.size()); i > 0; --i)
+				{ // Remove cur direction vector
+					temp_movement_pos = std::make_pair(movement_pair_vect.at(i - 1).first, movement_pair_vect.at(i - 1).second);
+					if (temp_movement_pos.first == this->direction.second.first && temp_movement_pos.second == this->direction.second.second)
+					{
+						movement_pair_vect.erase(movement_pair_vect.begin() + i - 1);
+					}
+				}
+				if (movement_pair_vect.size() > 0) {  // Randomly Pick a Movement Strategy for a direction - Reverse or Other line for diag and perp
+					temp_movement_pos = movement_pair_vect.at(randDocoObj->generateRandomNum(0, int(movement_pair_vect.size()) - 1)); // choose random position from movement strategy.
+					temp_next_dir.first = directions->getDirForOffset(temp_movement_pos);
+					temp_next_dir.second.first = temp_movement_pos.first;
+					temp_next_dir.second.second = temp_movement_pos.second;
+					this->direction =temp_next_dir; // Change Direction
+				}
+
+				// --- Move to a random avoidance strategy that is open
+				// Create open avoidance vectors
+				std::pair<bool, int> avoidance_pair;
+				auto avoidance_pair_vect = this->ptr_moveStrategy->avoidanceStrategy();
+				//for (auto i = avoidance_pair_vect.end(); i > avoidance_pair_vect.begin(); --i)
+				for (auto i = int(avoidance_pair_vect.size()); i > 0; --i)
+				{ // Remove all vectors not open
+					std::pair<int, int> temp_avoidance_pos = std::make_pair(x + avoidance_pair_vect.at(i-1).first, y + avoidance_pair_vect.at(i-1).second);
+					if (temp_avoidance_pos.first >= world_w || temp_avoidance_pos.first < 0 || temp_avoidance_pos.second >= world_h || temp_avoidance_pos.second < 0)
+					{
+						avoidance_pair.first = false; 
+						avoidance_pair.second = i - 1; //outside range, don't bother checking for open
+					}
+					else
+					   avoidance_pair = findItemInVect<std::pair<int, int> >(this->adjoined_open_cells, temp_avoidance_pos); // returns (bool, pos in searched vect)
+					if (!avoidance_pair.first) // avoidance not open or outside range, remove vector
+					{
+						avoidance_pair_vect.erase(avoidance_pair_vect.begin()+i-1);
+					}
+				}
+				if (avoidance_pair_vect.size() > 0) {  // Randomly Pick a Avoidance Strategy
+					std::pair<int, int> temp_avoidance_pos = avoidance_pair_vect.at(randDocoObj->generateRandomNum(0, int(avoidance_pair_vect.size()) - 1)); // choose random position from avoidance strategy.
+					temp_next_valid_pos = std::make_pair(x + temp_avoidance_pos.first, y + temp_avoidance_pos.second);
+					found_next_valid_pos = true;
 				}
 			}
-			// | 4 | WHEN DIRECTION HITS ANOTHER DOCO, REVERSE, CHECK IF THAT'S A DOCO, IF IT IS, USE AVOIDANCE STRATEGY W/ RANDOM CHOICE
-			else if (this->adjoined_occupied_cells.size() > 0) {
-				this->ptr_moveStrategy->moveStrategy();
+		}
+	}
+	                              ///////////////////////////////////////////////
+                                  // | 3 | WHEN OBSTACLE IS IN PATH, PICK RANDOM DIRECTION in an OPEN PATH.
+                                  ///////////////////////////////////////////////
+	if (!found_next_valid_pos) {  
+		if (this->adjoined_obstacle_cells.size() > 0) // Obstacles somewhere around doco
+		{
+			// --- Check if obstacle in current direction path, if it is, pick a random open direction
+			searchResult = findItemInVect<std::pair<int, int> >(this->adjoined_obstacle_cells, temp_next_pos); // returns (bool, pos in searched vect)
+			if (searchResult.first) // if there is an obstacle
+			{
+				// --- Choose random open position
+				temp_next_valid_pos = this->adjoined_open_cells.at(randDocoObj->generateRandomNum(0, int(this->adjoined_open_cells.size()) - 1));
+				found_next_valid_pos = true;
+			}
+		}
+	}
+	                      ///////////////////////////////////////////////
+                          // | 4 | WHEN DIRECTION HITS ANOTHER DOCO, REVERSE, CHECK IF THAT'S A DOCO, IF IT IS, USE AVOIDANCE STRATEGY W/ RANDOM CHOICE.
+                          ///////////////////////////////////////////////
+	if (!found_next_valid_pos) { 
+		if (this->adjoined_occupied_cells.size() > 0) {
+			//this->ptr_moveStrategy->moveStrategy();
 
-				std::pair<bool, int> other_doco_pair = findItemInVect<std::pair<int, int> >(this->adjoined_occupied_cells, temp_next_pos); // returns (bool, pos in searched vect)
-				if (other_doco_pair.first) // if there is doco in that direction
+			std::pair<bool, int> other_doco_pair = findItemInVect<std::pair<int, int> >(this->adjoined_occupied_cells, temp_next_pos); // returns (bool, pos in searched vect)
+			if (other_doco_pair.first) // if there is doco in Current direction
+			{
+				auto temp_next_dir = this->direction;
+				this->direction = directions->getOppositeDirectionPair(temp_next_dir); // Reverse doco direction, but...for the move
+				
+				// --- Check if doco in reverse direction
+				temp_next_dir = this->direction;
+				std::pair<bool, int> other_doco_pair2;
+				temp_next_pos = std::make_pair(x + temp_next_dir.second.first, y + temp_next_dir.second.second);
+				if (temp_next_pos.first >= world_w || temp_next_pos.first < 0 || temp_next_pos.second >= world_h || temp_next_pos.second < 0)
+					other_doco_pair2.first = false; //outside range, don't bother checking
+				else
+				   other_doco_pair2 = findItemInVect<std::pair<int, int> >(this->adjoined_occupied_cells, temp_next_pos); // returns (bool, pos in searched vect)
+				if (other_doco_pair2.first) // if there is doco in the reverse direction
 				{
-					this->direction = directions->getOppositeDirectionPair(this->direction); // Reverse doco direction, but...for the move
-
-					// --- Check if doco in reverse direction
-					auto temp_next_dir = this->direction;
-					temp_next_pos = std::make_pair(x + temp_next_dir.second.first, y + temp_next_dir.second.second);
-					std::pair<bool, int> other_doco_pair2 = findItemInVect<std::pair<int, int> >(this->adjoined_occupied_cells, temp_next_pos); // returns (bool, pos in searched vect)
-					if (other_doco_pair2.first) // if there is doco in that direction
-					{
-						// --- doco in reverse direction, so choose random avoidance stragey
-						auto temp_pair_vect = this->ptr_moveStrategy->avoidanceStrategy();
-						temp_next_pos = temp_pair_vect.at(randDocoObj->generateRandomNum(0, int(temp_pair_vect.size()) - 1)); // choose random position from avoidance strategy.			
-						std::pair<bool, int> validCheck = findItemInVect<std::pair<int, int> >(this->adjoined_open_cells, temp_next_pos); // returns (bool, pos in searched vect)																												 // --- Choose open position
-						if (validCheck.first) // if found in open cells
+					// --- doco in reverse direction, so choose random avoidance stragey
+				    // Create open avoidance vectors
+					auto avoidance_pair_vect = this->ptr_moveStrategy->avoidanceStrategy();
+					std::pair<bool, int> avoidance_pair;
+					//for (auto i = avoidance_pair_vect.end(); i > avoidance_pair_vect.begin(); --i)
+					for (auto i = int(avoidance_pair_vect.size()); i > 0; --i)
+					{ // Remove all vectors not open
+						std::pair<int, int> temp_avoidance_pos = std::make_pair(x + avoidance_pair_vect.at(i-1).first, y + avoidance_pair_vect.at(i-1).second);
+						if (temp_avoidance_pos.first >= world_w || temp_avoidance_pos.first < 0 || temp_avoidance_pos.second >= world_h || temp_avoidance_pos.second < 0) // 0 too (h-1)
 						{
-							temp_next_valid_pos = this->adjoined_open_cells.at(identifying_value->second);
+							avoidance_pair.first = false;
+							avoidance_pair.second = i - 1; //outside range, don't bother checking for open
 						}
+						else
+						   avoidance_pair = findItemInVect<std::pair<int, int> >(this->adjoined_open_cells, temp_avoidance_pos); // returns (bool, pos in searched vect)
+						if (!avoidance_pair.first) // avoidance not open or outside range, remove vector
+						{
+							avoidance_pair_vect.erase(avoidance_pair_vect.begin() +i-1);
+						}
+					}
+					if (avoidance_pair_vect.size() > 0) {  // Randomly Pick a Avoidance Strategy
+						std::pair<int, int> temp_avoidance_pos = avoidance_pair_vect.at(randDocoObj->generateRandomNum(0, int(avoidance_pair_vect.size()) - 1)); // choose random position from avoidance strategy.
+						temp_next_valid_pos = std::make_pair(x + temp_avoidance_pos.first, y + temp_avoidance_pos.second);
+						found_next_valid_pos = true;
+					}
+				}
+				else {
+					// --- doco not in revese direction keep it
+					// --- make sure it is in ajoined_open,don't want to turn into a wall or obstable
+					std::pair<bool, int> validCheck = findItemInVect<std::pair<int, int> >(this->adjoined_open_cells, temp_next_pos); // returns (bool, pos in searched vect)																											 // --- Choose open position
+					if (validCheck.first) // if found in open cells
+					{
+						temp_next_valid_pos = temp_next_pos;
+						found_next_valid_pos = true;
 					}
 					else {
-						// --- doco not in revese direction keep it
-						// --- make sure it is in ajoined_open,don't want to turn into a wall or obstable
-						std::pair<bool, int> validCheck = findItemInVect<std::pair<int, int> >(this->adjoined_open_cells, temp_next_pos); // returns (bool, pos in searched vect)																											 // --- Choose open position
-						if (validCheck.first) // if found in open cells
-						{
-							temp_next_valid_pos = this->adjoined_open_cells.at(identifying_value->second);
-						}
-						else temp_next_valid_pos = this->position;  // move to same spot?
+						temp_next_valid_pos = this->position;  // move to same spot?
+						found_next_valid_pos = true;
 					}
 				}
 			}
-		}	
-		
-		// continue looping until item within the bounds of the map
-		// --- Find if that pair is in, and it's position in the adjoined_cells vector of pairs
-		std::pair<bool, int> result = findItemInVect<std::pair<int, int> >(this->adjoined_cells, temp_next_valid_pos);
-		if (result.first && (this->adjoined_cells.at(result.second).first >= 0) && (this->adjoined_cells.at(result.second).second >= 0) &&
-			(this->adjoined_cells.at(result.second).first < world_w) && (this->adjoined_cells.at(result.second).second < world_h))
-		{
-			// --- The next position for the same direction is valid.
-			temp_next_valid_pos = temp_next_pos;
-			verified_bounds = true;
+
 		}
 	}
 
+	
+   ///////////////////////////////////////////////
+   //  THE ACTUAL MOVE
+   ///////////////////////////////////////////////
 	moving_here = temp_next_valid_pos;
 	
 	// --- Update doco position and energy if it's still alive.

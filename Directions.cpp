@@ -151,31 +151,49 @@ std::vector<std::pair<int, int> > Directions::getXYOffsets()
 
 std::pair<std::string, std::pair<int, int> > Directions::getPairComboForString(std::string dir)
 {
-	if (dir == "N") return this->dir_xy_pairs.at(4);
-	else if (dir == "NE") return this->dir_xy_pairs.at(7);
-	else if (dir == "E") return this->dir_xy_pairs.at(6);
-	else if (dir == "SE") return this->dir_xy_pairs.at(5);
-	else if (dir == "S") return this->dir_xy_pairs.at(3);
-	else if (dir == "SW") return this->dir_xy_pairs.at(0);
+	if (dir == "NW") return this->dir_xy_pairs.at(0);
 	else if (dir == "W") return this->dir_xy_pairs.at(1);
-	else if (dir == "NW") return this->dir_xy_pairs.at(2);
-	else return this->dir_xy_pairs.at(4);
+	else if (dir == "SW") return this->dir_xy_pairs.at(2);
+	else if (dir == "N") return this->dir_xy_pairs.at(3);
+	else if (dir == "S") return this->dir_xy_pairs.at(4);
+	else if (dir == "NE") return this->dir_xy_pairs.at(5);
+	else if (dir == "E") return this->dir_xy_pairs.at(6);
+	else if (dir == "SE") return this->dir_xy_pairs.at(7);
+	else return this->dir_xy_pairs.at(3);
 }
 
 std::string Directions::getDirForPair(std::pair<int, int> presentPair, std::pair<int, int> movePair)
 {
 	int d_y = -movePair.second + presentPair.second;
 	int d_x = movePair.first - presentPair.first;
-	if (this->dir_xy_pairs.at(4).second.first == d_x && this->dir_xy_pairs.at(4).second.second == d_y) return "N";
-	if (this->dir_xy_pairs.at(7).second.first == d_x && this->dir_xy_pairs.at(7).second.second == d_y) return "NE";
-	if (this->dir_xy_pairs.at(6).second.first == d_x && this->dir_xy_pairs.at(6).second.second == d_y) return "E";
-	if (this->dir_xy_pairs.at(5).second.first == d_x && this->dir_xy_pairs.at(5).second.second == d_y) return "SE";
-	if (this->dir_xy_pairs.at(3).second.first == d_x && this->dir_xy_pairs.at(3).second.second == d_y) return "S";
-	if (this->dir_xy_pairs.at(0).second.first == d_x && this->dir_xy_pairs.at(0).second.second == d_y) return "SW";
+	
+	if (this->dir_xy_pairs.at(0).second.first == d_x && this->dir_xy_pairs.at(0).second.second == d_y) return "NW";
 	if (this->dir_xy_pairs.at(1).second.first == d_x && this->dir_xy_pairs.at(1).second.second == d_y) return "W";
-	if (this->dir_xy_pairs.at(2).second.first == d_x && this->dir_xy_pairs.at(2).second.second == d_y) return "NW";
+	if (this->dir_xy_pairs.at(2).second.first == d_x && this->dir_xy_pairs.at(2).second.second == d_y) return "SW";
+	if (this->dir_xy_pairs.at(3).second.first == d_x && this->dir_xy_pairs.at(3).second.second == d_y) return "N";
+	if (this->dir_xy_pairs.at(4).second.first == d_x && this->dir_xy_pairs.at(4).second.second == d_y) return "S";
+	if (this->dir_xy_pairs.at(5).second.first == d_x && this->dir_xy_pairs.at(5).second.second == d_y) return "NE";
+	if (this->dir_xy_pairs.at(6).second.first == d_x && this->dir_xy_pairs.at(6).second.second == d_y) return "E";
+	if (this->dir_xy_pairs.at(7).second.first == d_x && this->dir_xy_pairs.at(7).second.second == d_y) return "SE";
 	else return "N";
 }
+
+std::string Directions::getDirForOffset(std::pair<int, int> offsetPair)
+{
+	int d_y = offsetPair.second;
+	int d_x = offsetPair.first;
+
+	if (this->dir_xy_pairs.at(0).second.first == d_x && this->dir_xy_pairs.at(0).second.second == d_y) return "NW";
+	if (this->dir_xy_pairs.at(1).second.first == d_x && this->dir_xy_pairs.at(1).second.second == d_y) return "W";
+	if (this->dir_xy_pairs.at(2).second.first == d_x && this->dir_xy_pairs.at(2).second.second == d_y) return "SW";
+	if (this->dir_xy_pairs.at(3).second.first == d_x && this->dir_xy_pairs.at(3).second.second == d_y) return "N";
+	if (this->dir_xy_pairs.at(4).second.first == d_x && this->dir_xy_pairs.at(4).second.second == d_y) return "S";
+	if (this->dir_xy_pairs.at(5).second.first == d_x && this->dir_xy_pairs.at(5).second.second == d_y) return "NE";
+	if (this->dir_xy_pairs.at(6).second.first == d_x && this->dir_xy_pairs.at(6).second.second == d_y) return "E";
+	if (this->dir_xy_pairs.at(7).second.first == d_x && this->dir_xy_pairs.at(7).second.second == d_y) return "SE";
+	else return "N";
+}
+
 
 
 std::pair<std::string, std::pair<int, int> > Directions::getOppositeDirectionPair(std::pair<std::string, std::pair<int, int> > dir_xy_offset) {

@@ -43,6 +43,9 @@ void WorldBoard::readFile(char* inFile)
 	
 	// --- Create the CellGrid given World Size
 	this->worldCellGrid = new CellGrid(width, height);
+
+	// --- Initialize the Char Matrix 
+	this->worldCellGrid->initCharMatrix(this->width, this->height);
 	
 	// --- Get number of DOCOs to Spawn from Parser
 	int doco_count = this->myParser->getDOCOCount();
@@ -76,26 +79,31 @@ void WorldBoard::readFile(char* inFile)
 				dir_pair = dirs.getRandomHorizontalDirectionPair();
 				dir = dir_pair.first;
 				this->doco_vect.push_back(*myDocoFactory->createDocoHorizontal(*ptr_x_pos, *ptr_y_pos, dir));
+				this->worldCellGrid->cell_matrix[*ptr_y_pos][*ptr_x_pos].setStrategy("Horizontal");
 				break;
 			case 'V':
 				dir_pair = dirs.getRandomVerticalDirectionPair();
 				dir = dir_pair.first;
 				this->doco_vect.push_back(*myDocoFactory->createDocoVertical(*ptr_x_pos, *ptr_y_pos, dir));
+				this->worldCellGrid->cell_matrix[*ptr_y_pos][*ptr_x_pos].setStrategy("Vertical");
 				break;
 			case 'D':
 				dir_pair = dirs.getRandomDiagonalDirectionPair();
 				dir = dir_pair.first;
 				this->doco_vect.push_back(*myDocoFactory->createDocoDiagonal(*ptr_x_pos, *ptr_y_pos, dir));
+				this->worldCellGrid->cell_matrix[*ptr_y_pos][*ptr_x_pos].setStrategy("Diagonal");
 				break;
 			case 'P':
 				dir_pair = dirs.getRandomPerpDirectionPair();
 				dir = dir_pair.first;
 				this->doco_vect.push_back(*myDocoFactory->createDocoPerp(*ptr_x_pos, *ptr_y_pos, dir));
+				this->worldCellGrid->cell_matrix[*ptr_y_pos][*ptr_x_pos].setStrategy("Perp");
 				break;
 			case 'R':
 				dir_pair = dirs.getRandomDirectionPair();
 				dir = dir_pair.first;
 				this->doco_vect.push_back(*myDocoFactory->createDocoDefault(*ptr_x_pos, *ptr_y_pos, dir));
+				this->worldCellGrid->cell_matrix[*ptr_y_pos][*ptr_x_pos].setStrategy("Random");
 				break;
 			default:
 				//	--- Generate a random direction. Provides pair like so: ("N", (0,1))
@@ -103,23 +111,27 @@ void WorldBoard::readFile(char* inFile)
 				dir_pair = dirs.getRandomDirectionPair();
 				dir = dir_pair.first;
 				this->doco_vect.push_back(*myDocoFactory->createDocoDefault(*ptr_x_pos, *ptr_y_pos, dir));
+				this->worldCellGrid->cell_matrix[*ptr_y_pos][*ptr_x_pos].setStrategy("Random");
 		}
+		// --- Set Matrix to occupied in this xy pos
+		WorldBoard::updateCellWithADoco(*ptr_x_pos, *ptr_y_pos); // set the cell for doco
 	}
 	// --- Parser Memory Management
-	delete ptr_direction;
-	delete ptr_strategy;
-	delete ptr_x_pos;
-	delete ptr_y_pos;
+	//delete ptr_direction;
+	//delete ptr_strategy;
+	//delete ptr_x_pos;
+	//delete ptr_y_pos;
 	this->doco_vect.shrink_to_fit();
 	std::cout << "\n\nDOCO's created: " << this->doco_vect.size() << "\n";
-	// --- Initialize the Char Matrix 
-	this->worldCellGrid->initCharMatrix(this->width, this->height);
+	
 	// --- Create the Initial Food Locations, Given starting Food_Count
 	int food_count = this->myParser->getFoodCount();
 	this->generateFoodLocations(this->width, this->height, food_count);
 	// --- Update the choosen new food cells with the food and change symbol for that cell position.
 	this->updateCellsWithNewFood();
 }
+
+
 
 // ========= FOOD SPAWNER ======================================================
 
@@ -133,7 +145,8 @@ void WorldBoard::generateFoodLocations(int w, int h, int foodCount)
 		x_pos = uniRand->generateRandomNum(0, w-1);
 		y_pos = uniRand->generateRandomNum(0, h-1);
 		while ((this->worldCellGrid->cell_matrix[y_pos][x_pos].getFoodCount() > 3) // Food count > 3, generate new x and y position.
-			|| (this->worldCellGrid->cell_matrix[y_pos][x_pos].getOccupied()) ) // Don't spawn food in occupied cells
+			|| (this->worldCellGrid->cell_matrix[y_pos][x_pos].getObstacle())      // Don't spawn food in obstacles cells
+			|| (this->worldCellGrid->cell_matrix[y_pos][x_pos].getOccupied()) )    // Don't spawn food in occupied cells
 		{
 			x_pos = uniRand->generateRandomNum(0, w-1);
 			y_pos = uniRand->generateRandomNum(0, h-1);
@@ -182,15 +195,12 @@ void WorldBoard::updateDocos(void)
 {
 	// --- Remove dead DOCOs from the list
 	auto size = this->doco_vect.size();
-	// TODO: 1 doco was killed at start???
 	while (size > 0)  // Go through doco_vect, delete item if it's dead
 	{
 		if (!this->doco_vect[size-1].getAlive()) {
 			this->worldCellGrid->cell_matrix[this->doco_vect[size-1].getYPos()][this->doco_vect[size-1].getXPos()].setOccupied(false);
 			this->worldCellGrid->cell_matrix[this->doco_vect[size-1].getYPos()][this->doco_vect[size-1].getXPos()].setSymbol();
-			auto pos = this->doco_vect.begin() + size - 1;
-			this->doco_vect.erase(pos);
-			size -= 1; // remove an extra item as the doco has been erased.
+			this->doco_vect.erase(this->doco_vect.begin() + size - 1);
 		}
 		size -= 1;
 	}
@@ -199,18 +209,17 @@ void WorldBoard::updateDocos(void)
 	int i = 0;
 	int currentEnergy = 0;
 	int newEnergy = 0;
-	// TODO: A doco COPY with inccorect ptr_moveStra, alive, and energy level is created.
 	for (i = 0; i < int(this->doco_vect.size()); ++i)  // Go through doco_vect, split them if high energy
 	{
-		// --- When engergy too high, split doco into 2 on cell and head in opposite dirs.
-		if (currentEnergy = this->doco_vect[i].getEnergy() > 750) { 
+		// --- When energy too high, split doco into 2 on cell and head in opposite dirs.
+		if ((currentEnergy = this->doco_vect[i].getEnergy()) > 750) { 
 			// --- Split original's energy
 			newEnergy = int(currentEnergy / 2);
 			this->doco_vect[i].setEnergy(newEnergy);
 			
 			// --- Save direction of original.
 			auto oldDir = this->doco_vect[i].getDirection();
-			
+			this->doco_vect[i].setAlive(true);
 			// --- Copy Constructor
 			// Doco docoCopy = this->doco_vect[i];
 			auto* docoCopy = new Doco(this->doco_vect[i]);
@@ -218,7 +227,7 @@ void WorldBoard::updateDocos(void)
 			// --- Reverse direction of the new Doco
 			auto oppositeDir = dirs.getOppositeDirectionPair(oldDir);
 			docoCopy->setDirection(oppositeDir.first);
-
+			docoCopy->setAlive(true);
 			// --- Push back the copy
 			doco_vect.push_back(*docoCopy);			
 		 }
@@ -260,6 +269,7 @@ void WorldBoard::updateDocos(void)
 		this->doco_vect[i].eat(food_eaten, "default");
 	
 		this->worldCellGrid->cell_matrix[this->doco_vect[i].getYPos()][this->doco_vect[i].getXPos()].setOccupied(true); // set the cell as populated
+		this->worldCellGrid->cell_matrix[this->doco_vect[i].getYPos()][this->doco_vect[i].getXPos()].setStrategy(this->worldCellGrid->cell_matrix[y][x].getStrategy()); //set strategy from previous cell
 		this->worldCellGrid->cell_matrix[this->doco_vect[i].getYPos()][this->doco_vect[i].getXPos()].setFoodPresent();
 		this->worldCellGrid->cell_matrix[this->doco_vect[i].getYPos()][this->doco_vect[i].getXPos()].setSymbol();
 	}

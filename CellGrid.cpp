@@ -98,6 +98,7 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedCells(int x, int y)
 // private adjoined_occupied_cells matrix with this informatio
 std::vector<std::pair<int, int> > CellGrid::findAdjoinedOccupiedCells()
 {
+
 	std::vector<std::pair<int, int> > tempOccupiedCells;
 	int* x = new int;
 	int* y = new int;
@@ -121,6 +122,7 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedOccupiedCells()
 // private adjoined_obstacle_cells matrix with this informatio
 std::vector<std::pair<int, int> > CellGrid::findAdjoinedObstacleCells()
 {
+
 	std::vector<std::pair<int, int> > tempObstacleCells;
 	int* x = new int;
 	int* y = new int;
@@ -144,6 +146,7 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedObstacleCells()
 // private adjoined_obstacle_cells matrix with this informatio
 std::vector<std::pair<int, int> > CellGrid::findAdjoinedOpenCells()
 {
+
 	std::vector<std::pair<int, int> > tempOpenCells;
 	int* x = new int;
 	int* y = new int;
@@ -172,6 +175,7 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedCellsFood()
 	// checks each of the temp_adjoining_cells and returns the 
 	// matrix of cells that contain food.Using the temp variable
 	// eliminates some error checking.
+	
 	std::vector<std::pair<int, int> > tempFoodCells;
 	int* x = new int;
 	int* y = new int;
@@ -191,6 +195,7 @@ std::vector<std::pair<int, int> > CellGrid::findAdjoinedCellsFood()
 }
 
 std::vector<std::pair<int, int> > CellGrid::findAdjoinedOpenCellsWithFood() {
+
 	std::vector<std::pair<int, int> > tempOpenCellsWithFood;
 	int* x = new int;
 	int* y = new int;
