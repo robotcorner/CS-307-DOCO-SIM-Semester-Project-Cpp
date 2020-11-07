@@ -1,15 +1,5 @@
 # CS-307-DOCO-SIM-Semester-Project
 
-***
-
-### ATTENTION: Tasks and Errors to Fix Prioritized:
-1. Doco movement occasionally returns move pairs that are out of bounds of the world, thus crashing the program.
-1. Last doco is spawned as alive = false
-	- This is wrong. It's killed while having full energy
-1. Unsure if the Doco Split works at all, or if it will crash program, need to get it to run longer first to see.
-
-***
-
 ## Task Overview
 
 - This is a semester long project where we deliver a simulation program, then deliver a version with new contraints and design pattern requirements, and then add a GUI at the end.
