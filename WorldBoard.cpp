@@ -117,10 +117,6 @@ void WorldBoard::readFile(char* inFile)
 		WorldBoard::updateCellWithADoco(*ptr_x_pos, *ptr_y_pos); // set the cell for doco
 	}
 	// --- Parser Memory Management
-	//delete ptr_direction;
-	//delete ptr_strategy;
-	//delete ptr_x_pos;
-	//delete ptr_y_pos;
 	this->doco_vect.shrink_to_fit();
 	std::cout << "\n\nDOCO's created: " << this->doco_vect.size() << "\n";
 	
@@ -298,7 +294,3 @@ void WorldBoard::printWorld()
 	std::cout << "Unique Food Spots:       " << this->worldCellGrid->getFoodCharCount() << "\n";
 	std::cout << "Obstacles on Board:      " << this->worldCellGrid->getObstacleCount() << "\n";
 }
-
-/* Doco* copyDoco() {
-
-} */
