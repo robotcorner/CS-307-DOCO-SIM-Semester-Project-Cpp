@@ -16,6 +16,10 @@
 - The initial world specifications (height, width, DOCO’s and positions, and food locations) will be read in from a provided file in XML format. 
 - As part of version two, the DOCO strategy is also read in. There are a lot of details involved and they are specified below.
 
+### Output
+
+![](output.gif)
+
 #### Class Outline UML - Preliminary 
 
 <p><img src='ClassPrelimDiagramUML.svg'></p>
