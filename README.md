@@ -18,7 +18,7 @@
 
 ### Output
 
-![](output.gif)
+![](Output.gif)
 
 #### Class Outline UML - Preliminary 
 
