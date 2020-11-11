@@ -30,6 +30,7 @@ public:
 	void updateCellsWithNewFood();
 	void setCellWithNewFood(int x, int y);
 	int  setCellWithNoFood(int x, int y);  // return the number of foods eaten, set new food to zero
+	void setCellWithObstacle(int x, int y);
 	void updateDocos();
 	int updateCellWithADoco(int x, int y);		// helper function to set cell status for cells with DOCOs, return food amount
 	void updateWorldState(); // x and y range to update.

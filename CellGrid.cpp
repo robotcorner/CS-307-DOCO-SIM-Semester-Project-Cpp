@@ -53,6 +53,7 @@ void CellGrid::setCharMatrix(void)
 	int y = 0;
 	this->food_char_count = 0;
 	this->doco_char_count = 0;
+	this->obstacle_count = 0;
 	for (y = 0; y < my_grid_size.getHeight(); y++)
 	{
 		for (x = 0; x < my_grid_size.getWidth(); x++)
@@ -60,7 +61,7 @@ void CellGrid::setCharMatrix(void)
 			this->char_matrix[y][x] = this->cell_matrix[y][x].getSymbol();
 			if (this->cell_matrix[y][x].getFoodPresent()) this->food_char_count += 1;
 			if (this->cell_matrix[y][x].getOccupied()) this->doco_char_count += 1;
-			if (this->cell_matrix[y][x].getObstacle()) this->doco_char_count += 1;
+			if (this->cell_matrix[y][x].getObstacle()) this->obstacle_count += 1;
 		}
 	}
 }

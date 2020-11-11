@@ -120,6 +120,19 @@ void WorldBoard::readFile(char* inFile)
 	this->doco_vect.shrink_to_fit();
 	std::cout << "\n\nDOCO's created: " << this->doco_vect.size() << "\n";
 	
+	// --- Spawn Obstacles
+	int* ptr_xpos = new int;
+	int* ptr_ypos = new int;
+	std::pair<int, int> pos_pair;
+	while (this->myParser->getObstacleData(ptr_xpos, ptr_ypos)) 
+	{
+		pos_pair = std::make_pair(*ptr_xpos, *ptr_ypos);
+		this->obstacle_positions.push_back(pos_pair);
+		this->setCellWithObstacle(*ptr_xpos, *ptr_ypos);
+	}
+	this->obstacle_positions.shrink_to_fit();
+	std::cout << "\n\nObstacles created: " << this->obstacle_positions.size() << "\n";
+
 	// --- Create the Initial Food Locations, Given starting Food_Count
 	int food_count = this->myParser->getFoodCount();
 	this->generateFoodLocations(this->width, this->height, food_count);
@@ -166,6 +179,14 @@ void WorldBoard::updateCellsWithNewFood()
 		this->setCellWithNewFood(food.first, food.second);
 	}
 	food_positions.clear(); // all new food positions have been processed.
+}
+
+// ========= OBSTACLES ======================================================
+
+void WorldBoard::setCellWithObstacle(int x, int y) 
+{
+	this->worldCellGrid->cell_matrix[y][x].setObsPresent();
+	this->worldCellGrid->cell_matrix[y][x].setSymbol();
 }
 
 // ========= DOCO ACTIONs ======================================================

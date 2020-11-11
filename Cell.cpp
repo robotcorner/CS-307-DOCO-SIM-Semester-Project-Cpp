@@ -124,3 +124,8 @@ void Cell::setStrategy(std::string newStrat)
 {
 	this->strategy = newStrat;
 }
+
+void Cell::setObsPresent(void) 
+{
+	this->obstacle = true;
+}

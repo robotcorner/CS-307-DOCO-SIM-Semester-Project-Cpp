@@ -34,4 +34,5 @@ public:
 	void addFood(int);			// add food to the Cell with the amount specified
 	void removeFood(int);		// remove food pellets from cell with amount specified
 	void removeAllFood(void);	// set the food count to zero
+	void setObsPresent();  // set the cell as having an obstacle
 };
